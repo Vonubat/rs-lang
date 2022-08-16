@@ -1,0 +1,56 @@
+{
+  "name": "rs-lang",
+  "version": "0.0.1",
+  "description": "https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/rs-lang/rslang.md",
+  "main": "webpack.base.config.js",
+  "scripts": {
+    "start": "webpack serve --open --config ./webpack.config.js --env mode=dev",
+    "build": "webpack --config ./webpack.config.js --env mode=prod",
+    "lint": "eslint . --ext .ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vonubat/rs-lang"
+  },
+  "keywords": [
+    "Communication with a server (fetch, REST API)",
+    "Database (MongoDB)",
+    "Async coding / Promises",
+    "JS Animations",
+    "DOM Api",
+    "SPA",
+    "Statistics",
+    "Authorization"
+  ],
+  "authors": ["Tabunov Egor <vonubat@gmail.com>", "Viacheslav Olishevko <slavaolish@gmail.com>", "Boris Kortunov <boris.kortunov@gmail.com>", "Nikita Orlov <nikita_orlov@epam.com>"],
+  "license": "ISC",
+  "homepages": ["https://github.com/Vonubat",  "https://github.com/SlavikusVOG", "https://github.com/Der-thun", "https://github.com/sonikfire" ],
+  "dependencies": {
+    "normalize.css": "^8.0.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.0",
+    "@typescript-eslint/parser": "^5.30.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^7.0.0",
+    "css-loader": "^5.1.0",
+    "eslint": "^7.27.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.3",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.2.0",
+    "prettier": "2.2.1",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "webpack": "^5.37.1",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^4.9.2",
+    "webpack-merge": "^5.7.3"
+  }
+}
