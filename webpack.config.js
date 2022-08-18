@@ -37,6 +37,9 @@ const baseConfig = {
   },
   resolve: {
     extensions: ['.ts', '.js'],
+    alias: {
+      Constants: path.resolve(__dirname, 'src/constants.ts'),
+    },
   },
   output: {
     filename: 'index.js',
