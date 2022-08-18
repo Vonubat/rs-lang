@@ -4,5 +4,5 @@ export default class Constants {
 
   static readonly JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
-  static readonly MONGO_CONNECTION_STRING = process.env.JWT_SECRET_KEY;
+  static readonly MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
 }
