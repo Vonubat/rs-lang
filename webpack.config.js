@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const EslingPlugin = require('eslint-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const DotEnv = require('dotenv-webpack');
 
 const baseConfig = {
   entry: path.resolve(__dirname, './src/index'),
@@ -59,6 +60,7 @@ const baseConfig = {
         // { from: './src/db', to: './../dist/db' },
       ],
     }),
+    new DotEnv(),
   ],
 };
 
