@@ -1,2 +1,2 @@
 import 'normalize.css';
-import './api/words';
+import './api/words/words';

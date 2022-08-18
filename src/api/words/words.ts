@@ -1,5 +1,5 @@
-import Constants from '../constants';
-import { WordsClass, WordsResponseSchema } from '../types/types';
+import Constants from '../../constants';
+import { WordsClass, WordsResponseSchema } from '../../types/types';
 
 class Words implements WordsClass {
   public rawResponse!: Response;
@@ -27,7 +27,7 @@ class Words implements WordsClass {
       },
     });
     const content: WordsResponseSchema[] = await this.rawResponse.json();
-    // console.log(content);
+    console.log(content);
     return content;
   }
 
@@ -50,7 +50,7 @@ class Words implements WordsClass {
       },
     });
     const content: WordsResponseSchema = await this.rawResponse.json();
-    // console.log(content);
+    console.log(content);
     return content;
   }
 }
