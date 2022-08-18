@@ -1,4 +1,5 @@
 import Constants from '../../constants';
+import HttpClient from '../http-client';
 import { WordsClass, WordsResponseSchema } from '../../types/types';
 
 class Words implements WordsClass {
@@ -20,14 +21,10 @@ class Words implements WordsClass {
     groupNumber: number;
     pageNumber: number;
   }): Promise<WordsResponseSchema[]> {
-    this.rawResponse = await fetch(`${Constants.BASE_URL}/words?group=${groupNumber}&page=${pageNumber}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    });
+    this.rawResponse = await HttpClient.get(`${Constants.BASE_URL}/words?group=${groupNumber}&page=${pageNumber}`);
+
     const content: WordsResponseSchema[] = await this.rawResponse.json();
-    console.log(content);
+    // console.log(content);
     return content;
   }
 
@@ -43,19 +40,15 @@ class Words implements WordsClass {
     if (wordId.length !== Constants.WORD_ID_LENGTH) {
       throw new Error('wordId is not correct');
     }
-    this.rawResponse = await fetch(`${Constants.BASE_URL}/words/${wordId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    });
+    this.rawResponse = await HttpClient.get(`${Constants.BASE_URL}/words/${wordId}`);
+
     const content: WordsResponseSchema = await this.rawResponse.json();
-    console.log(content);
+    // console.log(content);
     return content;
   }
 }
 
-const test = new Words();
-test.getWords({ groupNumber: 5, pageNumber: 25 });
-test.getWordById({ wordId: '5e9f5ee45eb9e72bc21b024c' });
+// const test = new Words();
+// test.getWords({ groupNumber: 5, pageNumber: 25 });
+// test.getWordById({ wordId: '5e9f5ee45eb9e72bc21b024c' });
 export default Words;
