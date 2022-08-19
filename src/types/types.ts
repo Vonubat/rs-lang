@@ -30,3 +30,15 @@ export type CookiesOptions = {
   secure?: boolean;
   'max-age'?: number;
 };
+
+export interface AuthResponseSchema {
+  message: string;
+  token: string;
+  refreshToken: string;
+  userId: string;
+  name: string;
+}
+
+export enum StatusCodes {
+  IncorrectEmailOrPassword = 403,
+}
