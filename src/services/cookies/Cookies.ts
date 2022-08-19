@@ -1,6 +1,11 @@
 import { CookiesOptions } from '../../types/types';
 
 export default class Cookies {
+  /**
+   * getCookie.
+   * @param {string} name - the name of cookie.
+   * @return {string | undefined} - cookie's value or undefined
+   */
   public static getCookie(name: string) {
     const matches = document.cookie.match(
       new RegExp(`(?:^|; )${name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1')}=([^;]*)`)
@@ -8,6 +13,13 @@ export default class Cookies {
     return matches ? decodeURIComponent(matches[1]) : undefined;
   }
 
+  /**
+   * setCookie.
+   * @param {string} name - the name of cookie.
+   * @param {string} value - the value of cookie.
+   * @param {CookiesOptions} options - cookie's options.
+   * @return {void}
+   */
   public static setCookie(name: string, value: string, options: CookiesOptions = {}) {
     const props: CookiesOptions = {
       path: '/',
@@ -24,8 +36,7 @@ export default class Cookies {
     // for (const optionKey in options) {
     Object.keys(options).forEach((optionKey) => {
       updatedCookie += `; ${optionKey}`;
-      // TODO: solve any problem
-      const optionValue = options[optionKey];
+      const optionValue = options[optionKey as keyof CookiesOptions];
       if (optionValue !== true) {
         updatedCookie += `=${optionValue}`;
       }
@@ -33,6 +44,11 @@ export default class Cookies {
     document.cookie = updatedCookie;
   }
 
+  /**
+   * deleteCookie.
+   * @param {string} name - the name of cookie.
+   * @return {void}
+   */
   public static deleteCookie(name: string) {
     Cookies.setCookie(name, '', {
       'max-age': -1,
