@@ -3,7 +3,11 @@ import HttpClient from '../http-client';
 import { WordsResponseSchema } from '../../types/types';
 
 class Words {
-  public rawResponse!: Response;
+  private httpClient: HttpClient;
+
+  constructor(httpClient: HttpClient) {
+    this.httpClient = httpClient;
+  }
 
   /**
    * Endpoint: /words [GET method].
@@ -21,9 +25,11 @@ class Words {
     groupNumber: number;
     pageNumber: number;
   }): Promise<WordsResponseSchema[]> {
-    this.rawResponse = await HttpClient.get(`${Constants.BASE_URL}/words?group=${groupNumber}&page=${pageNumber}`);
+    const response: Response = await this.httpClient.get(
+      `${Constants.BASE_URL}/words?group=${groupNumber}&page=${pageNumber}`
+    );
 
-    const content: WordsResponseSchema[] = await this.rawResponse.json();
+    const content: WordsResponseSchema[] = await response.json();
     // console.log(content);
     return content;
   }
@@ -40,15 +46,15 @@ class Words {
     if (wordId.length !== Constants.WORD_ID_LENGTH) {
       throw new Error('wordId is not correct');
     }
-    this.rawResponse = await HttpClient.get(`${Constants.BASE_URL}/words/${wordId}`);
+    const response = await this.httpClient.get(`${Constants.BASE_URL}/words/${wordId}`);
 
-    const content: WordsResponseSchema = await this.rawResponse.json();
+    const content: WordsResponseSchema = await response.json();
     // console.log(content);
     return content;
   }
 }
 
-// const test = new Words();
+// const test = new Words(new HttpClient());
 // test.getWords({ groupNumber: 5, pageNumber: 25 });
 // test.getWordById({ wordId: '5e9f5ee45eb9e72bc21b024c' });
 export default Words;
