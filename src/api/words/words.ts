@@ -3,7 +3,7 @@ import HttpClient from '../http-client';
 import { WordsResponseSchema } from '../../types/types';
 
 class Words {
-  httpClient: HttpClient;
+  private httpClient: HttpClient;
 
   constructor(httpClient: HttpClient) {
     this.httpClient = httpClient;
@@ -30,7 +30,7 @@ class Words {
     );
 
     const content: WordsResponseSchema[] = await response.json();
-    console.log(content);
+    // console.log(content);
     return content;
   }
 
@@ -49,12 +49,12 @@ class Words {
     const response = await this.httpClient.get(`${Constants.BASE_URL}/words/${wordId}`);
 
     const content: WordsResponseSchema = await response.json();
-    console.log(content);
+    // console.log(content);
     return content;
   }
 }
 
-const test = new Words(new HttpClient());
-test.getWords({ groupNumber: 5, pageNumber: 25 });
-test.getWordById({ wordId: '5e9f5ee45eb9e72bc21b024c' });
+// const test = new Words(new HttpClient());
+// test.getWords({ groupNumber: 5, pageNumber: 25 });
+// test.getWordById({ wordId: '5e9f5ee45eb9e72bc21b024c' });
 export default Words;
