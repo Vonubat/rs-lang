@@ -15,11 +15,3 @@ export interface WordsResponseSchema {
   textMeaningTranslate: string;
   textExampleTranslate: string;
 }
-
-/* API Request classes */
-
-export interface WordsClass {
-  rawResponse: Response;
-  getWords({ groupNumber, pageNumber }: { groupNumber: number; pageNumber: number }): Promise<WordsResponseSchema[]>;
-  getWordById({ wordId }: { wordId: string }): Promise<WordsResponseSchema>;
-}

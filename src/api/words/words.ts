@@ -1,8 +1,8 @@
 import Constants from '../../constants';
 import HttpClient from '../http-client';
-import { WordsClass, WordsResponseSchema } from '../../types/types';
+import { WordsResponseSchema } from '../../types/types';
 
-class Words implements WordsClass {
+class Words {
   public rawResponse!: Response;
 
   /**
