@@ -42,3 +42,9 @@ export interface AuthResponseSchema {
 export enum StatusCodes {
   IncorrectEmailOrPassword = 403,
 }
+
+export type Statistics = {
+  learnedWords: number;
+  // TODO: check optional type
+  // optional: Object
+};
