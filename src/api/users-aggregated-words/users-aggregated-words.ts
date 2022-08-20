@@ -27,7 +27,7 @@ export default class UsersAggregatedWords {
     filter: string
   ) {
     if (baseUrl) {
-      const url = new URL(`${baseUrl}/${id}//users/{id}/aggregatedWords`);
+      const url = new URL(`${baseUrl}/${id}/aggregatedWords`);
       const params = new URLSearchParams({
         group,
         page,
