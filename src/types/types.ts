@@ -48,3 +48,9 @@ export type Statistics = {
   // TODO: check optional type
   // optional: Object
 };
+
+export type Settings = {
+  wordsPerDay: number;
+  // TODO: check optinal type
+  // optional: Object
+};
