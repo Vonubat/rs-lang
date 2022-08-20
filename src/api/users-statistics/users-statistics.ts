@@ -11,6 +11,11 @@ export default class UsersStatistics {
     this.httpClient = httpClient;
   }
 
+  /**
+   * Get statistics
+   * @param id - user id
+   * @returns statistics
+   */
   public getStatistics(id: string) {
     if (baseUrl) {
       const url = new URL(`${baseUrl}/${id}/statistics`);
@@ -20,6 +25,12 @@ export default class UsersStatistics {
     return null;
   }
 
+  /**
+   * /users/{id}/statistics
+   * @param id user id
+   * @param learntWords - learnt words
+   * @returns statistics
+   */
   public setStatistics(id: string, learnedWords: Statistics) {
     if (baseUrl) {
       const url = new URL(`${baseUrl}/${id}/statistics`);
