@@ -94,6 +94,12 @@ export interface Statistics {
   optional?: Optional;
 }
 
+export interface Settings {
+  wordsPerDay: number;
+  id?: string;
+  optional?: Optional;
+}
+
 // https://gist.github.com/daxartio/f387e811ba38eca5d5f8bff53f9fadb1
 export type CookiesOptions = {
   expires?: Date | number | string;
