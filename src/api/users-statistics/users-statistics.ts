@@ -1,18 +1,8 @@
 import Constants from '../../constants';
 import { Statistics } from '../../types/types';
-import CheckApiParams from '../../utilities/check-api-params';
 import HttpClient from '../http-client';
 
-export default class UsersStatistics {
-  private httpClient: HttpClient;
-
-  private checkApiParams: CheckApiParams;
-
-  constructor(httpClient: HttpClient, checkApiParams: CheckApiParams) {
-    this.httpClient = httpClient;
-    this.checkApiParams = checkApiParams;
-  }
-
+export default class UsersStatistics extends HttpClient {
   /**
    * Endpoint: /users/{id}/statistics [GET method].
    * Gets statistics.
@@ -21,10 +11,10 @@ export default class UsersStatistics {
    */
 
   public async getStatistics(userId: string): Promise<Statistics> {
-    this.checkApiParams.checkId(userId);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/statistics`);
-    const response: Response = await this.httpClient.get(url);
+    const response: Response = await this.get(url);
     const content: Statistics = await response.json();
 
     // console.log(content);
@@ -41,10 +31,10 @@ export default class UsersStatistics {
    */
 
   public async setStatistics(userId: string, body: Statistics): Promise<Statistics> {
-    this.checkApiParams.checkId(userId);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/statistics`);
-    const response: Response = await this.httpClient.put(url, JSON.stringify(body));
+    const response: Response = await this.put(url, JSON.stringify(body));
     const content: Statistics = await response.json();
 
     // console.log(content);

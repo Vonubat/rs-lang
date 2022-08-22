@@ -1,18 +1,8 @@
 import Constants from '../../constants';
 import { UsersWordsRequestSchema, UsersWordsResponseSchema } from '../../types/types';
-import CheckApiParams from '../../utilities/check-api-params';
 import HttpClient from '../http-client';
 
-export default class UsersWords {
-  private httpClient: HttpClient;
-
-  private checkApiParams: CheckApiParams;
-
-  constructor(httpClient: HttpClient, checkApiParams: CheckApiParams) {
-    this.httpClient = httpClient;
-    this.checkApiParams = checkApiParams;
-  }
-
+export default class UsersWords extends HttpClient {
   /**
    * Endpoint: /users/{id}/words [GET method].
    * Gets all user words.
@@ -21,10 +11,10 @@ export default class UsersWords {
    */
 
   public async getAllUserWords(userId: string): Promise<UsersWordsResponseSchema[]> {
-    this.checkApiParams.checkId(userId);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/`);
-    const response: Response = await this.httpClient.get(url);
+    const response: Response = await this.get(url);
     const content: UsersWordsResponseSchema[] = await response.json();
 
     // console.log(content);
@@ -46,11 +36,11 @@ export default class UsersWords {
     wordId: string,
     body: UsersWordsRequestSchema
   ): Promise<UsersWordsResponseSchema> {
-    this.checkApiParams.checkId(userId);
-    this.checkApiParams.checkId(wordId);
+    this.checkId(userId);
+    this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
-    const response: Response = await this.httpClient.post(url, JSON.stringify(body));
+    const response: Response = await this.post(url, JSON.stringify(body));
     const content: UsersWordsResponseSchema = await response.json();
 
     // console.log(content);
@@ -66,11 +56,11 @@ export default class UsersWords {
    */
 
   public async getUserWordById(userId: string, wordId: string): Promise<UsersWordsResponseSchema> {
-    this.checkApiParams.checkId(userId);
-    this.checkApiParams.checkId(wordId);
+    this.checkId(userId);
+    this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
-    const response: Response = await this.httpClient.get(url);
+    const response: Response = await this.get(url);
     const content: UsersWordsResponseSchema = await response.json();
 
     // console.log(content);
@@ -92,11 +82,11 @@ export default class UsersWords {
     wordId: string,
     body: UsersWordsRequestSchema
   ): Promise<UsersWordsResponseSchema> {
-    this.checkApiParams.checkId(userId);
-    this.checkApiParams.checkId(wordId);
+    this.checkId(userId);
+    this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
-    const response: Response = await this.httpClient.put(url, JSON.stringify(body));
+    const response: Response = await this.put(url, JSON.stringify(body));
     const content: UsersWordsResponseSchema = await response.json();
 
     // console.log(content);
@@ -112,10 +102,10 @@ export default class UsersWords {
    */
 
   public async deleteUserWord(userId: string, wordId: string): Promise<void> {
-    this.checkApiParams.checkId(userId);
-    this.checkApiParams.checkId(wordId);
+    this.checkId(userId);
+    this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
-    await this.httpClient.delete(url);
+    await this.delete(url);
   }
 }

@@ -1,18 +1,8 @@
 import Constants from '../../constants';
 import { AggregatedWords, PaginatedResult } from '../../types/types';
-import CheckApiParams from '../../utilities/check-api-params';
 import HttpClient from '../http-client';
 
-export default class UsersAggregatedWords {
-  private httpClient: HttpClient;
-
-  private checkApiParams: CheckApiParams;
-
-  constructor(httpClient: HttpClient, checkApiParams: CheckApiParams) {
-    this.httpClient = httpClient;
-    this.checkApiParams = checkApiParams;
-  }
-
+export default class UsersAggregatedWords extends HttpClient {
   /**
    * Endpoint: /users/{id}/aggregatedWords [GET method].
    * Gets all user aggregated words.
@@ -40,14 +30,14 @@ export default class UsersAggregatedWords {
     groupNumber = 0,
     pageNumber = 0
   ): Promise<AggregatedWords[]> {
-    this.checkApiParams.checkId(userId);
-    this.checkApiParams.checkGroupsPagesOfWords(groupNumber, pageNumber);
+    this.checkId(userId);
+    this.checkGroupsPagesOfWords(groupNumber, pageNumber);
 
     const url: URL = new URL(
       `${Constants.BASE_URL}/users/${userId}/aggregatedWords?group=${groupNumber}&page=${pageNumber}&wordsPerPage=${wordsPerPage}&filter=${filter}`
     );
 
-    const response: Response = await this.httpClient.get(url);
+    const response: Response = await this.get(url);
     const content: AggregatedWords[] = await response.json();
 
     // console.log(content);
@@ -63,11 +53,11 @@ export default class UsersAggregatedWords {
    */
 
   public async getUserAggregatedWordById(userId: string, wordId: string) {
-    this.checkApiParams.checkId(userId);
-    this.checkApiParams.checkId(wordId);
+    this.checkId(userId);
+    this.checkId(wordId);
 
-    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}/`);
-    const response: Response = await this.httpClient.get(url);
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/aggregatedWords/${wordId}/`);
+    const response: Response = await this.get(url);
     const content: PaginatedResult = await response.json();
 
     // console.log(content);

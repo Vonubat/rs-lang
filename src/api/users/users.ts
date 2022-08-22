@@ -1,19 +1,9 @@
 import Constants from '../../constants';
 import Tokens from '../../services/auth/tokens';
 import { CredentialsSchema, UserResponseSchema, UserSchema, TokensSchema } from '../../types/types';
-import CheckApiParams from '../../utilities/check-api-params';
 import HttpClient from '../http-client';
 
-export default class Users {
-  private httpClient: HttpClient;
-
-  private checkApiParams: CheckApiParams;
-
-  constructor(httpClient: HttpClient, checkApiParams: CheckApiParams) {
-    this.httpClient = httpClient;
-    this.checkApiParams = checkApiParams;
-  }
-
+export default class Users extends HttpClient {
   /**
    * Endpoint: /users [POST method].
    * Creates a new user.
@@ -24,11 +14,11 @@ export default class Users {
 
   public async createUser(user: UserSchema): Promise<UserResponseSchema> {
     const { email, password } = user;
-    this.checkApiParams.checkEmail(email);
-    this.checkApiParams.checkPassword(password);
+    this.checkEmail(email);
+    this.checkPassword(password);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users`);
-    const response: Response = await this.httpClient.post(url, JSON.stringify(user));
+    const response: Response = await this.post(url, JSON.stringify(user));
     const content: UserResponseSchema = await response.json();
 
     // console.log(content);
@@ -43,10 +33,10 @@ export default class Users {
    */
 
   public async getUser(userId: string): Promise<UserSchema> {
-    this.checkApiParams.checkId(userId);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}`);
-    const response: Response = await this.httpClient.get(url);
+    const response: Response = await this.get(url);
     const content: UserSchema = await response.json();
 
     // console.log(content);
@@ -57,18 +47,18 @@ export default class Users {
    * Endpoint: /users/{id} [PUT method].
    * Updates a user.
    * @param {string} userId - id of user that we want to update.
-   * @param {Object} credentials - credentials of user. Object (request body) should contains: [Example] -> { "email": "string", "password": "string}.
+   * @param {Object} credentials - credentials of user. Object (request body) should contains: [Example] -> { "email": "string", "password": "string"}.
    * @returns {Promise<UserResponseSchema>} - return updated has been updated.
    */
 
   public async updateUser(userId: string, credentials: CredentialsSchema): Promise<UserResponseSchema> {
     const { email, password } = credentials;
-    this.checkApiParams.checkEmail(email);
-    this.checkApiParams.checkPassword(password);
-    this.checkApiParams.checkId(userId);
+    this.checkEmail(email);
+    this.checkPassword(password);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}`);
-    const response: Response = await this.httpClient.put(url, JSON.stringify(credentials));
+    const response: Response = await this.put(url, JSON.stringify(credentials));
     const content: UserResponseSchema = await response.json();
 
     // console.log(content);
@@ -83,10 +73,10 @@ export default class Users {
    */
 
   public async deleteUser(userId: string): Promise<void> {
-    this.checkApiParams.checkId(userId);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}`);
-    await this.httpClient.delete(url);
+    await this.delete(url);
   }
 
   /**
@@ -97,10 +87,10 @@ export default class Users {
    */
 
   public async getNewUserTokens(userId: string): Promise<TokensSchema> {
-    this.checkApiParams.checkId(userId);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/tokens`);
-    const response: Response = await this.httpClient.get(url, Tokens.getRefreshToken());
+    const response: Response = await this.get(url, Tokens.getRefreshToken());
     const content: TokensSchema = await response.json();
     const { token, refreshToken } = content;
     Tokens.setToken(token);

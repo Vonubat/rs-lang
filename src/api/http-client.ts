@@ -1,13 +1,7 @@
 import Tokens from '../services/auth/tokens';
 import CheckApiParams from '../utilities/check-api-params';
 
-export default class HttpClient {
-  private checkApiParams: CheckApiParams;
-
-  constructor(checkApiParams: CheckApiParams) {
-    this.checkApiParams = checkApiParams;
-  }
-
+export default class HttpClient extends CheckApiParams {
   private responseHandler(res: Response): Response {
     if (!res.ok) {
       throw Error(res.statusText);
@@ -16,7 +10,7 @@ export default class HttpClient {
   }
 
   public async get(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
-    this.checkApiParams.checkTokens(token);
+    this.checkTokens(token);
 
     const props: RequestInit = {
       method: 'GET',
@@ -35,7 +29,7 @@ export default class HttpClient {
     body: BodyInit | null,
     token: string = Tokens.getToken()
   ): Promise<Response> {
-    this.checkApiParams.checkTokens(token);
+    this.checkTokens(token);
 
     const props: RequestInit = {
       method: 'PUT',
@@ -55,7 +49,7 @@ export default class HttpClient {
     body: BodyInit | null,
     token: string = Tokens.getToken()
   ): Promise<Response> {
-    this.checkApiParams.checkTokens(token);
+    this.checkTokens(token);
 
     const props: RequestInit = {
       method: 'POST',
@@ -71,10 +65,10 @@ export default class HttpClient {
   }
 
   public async delete(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
-    this.checkApiParams.checkTokens(token);
+    this.checkTokens(token);
 
     const props: RequestInit = {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: 'application/json',

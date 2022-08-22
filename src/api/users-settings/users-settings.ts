@@ -1,18 +1,8 @@
 import Constants from '../../constants';
 import { Settings } from '../../types/types';
-import CheckApiParams from '../../utilities/check-api-params';
 import HttpClient from '../http-client';
 
-export default class UserSettings {
-  private httpClient: HttpClient;
-
-  private checkApiParams: CheckApiParams;
-
-  constructor(httpClient: HttpClient, checkApiParams: CheckApiParams) {
-    this.httpClient = httpClient;
-    this.checkApiParams = checkApiParams;
-  }
-
+export default class UserSettings extends HttpClient {
   /**
    * Endpoint: /users/{id}/settings [GET method].
    * Gets settings.
@@ -21,10 +11,10 @@ export default class UserSettings {
    */
 
   public async getSettings(userId: string): Promise<Settings> {
-    this.checkApiParams.checkId(userId);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/settings`);
-    const response: Response = await this.httpClient.get(url);
+    const response: Response = await this.get(url);
     const content: Settings = await response.json();
 
     // console.log(content);
@@ -41,10 +31,10 @@ export default class UserSettings {
    */
 
   public async setSettings(userId: string, body: Settings): Promise<Settings> {
-    this.checkApiParams.checkId(userId);
+    this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/settings`);
-    const response: Response = await this.httpClient.put(url, JSON.stringify(body));
+    const response: Response = await this.put(url, JSON.stringify(body));
     const content: Settings = await response.json();
 
     // console.log(content);

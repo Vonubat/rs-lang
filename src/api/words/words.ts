@@ -1,18 +1,8 @@
 import Constants from '../../constants';
 import HttpClient from '../http-client';
 import { WordsResponseSchema } from '../../types/types';
-import CheckApiParams from '../../utilities/check-api-params';
 
-export default class Words {
-  private httpClient: HttpClient;
-
-  private checkApiParams: CheckApiParams;
-
-  constructor(httpClient: HttpClient, checkApiParams: CheckApiParams) {
-    this.httpClient = httpClient;
-    this.checkApiParams = checkApiParams;
-  }
-
+export default class Words extends HttpClient {
   /**
    * Endpoint: /words [GET method].
    * Get a chunk of words.
@@ -22,10 +12,10 @@ export default class Words {
    */
 
   public async getWords(groupNumber = 0, pageNumber = 0): Promise<WordsResponseSchema[]> {
-    this.checkApiParams.checkGroupsPagesOfWords(groupNumber, pageNumber);
+    this.checkGroupsPagesOfWords(groupNumber, pageNumber);
 
     const url: URL = new URL(`${Constants.BASE_URL}/words?group=${groupNumber}&page=${pageNumber}`);
-    const response: Response = await this.httpClient.get(url);
+    const response: Response = await this.get(url);
     const content: WordsResponseSchema[] = await response.json();
 
     // console.log(content);
@@ -40,17 +30,13 @@ export default class Words {
    */
 
   public async getWordById(wordId: string): Promise<WordsResponseSchema> {
-    this.checkApiParams.checkId(wordId);
+    this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/words/${wordId}`);
-    const response = await this.httpClient.get(url);
+    const response = await this.get(url);
     const content: WordsResponseSchema = await response.json();
 
     // console.log(content);
     return content;
   }
 }
-
-// const test = new Words(new HttpClient());
-// test.getWords({ groupNumber: 5, pageNumber: 25 });
-// test.getWordById({ wordId: '5e9f5ee45eb9e72bc21b024c' });
