@@ -41,11 +41,12 @@ export class PartConstructor {
 
     const wrapper = this.HTMLConstructor.basic('div', undefined, ['card']);
     wrapper.id = word.id;
+    wrapper.setAttribute('style', 'width: 18rem');
 
     const img = this.HTMLConstructor.basic(
       'img',
       undefined,
-      ['card-img-left'],
+      ['card-img-up'],
       [
         ['src', `https://my-learnwords-app.herokuapp.com/${word.image}`],
         ['alt', word.word],
