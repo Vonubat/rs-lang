@@ -3,8 +3,6 @@ import { UsersWordsRequestSchema, UsersWordsResponseSchema } from '../../types/t
 import CheckApiParams from '../../utilities/check-api-params';
 import HttpClient from '../http-client';
 
-const baseUrl = Constants.BASE_URL ? `${Constants.BASE_URL}/users` : null;
-
 export default class UsersWords {
   private httpClient: HttpClient;
 
@@ -25,7 +23,7 @@ export default class UsersWords {
   public async getAllUserWords(userId: string): Promise<UsersWordsResponseSchema[]> {
     this.checkApiParams.checkId(userId);
 
-    const url: URL = new URL(`${baseUrl}/users/${userId}/words/`);
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/`);
     const response: Response = await this.httpClient.get(url);
     const content: UsersWordsResponseSchema[] = await response.json();
 
@@ -51,7 +49,7 @@ export default class UsersWords {
     this.checkApiParams.checkId(userId);
     this.checkApiParams.checkId(wordId);
 
-    const url: URL = new URL(`${baseUrl}/users/${userId}/words/${wordId}`);
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
     const response: Response = await this.httpClient.post(url, JSON.stringify(body));
     const content: UsersWordsResponseSchema = await response.json();
 
@@ -71,7 +69,7 @@ export default class UsersWords {
     this.checkApiParams.checkId(userId);
     this.checkApiParams.checkId(wordId);
 
-    const url: URL = new URL(`${baseUrl}/users/${userId}/words/${wordId}`);
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
     const response: Response = await this.httpClient.get(url);
     const content: UsersWordsResponseSchema = await response.json();
 
@@ -97,7 +95,7 @@ export default class UsersWords {
     this.checkApiParams.checkId(userId);
     this.checkApiParams.checkId(wordId);
 
-    const url: URL = new URL(`${baseUrl}/users/${userId}/words/${wordId}`);
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
     const response: Response = await this.httpClient.put(url, JSON.stringify(body));
     const content: UsersWordsResponseSchema = await response.json();
 
@@ -117,7 +115,7 @@ export default class UsersWords {
     this.checkApiParams.checkId(userId);
     this.checkApiParams.checkId(wordId);
 
-    const url: URL = new URL(`${baseUrl}/users/${userId}/words/${wordId}`);
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
     await this.httpClient.delete(url);
   }
 }

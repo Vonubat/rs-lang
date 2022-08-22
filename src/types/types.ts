@@ -49,10 +49,42 @@ export interface UsersWordsResponseSchema {
 
 export interface UsersWordsRequestSchema {
   difficulty: string;
-  optional: Optional;
+  optional?: Optional;
 }
 
-export interface Optional {
+export interface AggregatedWords {
+  paginatedResults: PaginatedResult[];
+  totalCount: TotalCount[];
+}
+
+export interface PaginatedResult {
+  _id: string;
+  group: number;
+  page: number;
+  word: string;
+  image: string;
+  audio: string;
+  audioMeaning: string;
+  audioExample: string;
+  textMeaning: string;
+  textExample: string;
+  transcription: string;
+  textExampleTranslate: string;
+  textMeaningTranslate: string;
+  wordTranslate: string;
+  userWord?: UserWord;
+  optional?: Optional;
+}
+
+export interface UserWord {
+  difficulty: string;
+}
+
+interface TotalCount {
+  count: number;
+}
+
+interface Optional {
   [index: string]: string;
 }
 
