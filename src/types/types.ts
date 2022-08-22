@@ -88,6 +88,12 @@ interface Optional {
   [index: string]: string;
 }
 
+export interface Statistics {
+  learnedWords: number;
+  id?: string;
+  optional?: Optional;
+}
+
 // https://gist.github.com/daxartio/f387e811ba38eca5d5f8bff53f9fadb1
 export type CookiesOptions = {
   expires?: Date | number | string;
@@ -100,15 +106,3 @@ export type CookiesOptions = {
 export enum StatusCodes {
   IncorrectEmailOrPassword = 403,
 }
-
-export type Statistics = {
-  learnedWords: number;
-  // TODO: check optional type
-  // optional: Object
-};
-
-export type Settings = {
-  wordsPerDay: number;
-  // TODO: check optinal type
-  // optional: Object
-};
