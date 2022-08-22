@@ -16,11 +16,29 @@ export interface WordsResponseSchema {
   textExampleTranslate: string;
 }
 
-export type User = {
+export interface TokensSchema {
+  token: string;
+  refreshToken: string;
+}
+
+export interface AuthResponseSchema extends TokensSchema {
+  message: string;
+  userId: string;
   name: string;
+}
+
+export interface CredentialsSchema {
   email: string;
   password: string;
-};
+}
+
+export interface UserSchema extends CredentialsSchema {
+  name: string;
+}
+
+export interface UserResponseSchema extends CredentialsSchema {
+  id: string;
+}
 
 // https://gist.github.com/daxartio/f387e811ba38eca5d5f8bff53f9fadb1
 export type CookiesOptions = {
@@ -30,14 +48,6 @@ export type CookiesOptions = {
   secure?: boolean;
   'max-age'?: number;
 };
-
-export interface AuthResponseSchema {
-  message: string;
-  token: string;
-  refreshToken: string;
-  userId: string;
-  name: string;
-}
 
 export enum StatusCodes {
   IncorrectEmailOrPassword = 403,

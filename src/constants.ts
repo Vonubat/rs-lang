@@ -11,7 +11,13 @@ export default class Constants {
 
   // common constants
 
-  static readonly WORD_ID_LENGTH = 24;
+  static readonly ID_LENGTH = 24;
 
   static readonly PASSWORD_MIN_LENGTH = 8;
+
+  static readonly TOKEN_LENGTH = 171;
+
+  static readonly REFRESH_TOKEN_LENGTH = 236;
+
+  static readonly EMPTY_STRING = '';
 }

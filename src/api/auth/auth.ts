@@ -1,46 +1,49 @@
 import Constants from '../../constants';
 import HttpClient from '../http-client';
-import { AuthResponseSchema } from '../../types/types';
+import { AuthResponseSchema, CredentialsSchema } from '../../types/types';
+import CheckApiParams from '../../utilities/check-api-params';
+import Tokens from '../../services/auth/tokens';
 
-class Auth {
+export default class Auth {
   private httpClient: HttpClient;
 
-  constructor(httpClient: HttpClient) {
+  private checkApiParams: CheckApiParams;
+
+  constructor(httpClient: HttpClient, checkApiParams: CheckApiParams) {
     this.httpClient = httpClient;
+    this.checkApiParams = checkApiParams;
   }
 
   /**
    * Endpoint: /signin [POST method].
    * Logins a user and returns a JWT-token.
-   * @param {Object} Body- contains email, password.
-   * @param {number} Body.email - email of user.
-   * @param {number} Body.password - password of user (PASSWORD_MIN_LENGTH === 8).
-   * @return {Promise<AuthResponseSchema[]>} - object which contains message, token, refreshToken, userId, name.
+   * @param {Object} credentials - credentials of user. Object (request body) should contains: [Example] -> { "email": "string", "password": "string}
+   * @return {Promise<AuthResponseSchema>} - object which contains: message, token, refreshToken, userId, name.
    */
 
-  public async signIn({ email, password }: { email: string; password: string }): Promise<AuthResponseSchema> {
-    if (!email.includes('@')) {
-      throw new Error('email is not correct');
-    }
-    if (password.length < Constants.PASSWORD_MIN_LENGTH) {
-      throw new Error('password should contsins at least 8 chars');
-    }
+  public async signIn(credentials: CredentialsSchema): Promise<AuthResponseSchema> {
+    const { email, password } = credentials;
+    this.checkApiParams.checkEmail(email);
+    this.checkApiParams.checkPassword(password);
 
+    const url: URL = new URL(`${Constants.BASE_URL}/signin`);
     const response: Response = await this.httpClient.post(
-      `${Constants.BASE_URL}/signin`,
+      url,
       JSON.stringify({
         email,
         password,
-      })
+      }),
+      Tokens.getToken()
     );
-
     const content: AuthResponseSchema = await response.json();
-    console.log(content);
+    const { token, refreshToken } = content;
+    Tokens.setToken(token);
+    Tokens.setRefreshToken(refreshToken);
+
+    // console.log(content);
     return content;
   }
 }
 
 // const test = new Auth(new HttpClient());
 // test.signIn({ email: 'test@test.com', password: '1234567890' });
-
-export default Auth;
