@@ -17,7 +17,7 @@ export default class Auth {
   /**
    * Endpoint: /signin [POST method].
    * Logins a user and returns a JWT-token.
-   * @param {Object} credentials - credentials of user. Object (request body) should contains: [Example] -> { "email": "string", "password": "string}
+   * @param {Object} credentials - credentials of user. Object (request body) should contains: [Example] -> { "email": "string", "password": "string}.
    * @return {Promise<AuthResponseSchema>} - object which contains: message, token, refreshToken, userId, name.
    */
 
@@ -32,8 +32,7 @@ export default class Auth {
       JSON.stringify({
         email,
         password,
-      }),
-      Tokens.getToken()
+      })
     );
     const content: AuthResponseSchema = await response.json();
     const { token, refreshToken } = content;

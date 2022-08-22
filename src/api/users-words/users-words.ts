@@ -1,5 +1,6 @@
 import Constants from '../../constants';
-import { WordsResponseSchema } from '../../types/types';
+import { UsersWordsRequestSchema, UsersWordsResponseSchema } from '../../types/types';
+import CheckApiParams from '../../utilities/check-api-params';
 import HttpClient from '../http-client';
 
 const baseUrl = Constants.BASE_URL ? `${Constants.BASE_URL}/users` : null;
@@ -7,84 +8,116 @@ const baseUrl = Constants.BASE_URL ? `${Constants.BASE_URL}/users` : null;
 export default class UsersWords {
   private httpClient: HttpClient;
 
-  constructor(httpClient: HttpClient) {
+  private checkApiParams: CheckApiParams;
+
+  constructor(httpClient: HttpClient, checkApiParams: CheckApiParams) {
     this.httpClient = httpClient;
+    this.checkApiParams = checkApiParams;
   }
 
   /**
-   * Get all user words
-   * @param {string} id - user id
-   * @returns - all user words
+   * Endpoint: /users/{id}/words [GET method].
+   * Gets all user words.
+   * @param {string} userId - id of user.
+   * @returns {Promise<UsersWordsResponseSchema[]>} return all user words.
    */
-  public async getAllUserWords(id: string) {
-    if (baseUrl) {
-      const url = new URL(`${baseUrl}/${id}/words/`);
-      const words = this.httpClient.get(url);
-      return words;
-    }
-    return null;
+
+  public async getAllUserWords(userId: string): Promise<UsersWordsResponseSchema[]> {
+    this.checkApiParams.checkId(userId);
+
+    const url: URL = new URL(`${baseUrl}/users/${userId}/words/`);
+    const response: Response = await this.httpClient.get(url);
+    const content: UsersWordsResponseSchema[] = await response.json();
+
+    // console.log(content);
+    return content;
   }
 
   /**
-   * Create new word
-   * @param {string} id - user id
-   * @param {string} wordId - word id
-   * @param {WordsResponseSchema} newWord - new word data
-   * @returns new word
+   * Endpoint: /users/{id}/words/{wordId} [POST method].
+   * Create a user word by id.
+   * @param {string} userId - id of user.
+   * @param {string} wordId - id of word.
+   * @param {Object} body - Object (request body) should contains:
+   * [Example] -> { "difficulty": "string",  "optional": { ... }}.
+   * @returns {Promise<UsersWordsResponseSchema>} return created word.
    */
-  public createNewWord(id: string, wordId: string, newWord: WordsResponseSchema) {
-    if (baseUrl) {
-      const url = new URL(`${baseUrl}/${id}/words/${wordId}`);
-      // TODO: check type
-      const words = this.httpClient.post(url, JSON.stringify(newWord));
-      return words;
-    }
-    return null;
+
+  public async createUserWord(
+    userId: string,
+    wordId: string,
+    body: UsersWordsRequestSchema
+  ): Promise<UsersWordsResponseSchema> {
+    this.checkApiParams.checkId(userId);
+    this.checkApiParams.checkId(wordId);
+
+    const url: URL = new URL(`${baseUrl}/users/${userId}/words/${wordId}`);
+    const response: Response = await this.httpClient.post(url, JSON.stringify(body));
+    const content: UsersWordsResponseSchema = await response.json();
+
+    // console.log(content);
+    return content;
   }
 
   /**
-   * Get user word by word id
-   * @param id - user id
-   * @param wordId - word id
-   * @returns user word
+   * Endpoint: /users/{id}/words/{wordId} [GET method].
+   * Gets a user word by id.
+   * @param {string} userId - id of user.
+   * @param {string} wordId - id of word.
+   * @returns {Promise<UsersWordsResponseSchema>} return specific word.
    */
-  public getUserWordById(id: string, wordId: string) {
-    if (baseUrl) {
-      const url = new URL(`${baseUrl}/${id}/words/${wordId}`);
-      const word = this.httpClient.get(url);
-      return word;
-    }
-    return null;
+
+  public async getUserWordById(userId: string, wordId: string): Promise<UsersWordsResponseSchema> {
+    this.checkApiParams.checkId(userId);
+    this.checkApiParams.checkId(wordId);
+
+    const url: URL = new URL(`${baseUrl}/users/${userId}/words/${wordId}`);
+    const response: Response = await this.httpClient.get(url);
+    const content: UsersWordsResponseSchema = await response.json();
+
+    // console.log(content);
+    return content;
   }
 
   /**
-   * Update user word
-   * @param {string} id - user id
-   * @param {string} wordId - word id
-   * @param {WordsResponseSchema} word - word data
-   * @returns updated word
+   * Endpoint: /users/{id}/words/{wordId} [PUT method].
+   * Updates a user word by id
+   * @param {string} userId - id of user.
+   * @param {string} wordId - id of word.
+   * @param {Object} body - Object (request body) should contains:
+   * [Example] -> { "difficulty": "string",  "optional": { ... }}.
+   * @returns {Promise<UsersWordsResponseSchema>} return updated word.
    */
-  public updateUserWord(id: string, wordId: string, word: WordsResponseSchema) {
-    if (baseUrl) {
-      const url = new URL(`${baseUrl}/${id}/words/${wordId}`);
-      const result = this.httpClient.put(url, JSON.stringify(word));
-      return result;
-    }
-    return null;
+
+  public async updateUserWord(
+    userId: string,
+    wordId: string,
+    body: UsersWordsRequestSchema
+  ): Promise<UsersWordsResponseSchema> {
+    this.checkApiParams.checkId(userId);
+    this.checkApiParams.checkId(wordId);
+
+    const url: URL = new URL(`${baseUrl}/users/${userId}/words/${wordId}`);
+    const response: Response = await this.httpClient.put(url, JSON.stringify(body));
+    const content: UsersWordsResponseSchema = await response.json();
+
+    // console.log(content);
+    return content;
   }
 
   /**
-   * Delete word
-   * @param id - user id
-   * @param wordId - word id
-   * @returns success status
+   * Endpoint: /users/{id}/words/{wordId} [Delete method].
+   * Deletes user words by id.
+   * @param {string} userId - id of user.
+   * @param {string} wordId - id of word.
+   * @returns {Promise<void>} return nothing.
    */
-  public deleteUserWord(id: string, wordId: string) {
-    if (baseUrl) {
-      const url = new URL(`${baseUrl}/${id}/words/${wordId}`);
-      const result = this.httpClient.delete(url);
-      return result;
-    }
-    return null;
+
+  public async deleteUserWord(userId: string, wordId: string): Promise<void> {
+    this.checkApiParams.checkId(userId);
+    this.checkApiParams.checkId(wordId);
+
+    const url: URL = new URL(`${baseUrl}/users/${userId}/words/${wordId}`);
+    await this.httpClient.delete(url);
   }
 }

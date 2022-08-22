@@ -1,3 +1,4 @@
+import Tokens from '../services/auth/tokens';
 import CheckApiParams from '../utilities/check-api-params';
 
 export default class HttpClient {
@@ -14,7 +15,7 @@ export default class HttpClient {
     return res;
   }
 
-  public async get(link: RequestInfo | URL, token: string): Promise<Response> {
+  public async get(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
     this.checkApiParams.checkTokens(token);
 
     const props: RequestInit = {
@@ -29,7 +30,11 @@ export default class HttpClient {
     return this.responseHandler(response);
   }
 
-  public async put(link: RequestInfo | URL, body: BodyInit | null, token: string): Promise<Response> {
+  public async put(
+    link: RequestInfo | URL,
+    body: BodyInit | null,
+    token: string = Tokens.getToken()
+  ): Promise<Response> {
     this.checkApiParams.checkTokens(token);
 
     const props: RequestInit = {
@@ -45,7 +50,11 @@ export default class HttpClient {
     return this.responseHandler(response);
   }
 
-  public async post(link: RequestInfo | URL, body: BodyInit | null, token: string): Promise<Response> {
+  public async post(
+    link: RequestInfo | URL,
+    body: BodyInit | null,
+    token: string = Tokens.getToken()
+  ): Promise<Response> {
     this.checkApiParams.checkTokens(token);
 
     const props: RequestInit = {
@@ -61,7 +70,7 @@ export default class HttpClient {
     return this.responseHandler(response);
   }
 
-  public async delete(link: RequestInfo | URL, token: string): Promise<Response> {
+  public async delete(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
     this.checkApiParams.checkTokens(token);
 
     const props: RequestInit = {

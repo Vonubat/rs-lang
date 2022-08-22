@@ -18,8 +18,8 @@ export default class Users {
    * Endpoint: /users [POST method].
    * Creates a new user.
    * @param {Object} user - User that we want to create. Object (request body) should contains:
-   * [Example] -> { "name": "string", "email": "string", "password": "string}
-   * @returns {Promise<UserResponseSchema>} created user.
+   * [Example] -> { "name": "string", "email": "string", "password": "string}.
+   * @returns {Promise<UserResponseSchema>} return created user.
    */
 
   public async createUser(user: UserSchema): Promise<UserResponseSchema> {
@@ -28,7 +28,7 @@ export default class Users {
     this.checkApiParams.checkPassword(password);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users`);
-    const response: Response = await this.httpClient.post(url, JSON.stringify(user), Tokens.getToken());
+    const response: Response = await this.httpClient.post(url, JSON.stringify(user));
     const content: UserResponseSchema = await response.json();
 
     // console.log(content);
@@ -39,14 +39,14 @@ export default class Users {
    * Endpoint: /users/{id} [GET method].
    * Gets user.
    * @param {string} userId - id of user that we want to get.
-   * @returns {Promise<UserSchema>} returned user.
+   * @returns {Promise<UserSchema>} returned specific user.
    */
 
   public async getUser(userId: string): Promise<UserSchema> {
     this.checkApiParams.checkId(userId);
 
-    const url: URL = new URL(`${Constants.BASE_URL}/${userId}`);
-    const response: Response = await this.httpClient.get(url, Tokens.getToken());
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}`);
+    const response: Response = await this.httpClient.get(url);
     const content: UserSchema = await response.json();
 
     // console.log(content);
@@ -57,8 +57,8 @@ export default class Users {
    * Endpoint: /users/{id} [PUT method].
    * Updates a user.
    * @param {string} userId - id of user that we want to update.
-   * @param {Object} credentials - credentials of user. Object (request body) should contains: [Example] -> { "email": "string", "password": "string}
-   * @returns {Promise<UserResponseSchema>} - the user has been updated.
+   * @param {Object} credentials - credentials of user. Object (request body) should contains: [Example] -> { "email": "string", "password": "string}.
+   * @returns {Promise<UserResponseSchema>} - return updated has been updated.
    */
 
   public async updateUser(userId: string, credentials: CredentialsSchema): Promise<UserResponseSchema> {
@@ -67,8 +67,8 @@ export default class Users {
     this.checkApiParams.checkPassword(password);
     this.checkApiParams.checkId(userId);
 
-    const url: URL = new URL(`${Constants.BASE_URL}/${userId}`);
-    const response: Response = await this.httpClient.put(url, JSON.stringify(credentials), Tokens.getToken());
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}`);
+    const response: Response = await this.httpClient.put(url, JSON.stringify(credentials));
     const content: UserResponseSchema = await response.json();
 
     // console.log(content);
@@ -79,14 +79,14 @@ export default class Users {
    * Endpoint: /users/{id} [DELETE method].
    * Deletes a user by id.
    * @param {string} userId - id of user that we want to delete.
-   * @returns {Promise<UserResponseSchema>} - the user has been updated.
+   * @returns {Promise<void>} - return nothing.
    */
 
   public async deleteUser(userId: string): Promise<void> {
     this.checkApiParams.checkId(userId);
 
-    const url: URL = new URL(`${Constants.BASE_URL}/${userId}`);
-    await this.httpClient.delete(url, Tokens.getToken());
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}`);
+    await this.httpClient.delete(url);
   }
 
   /**
@@ -99,7 +99,7 @@ export default class Users {
   public async getNewUserTokens(userId: string): Promise<TokensSchema> {
     this.checkApiParams.checkId(userId);
 
-    const url: URL = new URL(`${Constants.BASE_URL}/${userId}/tokens`);
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/tokens`);
     const response: Response = await this.httpClient.get(url, Tokens.getRefreshToken());
     const content: TokensSchema = await response.json();
     const { token, refreshToken } = content;

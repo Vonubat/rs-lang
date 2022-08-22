@@ -2,7 +2,6 @@ import Constants from '../../constants';
 import HttpClient from '../http-client';
 import { WordsResponseSchema } from '../../types/types';
 import CheckApiParams from '../../utilities/check-api-params';
-import Tokens from '../../services/auth/tokens';
 
 export default class Words {
   private httpClient: HttpClient;
@@ -19,14 +18,14 @@ export default class Words {
    * Get a chunk of words.
    * @param {number} groupNumber - # of a group (total: 6 groups, from 0 to 5).
    * @param {number} pageNumber - # of page in the group (total: 30 pages in the group, from 0 to 29). Every page contains 20 words (from 0 to 19).
-   * @return {Promise<WordsResponseSchema[]>} - array of 20 words according input Parameters
+   * @return {Promise<WordsResponseSchema[]>} - array of 20 words according input Parameters.
    */
 
   public async getWords(groupNumber = 0, pageNumber = 0): Promise<WordsResponseSchema[]> {
     this.checkApiParams.checkGroupsPagesOfWords(groupNumber, pageNumber);
 
     const url: URL = new URL(`${Constants.BASE_URL}/words?group=${groupNumber}&page=${pageNumber}`);
-    const response: Response = await this.httpClient.get(url, Tokens.getToken());
+    const response: Response = await this.httpClient.get(url);
     const content: WordsResponseSchema[] = await response.json();
 
     // console.log(content);
@@ -44,7 +43,7 @@ export default class Words {
     this.checkApiParams.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/words/${wordId}`);
-    const response = await this.httpClient.get(url, Tokens.getToken());
+    const response = await this.httpClient.get(url);
     const content: WordsResponseSchema = await response.json();
 
     // console.log(content);
