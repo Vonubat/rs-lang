@@ -2,41 +2,42 @@ import Constants from '../../constants';
 import { Statistics } from '../../types/types';
 import HttpClient from '../http-client';
 
-const baseUrl = Constants.BASE_URL ? `${Constants.BASE_URL}/users` : null;
+export default class UsersStatistics extends HttpClient {
+  /**
+   * Endpoint: /users/{id}/statistics [GET method].
+   * Gets statistics.
+   * @param {string} userId - id of user.
+   * @returns {Promise<Statistics>} return statistics.
+   */
 
-export default class UsersStatistics {
-  private httpClient: HttpClient;
+  public async getStatistics(userId: string): Promise<Statistics> {
+    this.checkId(userId);
 
-  constructor(httpClient: HttpClient) {
-    this.httpClient = httpClient;
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/statistics`);
+    const response: Response = await this.get(url);
+    const content: Statistics = await response.json();
+
+    // console.log(content);
+    return content;
   }
 
   /**
-   * Get statistics
-   * @param id - user id
-   * @returns statistics
+   * Endpoint: /users/{id}/statistics [PUT method].
+   * Upserts new statistics.
+   * @param {string} userId - id of user.
+   * @param {Object} body - Object (request body) should contains:
+   * [Example] -> { "learnedWords": "number",  "optional": { ... }}.
+   * @returns {Promise<Statistics>} return statistics.
    */
-  public getStatistics(id: string) {
-    if (baseUrl) {
-      const url = new URL(`${baseUrl}/${id}/statistics`);
-      const statistics = this.httpClient.get(url);
-      return statistics;
-    }
-    return null;
-  }
 
-  /**
-   * /users/{id}/statistics
-   * @param id user id
-   * @param learntWords - learnt words
-   * @returns statistics
-   */
-  public setStatistics(id: string, learnedWords: Statistics) {
-    if (baseUrl) {
-      const url = new URL(`${baseUrl}/${id}/statistics`);
-      const result = this.httpClient.put(url, JSON.stringify(learnedWords));
-      return result;
-    }
-    return null;
+  public async setStatistics(userId: string, body: Statistics): Promise<Statistics> {
+    this.checkId(userId);
+
+    const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/statistics`);
+    const response: Response = await this.put(url, JSON.stringify(body));
+    const content: Statistics = await response.json();
+
+    // console.log(content);
+    return content;
   }
 }
