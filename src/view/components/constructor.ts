@@ -1,51 +1,90 @@
 export default class HTMLConstructor {
-  public div(className: string): HTMLDivElement {
+  public div(classList?: string[]): HTMLDivElement {
     const element = document.createElement('div');
-    element.classList.add(className);
+    if (classList) {
+      classList.forEach((elem) => {
+        element.classList.add(elem);
+      });
+    }
 
     return element;
   }
 
-  public span(className: string): HTMLSpanElement {
+  public span(classList?: string[]): HTMLSpanElement {
     const element = document.createElement('span');
-    element.classList.add(className);
+    if (classList) {
+      classList.forEach((elem) => {
+        element.classList.add(elem);
+      });
+    }
 
     return element;
   }
 
-  public img(className: string, src: string, alt: string): HTMLImageElement {
+  public img(src: string, alt: string, classList?: string[]): HTMLImageElement {
     const element = document.createElement('img');
     element.src = src;
     element.alt = alt;
-    element.classList.add(className);
-
+    if (classList) {
+      classList.forEach((elem) => {
+        element.classList.add(elem);
+      });
+    }
     return element;
   }
 
-  public button(className: string): HTMLButtonElement {
+  public button(classList?: string[]): HTMLButtonElement {
     const element = document.createElement('button');
     element.type = 'button';
-    element.classList.add(className);
+    if (classList) {
+      classList.forEach((elem) => {
+        element.classList.add(elem);
+      });
+    }
 
     return element;
   }
 
-  /* public svg(): SVGElement {
-        const element = document.create
-    } */
+  public svg(type: string, classList?: string[]) {
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const XLINK_NS = 'http://www.w3.org/1999/xlink';
+    const boxWidth = 32;
+    const boxHeight = 32;
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttributeNS(null, 'width', `${boxWidth}`);
+    svg.setAttributeNS(null, 'height', `${boxHeight}`);
+    const use = document.createElementNS(SVG_NS, 'use');
+    use.setAttributeNS(XLINK_NS, 'xlink:href', `./assets/bootstrap-icons.svg#${type}`);
+    svg.appendChild(use);
+    if (classList) {
+      classList.forEach((elem) => {
+        svg.classList.add(elem);
+      });
+    }
+    return svg;
+  }
 
-  public audio(className: string, src: string): HTMLAudioElement {
+  public audio(src: string, classList?: string[]): HTMLAudioElement {
     const element = document.createElement('audio');
     element.src = src;
-    element.classList.add(className);
+    if (classList) {
+      classList.forEach((elem) => {
+        element.classList.add(elem);
+      });
+    }
 
     return element;
   }
 
-  public a(className: string, href: string): HTMLAnchorElement {
+  public a(href: string, classList?: string[]): HTMLAnchorElement {
     const element = document.createElement('a');
+    element.setAttribute('target', '_blanc');
     element.href = href;
-    element.classList.add(className);
+    if (classList) {
+      classList.forEach((elem) => {
+        element.classList.add(elem);
+      });
+    }
 
     return element;
   }
