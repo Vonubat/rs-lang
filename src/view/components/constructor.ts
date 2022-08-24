@@ -55,7 +55,7 @@ export default class HTMLConstructor {
     classList?: string[],
     id?: string,
     attributes?: [string, string][],
-    innerText?: string
+    innerHtml?: string
   ): HTMLElement {
     const element: HTMLElement = document.createElement(type);
     if (classList) {
@@ -71,8 +71,8 @@ export default class HTMLConstructor {
         element.setAttribute(elem[0], elem[1]);
       });
     }
-    if (innerText) {
-      element.innerText = innerText;
+    if (innerHtml) {
+      element.innerHTML = innerHtml;
     }
 
     return element;

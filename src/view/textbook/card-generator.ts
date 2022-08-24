@@ -3,16 +3,6 @@ import { WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 
 export default class CardGenerator extends HTMLConstructor {
-  groupNumber: number;
-
-  pageNumber: number;
-
-  constructor(groupNumber: number, pageNumber: number) {
-    super();
-    this.groupNumber = groupNumber;
-    this.pageNumber = pageNumber;
-  }
-
   createCard(word: WordsResponseSchema): HTMLElement {
     return this.createHtmlElement('div', ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'], `card-${word.id}`);
   }
@@ -47,7 +37,7 @@ export default class CardGenerator extends HTMLConstructor {
   }
 
   createSoundIcon(word: WordsResponseSchema): HTMLElement {
-    return this.createHtmlElement('image', ['sound-icon'], `sound-icon-${word.id}`, [
+    return this.createHtmlElement('img', ['sound-icon'], `sound-icon-${word.id}`, [
       ['alt', `sound-icon`],
       ['src', `./assets/sound-icon.png`],
     ]);
@@ -66,7 +56,7 @@ export default class CardGenerator extends HTMLConstructor {
   createTextMeaning(word: WordsResponseSchema): HTMLElement {
     return this.createHtmlElement(
       'p',
-      ['card-text', 'mb-0', 'text-meaning'],
+      ['card-text', 'mb-3', 'rounded', 'text-meaning'],
       `text-meaning-${word.id}`,
       undefined,
       `${word.textMeaning} `
@@ -74,26 +64,19 @@ export default class CardGenerator extends HTMLConstructor {
   }
 
   createTextMeaningTranslate(word: WordsResponseSchema): HTMLElement {
-    const element: HTMLElement = this.createHtmlElement(
-      'p',
-      ['card-text', 'text-meaning-translate'],
-      `text-meaning-translate-${word.id}`
-    );
-    const innerElement: HTMLElement = this.createHtmlElement(
+    return this.createHtmlElement(
       'small',
-      ['text-muted'],
-      undefined,
+      ['text-muted', 'text-meaning-translate'],
+      `text-meaning-translate-${word.id}`,
       undefined,
       `${word.textMeaningTranslate} `
     );
-    element.append(innerElement);
-    return element;
   }
 
   createTextExample(word: WordsResponseSchema): HTMLElement {
     return this.createHtmlElement(
       'p',
-      ['card-text', 'mb-0', 'text-example'],
+      ['card-text', 'mb-3', 'rounded', 'text-example'],
       `text-example-${word.id}`,
       undefined,
       `${word.textExample} `
@@ -101,20 +84,13 @@ export default class CardGenerator extends HTMLConstructor {
   }
 
   createTextExampleTranslate(word: WordsResponseSchema): HTMLElement {
-    const element: HTMLElement = this.createHtmlElement(
-      'p',
-      ['card-text', 'text-example-translate'],
-      `text-example-translate-${word.id}`
-    );
-    const innerElement: HTMLElement = this.createHtmlElement(
+    return this.createHtmlElement(
       'small',
-      ['text-muted'],
-      undefined,
+      ['text-muted', 'text-example-translate'],
+      `text-example-translate-${word.id}`,
       undefined,
       `${word.textExampleTranslate} `
     );
-    element.append(innerElement);
-    return element;
   }
 
   generateCard(word: WordsResponseSchema): HTMLElement {
@@ -132,7 +108,9 @@ export default class CardGenerator extends HTMLConstructor {
     const textExampleTranslate: HTMLElement = this.createTextExampleTranslate(word);
 
     wordContainer.append(newWord, transcription, soundIcon, wordTranslate);
-    cardBody.append(wordContainer, textMeaning, textMeaningTranslate, textExample, textExampleTranslate);
+    textMeaning.append(textMeaningTranslate);
+    textExample.append(textExampleTranslate);
+    cardBody.append(wordContainer, textMeaning, textExample);
     card.append(img, cardBody);
 
     return card;
