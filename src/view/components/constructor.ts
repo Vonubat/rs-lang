@@ -50,20 +50,29 @@ export default class HTMLConstructor {
     return element;
   }
 
-  public basic(type: string, id?: string, classList?: string[], atributes?: [string, string][]) {
-    const element = document.createElement(type);
+  public createHtmlElement(
+    type: string,
+    classList?: string[],
+    id?: string,
+    attributes?: [string, string][],
+    innerText?: string
+  ): HTMLElement {
+    const element: HTMLElement = document.createElement(type);
     if (classList) {
-      classList.forEach((elem) => {
+      classList.forEach((elem: string): void => {
         element.classList.add(elem);
       });
     }
     if (id) {
       element.id = id;
     }
-    if (atributes) {
-      atributes.forEach((elem) => {
+    if (attributes) {
+      attributes.forEach((elem: [string, string]): void => {
         element.setAttribute(elem[0], elem[1]);
       });
+    }
+    if (innerText) {
+      element.innerText = innerText;
     }
 
     return element;
