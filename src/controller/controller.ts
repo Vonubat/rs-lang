@@ -9,3 +9,4 @@ export class Controller {
 }
 
 export const controller: Controller = new Controller(api);
+console.log(controller.api.words.getWords());

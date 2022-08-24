@@ -11,5 +11,41 @@
     <title>RS Lang</title>
   </head>
   <body id="body">
+    <div class="d-flex flex-row flex-wrap cards-container" id="cards-container">
+      <div class="card d-flex align-items-center m-2 p2-2" id="card-${id}">
+        <div class="">
+          <img
+            src="https://rs-lang-2022q1-nseb.herokuapp.com/files/01_0002.jpg"
+            class="img-fluid rounded image"
+            alt="image-${word}"
+            id="image-${id}"
+          />
+        </div>
+        <div class="">
+          <div class="card-body" id="card-body-${id}">
+            <h5 class="card-title mb-3 word-container" id="word-container-${id}">
+              <span class="word" id="word-${id}">Incidence </span
+              ><span class="transcription" id="transcription-${id}">[ínsədəns] </span>
+              <img src="./assets/sound-icon.png" alt="sound-icon" class="sound-icon" id="sound-icon-${id}" />
+              <small class="text-muted word-translate" id="word-translate-${id}">частота</small>
+            </h5>
+            <p class="card-text mb-0 text-meaning" id="text-meaning-${id}">
+              The number of times something happens is the incidence of the event.
+            </p>
+            <p class="card-text text-meaning-translate" id="text-meaning-translate-${id}">
+              <small class="text-muted">Количество случаев, когда что-то случается, является частотой события</small>
+            </p>
+            <p class="card-text mb-0 text-example" id="text-example-${id}">
+              We need to increase the incidence of success in school.
+            </p>
+            <p class="card-text">
+              <small class="text-muted text-example-translate" id="text-example-translate-${id}"
+                >Нам нужно увеличить частоту успеха в школе</small
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
