@@ -33,7 +33,7 @@ export default class Words extends HttpClient {
     this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/words/${wordId}`);
-    const response = await this.get(url);
+    const response: Response = await this.get(url);
     const content: WordsResponseSchema = await response.json();
 
     // console.log(content);

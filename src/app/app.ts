@@ -1,12 +1,12 @@
-import { api, ApiClass } from '../api/api';
+import { controller, Controller } from '../controller/controller';
 
 class App {
-  public API: ApiClass;
+  public controller: Controller;
 
-  constructor(value: ApiClass) {
-    this.API = value;
+  constructor(value: Controller) {
+    this.controller = value;
   }
 }
 
-const app: App = new App(api);
+const app: App = new App(controller);
 console.log(app);

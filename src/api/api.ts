@@ -6,7 +6,7 @@ import UsersWords from './users-words/users-words';
 import Users from './users/users';
 import Words from './words/words';
 
-export class ApiClass {
+export class Api {
   public words: Words;
 
   public users: Users;
@@ -41,7 +41,7 @@ export class ApiClass {
   }
 }
 
-export const api: ApiClass = new ApiClass(
+export const api: Api = new Api(
   new Words(),
   new Users(),
   new UsersWords(),
