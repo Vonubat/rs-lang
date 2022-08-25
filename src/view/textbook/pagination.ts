@@ -128,13 +128,7 @@ export default class Pagination extends HTMLConstructor {
   }
 
   createDropdownItem(id: string, i: number, position: string): HTMLElement {
-    return this.createHtmlElement(
-      'a',
-      ['dropdown-item', `${id}-${position}`],
-      `${id}-${i}-${position}`,
-      [['href', '#']],
-      `${i}`
-    );
+    return this.createHtmlElement('a', ['dropdown-item', `${id}`], `${id}-${i}-${position}`, [['href', '#']], `${i}`);
   }
 
   createDropdownDivider(): HTMLElement {
@@ -177,8 +171,8 @@ export default class Pagination extends HTMLConstructor {
       dropdownMenu.append(dropdownItem);
     }
 
-    const dropdownItemSeven: HTMLElement = this.createDropdownItem('group-number', 7, position);
-    dropdownMenu.append(dropdownDivider, dropdownItemSeven);
+    const dropdownItemUserWords: HTMLElement = this.createDropdownItem('group-number', 7, position);
+    dropdownMenu.append(dropdownDivider, dropdownItemUserWords);
 
     numberCurrentContainer.append(groupNumberCurrent, dropdownMenu);
     pagination.append(leftArrow, numberCurrentContainer, rightArrow);

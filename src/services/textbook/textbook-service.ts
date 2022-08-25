@@ -85,6 +85,16 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words);
   }
 
+  async setPageNumber(): Promise<void> {
+    this.pageConfig.setPageNumber(5);
+
+    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+
+    view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
+    view.textbookView.drawCardsContainer(words);
+  }
+
   listenPaginationPageNumber(): void {
     this.pageNumberItemsLeft.forEach((item: Element): void =>
       item.addEventListener('click', this.decreasePageNumber.bind(this))
@@ -97,6 +107,15 @@ export default class TextbookService {
     );
     this.groupNumberItemsRight.forEach((item: Element): void =>
       item.addEventListener('click', this.increaseGroupNumber.bind(this))
+    );
+    this.pageNumberCurrent.forEach((item: Element): void =>
+      // item.addEventListener('click', this.setPageNumber.bind(this))
+      console.log(item)
+    );
+
+    this.groupNumberCurrent.forEach((item: Element): void =>
+      // item.addEventListener('click', this.setPageNumber.bind(this))
+      console.log(item)
     );
   }
 }
