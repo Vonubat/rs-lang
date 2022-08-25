@@ -89,36 +89,37 @@ export default class Pagination extends HTMLConstructor {
     const leftGroupArrows: NodeListOf<Element> = textbook.querySelectorAll('.left-group-number');
     const rightGroupArrows: NodeListOf<Element> = textbook.querySelectorAll('.right-group-number');
 
+    leftPageArrows.forEach((item: Element): void => {
+      item.classList.remove('disabled');
+    });
+    rightPageArrows.forEach((item: Element): void => {
+      item.classList.remove('disabled');
+    });
+    leftGroupArrows.forEach((item: Element): void => {
+      item.classList.remove('disabled');
+    });
+    rightGroupArrows.forEach((item: Element): void => {
+      item.classList.remove('disabled');
+    });
+
     if (pageConfig.pageNumber === 0) {
       leftPageArrows.forEach((item: Element): void => {
         item.classList.add('disabled');
       });
-    } else if (pageConfig.pageNumber === 29) {
+    }
+    if (pageConfig.pageNumber === 29) {
       rightPageArrows.forEach((item: Element): void => {
         item.classList.add('disabled');
-      });
-    } else {
-      leftPageArrows.forEach((item: Element): void => {
-        item.classList.remove('disabled');
-      });
-      rightPageArrows.forEach((item: Element): void => {
-        item.classList.remove('disabled');
       });
     }
     if (pageConfig.groupNumber === 0) {
       leftGroupArrows.forEach((item: Element): void => {
         item.classList.add('disabled');
       });
-    } else if (pageConfig.groupNumber === 6) {
+    }
+    if (pageConfig.groupNumber === 6) {
       rightGroupArrows.forEach((item: Element): void => {
         item.classList.add('disabled');
-      });
-    } else {
-      leftGroupArrows.forEach((item: Element): void => {
-        item.classList.remove('disabled');
-      });
-      rightGroupArrows.forEach((item: Element): void => {
-        item.classList.remove('disabled');
       });
     }
   }

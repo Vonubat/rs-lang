@@ -1,0 +1,18 @@
+// Import all of Bootstrap's CSS
+
+@import '~bootstrap/scss/bootstrap';
+@import './components/card';
+@import './components/pagination';
+@import './components/svg';
+@import './components/video';
+@import './components/img';
+@import './layout/main';
+
+html {
+  scroll-behavior: smooth;
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}

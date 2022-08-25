@@ -18,6 +18,10 @@ export default class TextbookService {
 
   groupNumberCurrent!: NodeListOf<Element>;
 
+  pageNumber!: NodeListOf<Element>;
+
+  groupNumber!: NodeListOf<Element>;
+
   constructor() {
     this.pageConfig = new PageConfig();
   }
@@ -33,7 +37,7 @@ export default class TextbookService {
 
     view.textbookView.drawPage(words, pageConfig);
     this.setPaginationItems();
-    this.listenPaginationPageNumber();
+    this.listenPagination();
   }
 
   setPaginationItems(): void {
@@ -43,6 +47,8 @@ export default class TextbookService {
     this.groupNumberItemsRight = view.textbookView.textbook.querySelectorAll('.right-group-number');
     this.pageNumberCurrent = view.textbookView.textbook.querySelectorAll('.page-number-current');
     this.groupNumberCurrent = view.textbookView.textbook.querySelectorAll('.group-number-current');
+    this.pageNumber = view.textbookView.textbook.querySelectorAll('.page-number');
+    this.groupNumber = view.textbookView.textbook.querySelectorAll('.group-number');
   }
 
   async decreasePageNumber(): Promise<void> {
@@ -85,8 +91,20 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words);
   }
 
-  async setPageNumber(): Promise<void> {
-    this.pageConfig.setPageNumber(5);
+  async setPageNumber(event: Event): Promise<void> {
+    const value: number = Number((event.target as HTMLElement).innerText) - 1;
+    this.pageConfig.setPageNumber(value);
+
+    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+
+    view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
+    view.textbookView.drawCardsContainer(words);
+  }
+
+  async setGroupNumber(event: Event): Promise<void> {
+    const value: number = Number((event.target as HTMLElement).innerText) - 1;
+    this.pageConfig.setGroupNumber(value);
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
@@ -95,7 +113,7 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words);
   }
 
-  listenPaginationPageNumber(): void {
+  listenPagination(): void {
     this.pageNumberItemsLeft.forEach((item: Element): void =>
       item.addEventListener('click', this.decreasePageNumber.bind(this))
     );
@@ -108,14 +126,7 @@ export default class TextbookService {
     this.groupNumberItemsRight.forEach((item: Element): void =>
       item.addEventListener('click', this.increaseGroupNumber.bind(this))
     );
-    this.pageNumberCurrent.forEach((item: Element): void =>
-      // item.addEventListener('click', this.setPageNumber.bind(this))
-      console.log(item)
-    );
-
-    this.groupNumberCurrent.forEach((item: Element): void =>
-      // item.addEventListener('click', this.setPageNumber.bind(this))
-      console.log(item)
-    );
+    this.pageNumber.forEach((item: Element): void => item.addEventListener('click', this.setPageNumber.bind(this)));
+    this.groupNumber.forEach((item: Element): void => item.addEventListener('click', this.setGroupNumber.bind(this)));
   }
 }
