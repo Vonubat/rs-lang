@@ -1,16 +1,16 @@
 import { api, Api } from '../api/api';
-import { services, Services } from '../services/services';
+import { view, View } from '../view/view';
 
 export class Controller {
   public api: Api;
 
-  public services: Services;
+  public view: View;
 
-  constructor(value: Api, value2: Services) {
+  constructor(value: Api, value2: View) {
     this.api = value;
-    this.services = value2;
+    this.view = value2;
   }
 }
 
-export const controller: Controller = new Controller(api, services);
+export const controller: Controller = new Controller(api, view);
 console.log(controller.api.words.getWords());

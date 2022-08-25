@@ -9,3 +9,5 @@ export class Services {
 }
 
 export const services: Services = new Services();
+
+services.textbookService.drawPage();

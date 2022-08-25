@@ -15,6 +15,16 @@ export default class PageConfig {
     return 0;
   }
 
+  public getPageConfig(): PageConfig {
+    const pageNumber: number = this.getPageNumber();
+    const groupNumber: number = this.getGroupNumber();
+
+    return {
+      pageNumber,
+      groupNumber,
+    };
+  }
+
   public setPageNumber(value: number, action?: Action): void {
     if (action) {
       const currentValue: number = this.getPageNumber();

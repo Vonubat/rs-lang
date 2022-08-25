@@ -41,6 +41,7 @@
     "normalize.css": "^8.0.1"
   },
   "devDependencies": {
+    "@types/bootstrap": "^5.2.3",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@typescript-eslint/parser": "^5.30.0",
     "autoprefixer": "^10.4.8",

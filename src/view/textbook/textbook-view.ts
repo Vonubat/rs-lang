@@ -1,10 +1,8 @@
-import { controller } from '../../controller/controller';
 import { WordsResponseSchema } from '../../types/types';
-import HTMLConstructor from '../components/constructor';
 import CardsContainer from './cards-container';
 import Pagination from './pagination';
 
-export default class TextbookView extends HTMLConstructor {
+export default class TextbookView {
   cardsContainer: CardsContainer;
 
   pagination: Pagination;
@@ -13,27 +11,20 @@ export default class TextbookView extends HTMLConstructor {
 
   cardsContainerInstance!: HTMLElement;
 
-  paginationTopInstance: HTMLElement;
+  paginationTopInstance!: HTMLElement;
 
-  paginationBottomInstance: HTMLElement;
+  paginationBottomInstance!: HTMLElement;
 
   constructor() {
-    super();
     this.cardsContainer = new CardsContainer();
     this.pagination = new Pagination();
     this.textbook = document.getElementById('body') as HTMLElement;
-    this.paginationTopInstance = this.pagination.generatePaginationContainer('top');
-    this.paginationBottomInstance = this.pagination.generatePaginationContainer('bottom');
   }
 
-  async drawPage(): Promise<void> {
-    const words: WordsResponseSchema[] = await controller.api.words.getWords();
-
+  drawPage(words: WordsResponseSchema[], currentNumber: number): void {
     this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+    this.paginationTopInstance = this.pagination.generatePaginationContainer('top', currentNumber);
+    this.paginationBottomInstance = this.pagination.generatePaginationContainer('bottom', currentNumber);
     this.textbook.append(this.paginationTopInstance, this.cardsContainerInstance, this.paginationBottomInstance);
   }
 }
-
-const test: TextbookView = new TextbookView();
-test.drawPage();
-console.dir(test);
