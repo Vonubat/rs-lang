@@ -27,4 +27,9 @@ export default class TextbookView {
     this.paginationBottomInstance = this.pagination.generatePaginationContainer('bottom', pageConfig);
     this.textbook.append(this.paginationTopInstance, this.cardsContainerInstance, this.paginationBottomInstance);
   }
+
+  drawCardsContainer(words: WordsResponseSchema[]): void {
+    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+    this.paginationTopInstance.append(this.cardsContainerInstance);
+  }
 }

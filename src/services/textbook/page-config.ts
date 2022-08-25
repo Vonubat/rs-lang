@@ -24,24 +24,23 @@ export default class PageConfig {
     };
   }
 
-  public setPageNumber(value: number, action?: Action): void {
-    if (action) {
-      const currentValue: number = this.getPageNumber();
-      const newValue: number = action === '+' ? currentValue + 1 : currentValue - 1;
-      this.setPageNumber(newValue);
-    } else {
-      localStorage.setItem('pageNumber', String(value));
-    }
+  public shiftPageNumber(action: Action): void {
+    const currentValue: number = this.getPageNumber();
+    const newValue: number = action === '+' ? currentValue + 1 : currentValue - 1;
+    this.setPageNumber(newValue);
   }
 
-  public setGroupNumber(value: number, action?: Action): void {
-    if (action) {
-      const currentValue: number = this.getGroupNumber();
-      const newValue: number = action === '+' ? currentValue + 1 : currentValue - 1;
-      this.setGroupNumber(newValue);
-    } else {
-      localStorage.setItem('groupNumber', String(value));
-      localStorage.setItem('pageNumber', '0');
-    }
+  public setPageNumber(value: number): void {
+    localStorage.setItem('pageNumber', String(value));
+  }
+
+  public shiftGroupNumber(action: Action): void {
+    const currentValue: number = this.getGroupNumber();
+    const newValue: number = action === '+' ? currentValue + 1 : currentValue - 1;
+    this.setGroupNumber(newValue);
+  }
+
+  public setGroupNumber(value: number): void {
+    localStorage.setItem('groupNumber', String(value));
   }
 }

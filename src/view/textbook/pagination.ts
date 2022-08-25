@@ -29,14 +29,14 @@ export default class Pagination extends HTMLConstructor {
     return this.createHtmlElement('a', ['page-link'], undefined, [['href', '#']], `${direction}`);
   }
 
-  createNumberCurrent(id: string, i: number, position: string): HTMLElement {
+  createNumberCurrent(id: string, i: number): HTMLElement {
     const lastPage = id === 'page-number' ? 30 : 7;
     const pageName = id === 'page-number' ? 'Page' : 'Group';
 
     return this.createHtmlElement(
       'span',
-      ['page-link', 'dropdown-toggle', `${id}-current-${position}`],
-      `${id}-current-${position}`,
+      ['page-link', 'dropdown-toggle', `${id}-current`],
+      undefined,
       [['data-bs-toggle', 'dropdown']],
       `${pageName} ${i} / ${lastPage}`
     );
@@ -68,7 +68,7 @@ export default class Pagination extends HTMLConstructor {
     const pageItemActive: HTMLElement = this.createPageItem(['page-item', 'active']);
     const leftArrow: HTMLElement = this.createArrow(Constants.LEFT_ARROW);
     const rightArrow: HTMLElement = this.createArrow(Constants.RIGHT_ARROW);
-    const pageNumberCurrent: HTMLElement = this.createNumberCurrent('page-number', pageConfig.pageNumber, position);
+    const pageNumberCurrent: HTMLElement = this.createNumberCurrent('page-number', pageConfig.pageNumber + 1);
     const dropdownMenu: HTMLElement = this.createDropdownMenu();
 
     for (let i = 1; i <= 30; i += 1) {
@@ -93,7 +93,7 @@ export default class Pagination extends HTMLConstructor {
     const pageItemActive: HTMLElement = this.createPageItem(['page-item', 'active']);
     const leftArrow: HTMLElement = this.createArrow(Constants.LEFT_ARROW);
     const rightArrow: HTMLElement = this.createArrow(Constants.RIGHT_ARROW);
-    const groupNumberCurrent: HTMLElement = this.createNumberCurrent('group-number', pageConfig.groupNumber, position);
+    const groupNumberCurrent: HTMLElement = this.createNumberCurrent('group-number', pageConfig.groupNumber + 1);
     const dropdownMenu: HTMLElement = this.createDropdownMenu();
     const dropdownDivider: HTMLElement = this.createDropdownDivider();
 
