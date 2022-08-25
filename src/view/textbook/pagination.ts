@@ -30,13 +30,14 @@ export default class Pagination extends HTMLConstructor {
 
   createNumberCurrent(id: string, i: number, position: string): HTMLElement {
     const lastPage = id === 'page-number' ? 30 : 7;
+    const pageName = id === 'page-number' ? 'Page' : 'Group';
 
     return this.createHtmlElement(
       'span',
       ['page-link', 'dropdown-toggle', `${id}-current-${position}`],
       `${id}-current-${position}`,
       [['data-bs-toggle', 'dropdown']],
-      `Page ${i} / ${lastPage}`
+      `${pageName} ${i} / ${lastPage}`
     );
   }
 
@@ -61,8 +62,8 @@ export default class Pagination extends HTMLConstructor {
   generatePaginationPageNumber(position: string): HTMLElement {
     const nav: HTMLElement = this.createNav();
     const pagination: HTMLElement = this.createPagination();
-    const pageItemLeft: HTMLElement = this.createPageItem(['page-item']);
-    const pageItemRight: HTMLElement = this.createPageItem(['page-item']);
+    const pageItemLeft: HTMLElement = this.createPageItem(['page-item', 'left-page-number']);
+    const pageItemRight: HTMLElement = this.createPageItem(['page-item', 'right-page-number']);
     const pageItemActive: HTMLElement = this.createPageItem(['page-item', 'active']);
     const leftArrow: HTMLElement = this.createArrow(Constants.LEFT_ARROW);
     const rightArrow: HTMLElement = this.createArrow(Constants.RIGHT_ARROW);
@@ -86,8 +87,8 @@ export default class Pagination extends HTMLConstructor {
   generatePaginationGroupNumber(position: string): HTMLElement {
     const nav: HTMLElement = this.createNav();
     const pagination: HTMLElement = this.createPagination();
-    const pageItemLeft: HTMLElement = this.createPageItem(['page-item']);
-    const pageItemRight: HTMLElement = this.createPageItem(['page-item']);
+    const pageItemLeft: HTMLElement = this.createPageItem(['page-item', 'left-group-number']);
+    const pageItemRight: HTMLElement = this.createPageItem(['page-item', 'right-group-number']);
     const pageItemActive: HTMLElement = this.createPageItem(['page-item', 'active']);
     const leftArrow: HTMLElement = this.createArrow(Constants.LEFT_ARROW);
     const rightArrow: HTMLElement = this.createArrow(Constants.RIGHT_ARROW);

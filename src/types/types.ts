@@ -112,3 +112,5 @@ export type CookiesOptions = {
 export enum StatusCodes {
   IncorrectEmailOrPassword = 403,
 }
+
+export type Action = '+' | '-';

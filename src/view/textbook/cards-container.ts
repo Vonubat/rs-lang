@@ -1,4 +1,3 @@
-import { controller } from '../../controller/controller';
 import { WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 import CardGenerator from './card-generator';
@@ -24,11 +23,10 @@ export default class CardsContainer extends HTMLConstructor {
     );
   }
 
-  async generateCardContainer(): Promise<HTMLElement> {
+  generateCardContainer(words: WordsResponseSchema[]): HTMLElement {
     const cardsContainer: HTMLElement = this.createCardContainer();
     cardsContainer.innerHTML = '';
 
-    const words: WordsResponseSchema[] = await controller.api.words.getWords();
     words.forEach((item: WordsResponseSchema): void => cardsContainer.append(this.cardGenerator.generateCard(item)));
 
     return cardsContainer;
