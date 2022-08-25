@@ -10,7 +10,7 @@ export default class Header {
   view() {
     const fragment = document.createDocumentFragment();
 
-    const header = this.HTMLConstructor.basic('header', undefined, [
+    const header = this.HTMLConstructor.createHtmlElement('header', [
       'header',
       'container-fluid',
       'justify-content-between',
@@ -18,11 +18,12 @@ export default class Header {
       'text-center',
       'align-items-center',
     ]);
-    const a = this.HTMLConstructor.basic('a', undefined, ['logo-link'], [['href', '..main/index.html']]);
-    const img = this.HTMLConstructor.basic(
+    const a = this.HTMLConstructor.createHtmlElement('a', ['logo-link'], undefined, [['href', '..main/index.html']]);
+    const img = this.HTMLConstructor.createHtmlElement(
       'img',
-      undefined,
+
       ['logo-img'],
+      undefined,
       [
         ['src', '../../assets/favicons/favicon-96.png'],
         ['alt', 'logo'],
@@ -30,13 +31,8 @@ export default class Header {
     );
     a.appendChild(img);
     header.appendChild(a);
-    const buttonWrapper = this.HTMLConstructor.basic('div');
-    const loginButton = this.HTMLConstructor.basic(
-      'button',
-      undefined,
-      ['btn', 'btn-outline-dark'],
-      [['type', 'button']]
-    );
+    const buttonWrapper = this.HTMLConstructor.div();
+    const loginButton = this.HTMLConstructor.button(['btn', 'btn-outline-dark']);
     const svg = this.HTMLConstructor.svg('lock', ['login-svg']);
     loginButton.innerText = 'Login';
     loginButton.appendChild(svg);

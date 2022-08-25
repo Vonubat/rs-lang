@@ -30,7 +30,7 @@ export default class Main {
   }
 
   view() {
-    const main = this.HTMLConstructor.basic('main');
+    const main = this.HTMLConstructor.createHtmlElement('main');
     const preview = this.preview();
     main.appendChild(preview);
     const ourAdvantages = this.advantages();
@@ -44,15 +44,11 @@ export default class Main {
   }
 
   private preview() {
-    const previewSection = this.HTMLConstructor.basic('section', undefined, ['preview']);
-    const previewContainer = this.HTMLConstructor.basic('div', undefined, [
-      'container-fluid',
-      'justify-content-around',
-      'd-flex',
-    ]);
+    const previewSection = this.HTMLConstructor.createHtmlElement('section', ['preview']);
+    const previewContainer = this.HTMLConstructor.div(['container-fluid', 'justify-content-around', 'd-flex']);
     const previewCard = this.card('preview', 'RS Lang', 'If you can dream it, you can do it', this.previewText);
     const cardBody = previewCard.querySelector('.card-body') as HTMLElement;
-    const button = this.HTMLConstructor.basic('button', undefined, ['btn', 'btn-primary']);
+    const button = this.HTMLConstructor.createHtmlElement('button', ['btn', 'btn-primary']);
     button.innerText = "Let's start";
     cardBody.appendChild(button);
     previewContainer.appendChild(previewCard);
@@ -66,9 +62,9 @@ export default class Main {
   }
 
   private advantages() {
-    const advantagesSection = this.HTMLConstructor.basic('section', undefined, ['ourAdvantages']);
-    const advantagesContainer = this.HTMLConstructor.basic('div', undefined, ['container-fluid']);
-    const title = this.HTMLConstructor.basic('h2', undefined, ['text-center', 'section-title']);
+    const advantagesSection = this.HTMLConstructor.createHtmlElement('section', ['ourAdvantages']);
+    const advantagesContainer = this.HTMLConstructor.div(['container-fluid']);
+    const title = this.HTMLConstructor.createHtmlElement('h2', ['text-center', 'section-title']);
     title.innerText = 'Our advantages';
     advantagesContainer.appendChild(title);
     const cardWrapper = this.HTMLConstructor.div(['d-flex', 'justify-content-around', 'flex-wrap', 'gap-5']);
@@ -98,14 +94,14 @@ export default class Main {
   }
 
   private posibilities() {
-    const posibilitiesSection = this.HTMLConstructor.basic('section', undefined, ['ourPosibilities']);
-    const title = this.HTMLConstructor.basic('h3', undefined, ['text-center', 'section-title']);
+    const posibilitiesSection = this.HTMLConstructor.createHtmlElement('section', ['ourPosibilities']);
+    const title = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
     title.innerText = 'Our posibilities';
     posibilitiesSection.appendChild(title);
-    const posibilitiesContainer = this.HTMLConstructor.basic('div', undefined, ['container-fluid']);
-    const videoContainer = this.HTMLConstructor.basic('div', undefined, ['video-container']);
-    const videoWrapper = this.HTMLConstructor.basic('div', undefined, ['video-wrapper']);
-    const video = this.HTMLConstructor.basic('iframe', undefined, ['video'], [['src', this.videoSrc]]);
+    const posibilitiesContainer = this.HTMLConstructor.div(['container-fluid']);
+    const videoContainer = this.HTMLConstructor.div(['video-container']);
+    const videoWrapper = this.HTMLConstructor.div(['video-wrapper']);
+    const video = this.HTMLConstructor.createHtmlElement('iframe', ['video'], undefined, [['src', this.videoSrc]]);
     videoWrapper.appendChild(video);
     videoContainer.appendChild(videoWrapper);
     posibilitiesContainer.appendChild(videoContainer);
@@ -114,8 +110,8 @@ export default class Main {
   }
 
   private team() {
-    const teamSection = this.HTMLConstructor.basic('section', undefined, ['ourTeam']);
-    const title = this.HTMLConstructor.basic('h3', undefined, ['text-center', 'section-title']);
+    const teamSection = this.HTMLConstructor.createHtmlElement('section', ['ourTeam']);
+    const title = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
     title.innerText = 'Our team';
     teamSection.appendChild(title);
     const teamContainer = this.HTMLConstructor.div(['container-fluid', 'gap-5']);
@@ -151,19 +147,19 @@ export default class Main {
   }
 
   private card(type: string, title: string, subtitle: string, text: string, img?: string, git?: string) {
-    const card = this.HTMLConstructor.basic('div', undefined, ['card', `card-${type}`]);
+    const card = this.HTMLConstructor.div(['card', `card-${type}`]);
     if (img) {
       const cardImg = this.HTMLConstructor.img(img, title, ['card-img', `card-img-${type}`]);
       card.appendChild(cardImg);
     }
-    const cardBody = this.HTMLConstructor.basic('div', undefined, ['card-body', `card-body-${type}`]);
-    const cardTitle = this.HTMLConstructor.basic('h3', undefined, ['card-title']);
+    const cardBody = this.HTMLConstructor.div(['card-body', `card-body-${type}`]);
+    const cardTitle = this.HTMLConstructor.createHtmlElement('h3', ['card-title']);
     cardTitle.innerText = title;
     cardBody.appendChild(cardTitle);
-    const cardSubTitle = this.HTMLConstructor.basic('h4', undefined, ['card-subtitle', 'text-muted']);
+    const cardSubTitle = this.HTMLConstructor.createHtmlElement('h4', ['card-subtitle', 'text-muted']);
     cardSubTitle.innerText = subtitle;
     cardBody.appendChild(cardSubTitle);
-    const cardText = this.HTMLConstructor.basic('p', undefined, ['card-text']);
+    const cardText = this.HTMLConstructor.createHtmlElement('p', ['card-text']);
     cardText.innerHTML = text;
     cardBody.appendChild(cardText);
     if (git) {
