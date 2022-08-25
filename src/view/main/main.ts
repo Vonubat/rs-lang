@@ -1,4 +1,4 @@
-import HTMLConstructor from './constructor';
+import HTMLConstructor from '../components/constructor';
 
 export default class Main {
   HTMLConstructor: HTMLConstructor;
