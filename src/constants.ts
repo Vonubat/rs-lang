@@ -20,4 +20,8 @@ export default class Constants {
   static readonly REFRESH_TOKEN_LENGTH = 236;
 
   static readonly EMPTY_STRING = '';
+
+  static readonly LEFT_ARROW = '&laquo;';
+
+  static readonly RIGHT_ARROW = '&raquo;';
 }

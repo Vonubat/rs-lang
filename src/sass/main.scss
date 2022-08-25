@@ -1,6 +1,7 @@
 // Import all of Bootstrap's CSS
 @import '~bootstrap/scss/bootstrap';
 @import './components/card';
+@import './components/pagination';
 
 html {
   scroll-behavior: smooth;

@@ -17,17 +17,20 @@ export default class CardsContainer extends HTMLConstructor {
     if (cardsContainer) {
       cardsContainer.remove();
     }
-    return this.createHtmlElement('div', ['d-flex', 'flex-row', 'flex-wrap', 'cards-container'], `cards-container`);
+    return this.createHtmlElement(
+      'div',
+      ['d-flex', 'flex-row', 'flex-wrap', 'justify-content-center', 'cards-container'],
+      `cards-container`
+    );
   }
 
   async generateCardContainer(): Promise<HTMLElement> {
-    const body: HTMLElement = document.getElementById('body') as HTMLElement;
     const cardsContainer: HTMLElement = this.createCardContainer();
     cardsContainer.innerHTML = '';
 
     const words: WordsResponseSchema[] = await controller.api.words.getWords();
     words.forEach((item: WordsResponseSchema): void => cardsContainer.append(this.cardGenerator.generateCard(item)));
-    body.append(cardsContainer);
+
     return cardsContainer;
   }
 }

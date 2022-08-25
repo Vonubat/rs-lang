@@ -56,7 +56,7 @@ export default class CardGenerator extends HTMLConstructor {
   createTextMeaning(word: WordsResponseSchema): HTMLElement {
     return this.createHtmlElement(
       'p',
-      ['card-text', 'mb-3', 'rounded', 'text-meaning'],
+      ['card-text', 'mb-3', 'rounded', 'shadow', 'text-meaning'],
       `text-meaning-${word.id}`,
       undefined,
       `${word.textMeaning} `
@@ -76,7 +76,7 @@ export default class CardGenerator extends HTMLConstructor {
   createTextExample(word: WordsResponseSchema): HTMLElement {
     return this.createHtmlElement(
       'p',
-      ['card-text', 'mb-3', 'rounded', 'text-example'],
+      ['card-text', 'mb-3', 'rounded', 'shadow', 'text-example'],
       `text-example-${word.id}`,
       undefined,
       `${word.textExample} `

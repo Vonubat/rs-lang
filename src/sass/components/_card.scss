@@ -1,5 +1,6 @@
 .card {
   max-width: 250px;
+  animation: append-animate 0.3s linear;
 
   .card-body {
     padding: 0px;
@@ -17,7 +18,6 @@
 
     .text-meaning {
       padding: 0.5rem;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       .text-meaning-translate {
         display: block;
       }
@@ -25,10 +25,20 @@
 
     .text-example {
       padding: 0.5rem;
-      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       .text-example-translate {
         display: block;
       }
     }
+  }
+}
+
+@keyframes append-animate {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
