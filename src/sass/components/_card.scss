@@ -8,7 +8,13 @@
 
     .word-container {
       padding: 0.5rem;
+
+      .word {
+        text-transform: capitalize;
+      }
+
       .word-translate {
+        text-transform: capitalize;
         display: block;
       }
 
