@@ -115,7 +115,7 @@ export enum StatusCodes {
 
 export type Action = '+' | '-';
 
-export type PageConfig = {
+export interface PageConfigResponce {
   pageNumber: number;
   groupNumber: number;
-};
+}

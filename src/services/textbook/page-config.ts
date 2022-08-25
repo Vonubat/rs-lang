@@ -1,4 +1,4 @@
-import { Action } from '../../types/types';
+import { Action, PageConfigResponce } from '../../types/types';
 
 export default class PageConfig {
   public getPageNumber(): number {
@@ -15,10 +15,9 @@ export default class PageConfig {
     return 0;
   }
 
-  public getPageConfig(): PageConfig {
+  public getPageConfigResponse(): PageConfigResponce {
     const pageNumber: number = this.getPageNumber();
     const groupNumber: number = this.getGroupNumber();
-
     return {
       pageNumber,
       groupNumber,

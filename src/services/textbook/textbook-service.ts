@@ -1,5 +1,6 @@
-import { controller } from '../../controller/controller';
+import { api } from '../../api/api';
 import { WordsResponseSchema } from '../../types/types';
+import { view } from '../../view/view';
 import PageConfig from './page-config';
 
 export default class TextbookService {
@@ -25,12 +26,12 @@ export default class TextbookService {
   async getWords(): Promise<WordsResponseSchema[]> {
     const pageNumber: number = this.pageConfig.getPageNumber();
     const groupNumber: number = this.pageConfig.getGroupNumber();
-    const words: WordsResponseSchema[] = await controller.api.words.getWords(pageNumber, groupNumber);
+    const words: WordsResponseSchema[] = await api.words.getWords(pageNumber, groupNumber);
     return words;
   }
 
   async drawPage(): Promise<void> {
-    controller.view.textbookView.drawPage(await this.getWords());
+    view.textbookView.drawPage(await this.getWords(), this.pageConfig.getPageConfigResponse());
   }
 
   setPaginationItems() {
