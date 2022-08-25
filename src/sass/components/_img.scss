@@ -1,0 +1,13 @@
+.preview-img {
+    height: 350px;
+
+    @media (max-width: 860px) {
+        width: 350px;
+        margin: 0 auto;
+    }
+
+    @media (max-width: 650px) {
+        width: calc(80vw);
+        height: auto;
+    }
+}
