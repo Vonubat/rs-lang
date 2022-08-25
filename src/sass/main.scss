@@ -1,2 +1,9 @@
 // Import all of Bootstrap's CSS
 @import "~bootstrap/scss/bootstrap";
+
+@import './components/card';
+@import './components/svg';
+@import './components/video';
+@import './components/img';
+
+@import './layout/main';
