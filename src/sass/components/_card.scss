@@ -42,3 +42,53 @@
     opacity: 1;
   }
 }
+
+.card-ourAdvantages {
+  width: 360px;
+  box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px;
+  background-color: rgb(255, 255, 255);
+
+  @media (max-width: 860px) {
+    width: 300px;
+  }
+}
+
+.card-ourAdvantages .card-img {
+  width: 85px;
+  height: auto;
+  margin: 20px auto;
+}
+
+.card-ourteam {
+  flex-direction: row;
+  box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px;
+  background-color: rgb(255, 255, 255);
+  width: 800px;
+
+  @media (max-width: 860px) {
+    width: 600px;
+  }
+
+  @media (max-width: 650px) {
+    width: auto;
+    flex-direction: column;
+  }
+}
+
+.card-img-ourteam {
+  width: 220px;
+  height: auto;
+}
+
+.card-body-preview {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+}
+
+.card-preview {
+  @media (max-width: 860px) {
+    width: calc(80vw);
+    margin: 0 auto;
+  }
+}
