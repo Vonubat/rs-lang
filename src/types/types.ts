@@ -119,3 +119,5 @@ export interface PageConfigResponce {
   pageNumber: number;
   groupNumber: number;
 }
+
+export type TypeOfPagination = 'page' | 'group';

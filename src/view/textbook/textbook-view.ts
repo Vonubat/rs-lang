@@ -32,4 +32,8 @@ export default class TextbookView {
     this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
     this.paginationTopInstance.append(this.cardsContainerInstance);
   }
+
+  updatePaginationNumberCurrent(elements: NodeListOf<Element>, pageConfig: PageConfigResponce) {
+    this.pagination.updateNumberCurrent(elements, pageConfig);
+  }
 }
