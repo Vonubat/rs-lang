@@ -51,11 +51,7 @@ export default class TextbookService {
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
-    this.pageNumberCurrent.forEach((item: Element): void => {
-      const value: Element = item;
-      value.innerHTML = `Page ${String(pageConfig.pageNumber + 1)} / 30`;
-    });
-
+    view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
   }
 
@@ -65,11 +61,7 @@ export default class TextbookService {
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
-    this.pageNumberCurrent.forEach((item: Element): void => {
-      const value: Element = item;
-      value.innerHTML = `Page ${String(pageConfig.pageNumber + 1)} / 30`;
-    });
-
+    view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
   }
 
@@ -79,11 +71,7 @@ export default class TextbookService {
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
-    this.groupNumberCurrent.forEach((item: Element): void => {
-      const value: Element = item;
-      value.innerHTML = `Group ${String(pageConfig.groupNumber + 1)} / 7`;
-    });
-
+    view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
   }
 
@@ -93,11 +81,7 @@ export default class TextbookService {
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
-    this.groupNumberCurrent.forEach((item: Element): void => {
-      const value: Element = item;
-      value.innerHTML = `Group ${String(pageConfig.groupNumber + 1)} / 7`;
-    });
-
+    view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
   }
 
