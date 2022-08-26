@@ -2,9 +2,12 @@ import { api } from '../../api/api';
 import { view } from '../../view/view';
 import { PageConfigResponce, WordsResponseSchema } from '../../types/types';
 import PageConfig from './page-config';
+import SoundHelper from './sound-helper';
 
 export default class TextbookService {
   pageConfig: PageConfig;
+
+  soundHelper: SoundHelper;
 
   pageNumberItemsLeft!: NodeListOf<Element>;
 
@@ -22,8 +25,11 @@ export default class TextbookService {
 
   groupNumber!: NodeListOf<Element>;
 
+  soundIcons!: NodeListOf<Element>;
+
   constructor() {
     this.pageConfig = new PageConfig();
+    this.soundHelper = new SoundHelper();
   }
 
   async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[]> {
@@ -37,7 +43,9 @@ export default class TextbookService {
 
     view.textbookView.drawPage(words, pageConfig);
     this.setPaginationItems();
+    this.setCardsItems();
     this.listenPagination();
+    this.listenCards();
   }
 
   setPaginationItems(): void {
@@ -51,6 +59,10 @@ export default class TextbookService {
     this.groupNumber = view.textbookView.textbook.querySelectorAll('.group-number');
   }
 
+  setCardsItems(): void {
+    this.soundIcons = view.textbookView.textbook.querySelectorAll('.sound-icon');
+  }
+
   async decreasePageNumber(): Promise<void> {
     this.pageConfig.shiftPageNumber('-');
 
@@ -59,6 +71,8 @@ export default class TextbookService {
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
+    this.setCardsItems();
+    this.listenCards();
   }
 
   async increasePageNumber(): Promise<void> {
@@ -69,6 +83,8 @@ export default class TextbookService {
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
+    this.setCardsItems();
+    this.listenCards();
   }
 
   async decreaseGroupNumber(): Promise<void> {
@@ -79,6 +95,8 @@ export default class TextbookService {
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
+    this.setCardsItems();
+    this.listenCards();
   }
 
   async increaseGroupNumber(): Promise<void> {
@@ -89,6 +107,8 @@ export default class TextbookService {
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
+    this.setCardsItems();
+    this.listenCards();
   }
 
   async setPageNumber(event: Event): Promise<void> {
@@ -100,6 +120,8 @@ export default class TextbookService {
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
+    this.setCardsItems();
+    this.listenCards();
   }
 
   async setGroupNumber(event: Event): Promise<void> {
@@ -111,6 +133,8 @@ export default class TextbookService {
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words);
+    this.setCardsItems();
+    this.listenCards();
   }
 
   listenPagination(): void {
@@ -128,5 +152,34 @@ export default class TextbookService {
     );
     this.pageNumber.forEach((item: Element): void => item.addEventListener('click', this.setPageNumber.bind(this)));
     this.groupNumber.forEach((item: Element): void => item.addEventListener('click', this.setGroupNumber.bind(this)));
+  }
+
+  playSound(event: Event): false | true {
+    let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
+    if (elem.tagName === 'use') {
+      elem = elem.parentNode as SVGSVGElement;
+    }
+
+    const currentAttr: string = (elem.firstChild as SVGUseElement).getAttributeNS(
+      'http://www.w3.org/1999/xlink',
+      'href'
+    ) as string;
+
+    if (currentAttr.includes('stop-fill')) {
+      this.soundHelper.pause();
+      view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
+      return false;
+    }
+
+    this.soundIcons.forEach((item) => {
+      view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
+    });
+
+    this.soundHelper.play(elem as SVGSVGElement);
+    return true;
+  }
+
+  listenCards(): void {
+    this.soundIcons.forEach((item: Element): void => item.addEventListener('click', this.playSound.bind(this)));
   }
 }

@@ -1,6 +1,6 @@
 // textbook
 .card {
-  max-width: 250px;
+  max-width: 300px;
   animation: append-animate 0.3s linear;
 
   .card-body {
@@ -19,7 +19,8 @@
       }
 
       .sound-icon {
-        width: 20px;
+        width: 25px;
+        cursor: pointer;
       }
     }
 

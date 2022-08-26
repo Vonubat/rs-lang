@@ -36,10 +36,11 @@ export default class CardGenerator extends HTMLConstructor {
     );
   }
 
-  createSoundIcon(word: WordsResponseSchema): HTMLElement {
-    return this.createHtmlElement('img', ['sound-icon'], `sound-icon-${word.id}`, [
-      ['alt', `sound-icon`],
-      ['src', `./assets/sound-icon.png`],
+  createSoundIcon(word: WordsResponseSchema): SVGSVGElement {
+    return this.svg('volume-up-fill', ['sound-icon'], `sound-icon-${word.id}`, [
+      ['data-audio', `${word.audio}`],
+      ['data-audio-meaning', `${word.audioMeaning}`],
+      ['data-audio-example', `${word.audioExample}`],
     ]);
   }
 
@@ -100,7 +101,7 @@ export default class CardGenerator extends HTMLConstructor {
     const wordContainer: HTMLElement = this.createWordContainer(word);
     const newWord: HTMLElement = this.createWord(word);
     const transcription: HTMLElement = this.createTranscription(word);
-    const soundIcon: HTMLElement = this.createSoundIcon(word);
+    const soundIcon: SVGSVGElement = this.createSoundIcon(word);
     const wordTranslate: HTMLElement = this.createWordTranslate(word);
     const textMeaning: HTMLElement = this.createTextMeaning(word);
     const textMeaningTranslate: HTMLElement = this.createTextMeaningTranslate(word);
