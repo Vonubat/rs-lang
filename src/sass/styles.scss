@@ -12,6 +12,11 @@ html {
   scroll-behavior: smooth;
 }
 
+.app-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
 .disabled {
   opacity: 0.6;
   pointer-events: none;
