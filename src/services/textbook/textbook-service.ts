@@ -156,7 +156,7 @@ export default class TextbookService {
 
   playSound(event: Event): false | true {
     let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
-    if (elem.tagName === 'use') {
+    if (elem instanceof SVGUseElement) {
       elem = elem.parentNode as SVGSVGElement;
     }
 
