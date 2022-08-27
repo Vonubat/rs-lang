@@ -24,4 +24,13 @@ export default class Constants {
   static readonly LEFT_ARROW = '&laquo;';
 
   static readonly RIGHT_ARROW = '&raquo;';
+
+  static readonly MENU = {
+    MAIN: 'Main',
+    TEXTBOOK: 'Textbook',
+    MINIGAMES: 'Minigames',
+    STATISTICS: 'Statistics',
+  };
+
+  static readonly BODY_INDEX = 'body';
 }
