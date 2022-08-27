@@ -20,7 +20,7 @@ export default class CardsContainer extends HTMLConstructor {
 
     cardsContainer = this.createHtmlElement(
       'div',
-      ['d-flex', 'flex-row', 'flex-wrap', 'justify-content-center', 'cards-container'],
+      ['d-flex', 'flex-row', 'flex-wrap', 'justify-content-center', 'cards-container', 'rounded'],
       `cards-container`
     );
 
