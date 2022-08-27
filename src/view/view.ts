@@ -26,7 +26,7 @@ class View {
 
   drawPage() {
     const body = document.getElementById(Constants.BODY_INDEX);
-    const appWrapper = this.htmlConstructor.div(['app-wrapper']);
+    const appWrapper = this.htmlConstructor.div(['app-wrapper', 'd-flex', 'flex-nowrap']);
     const menuElement = this.menu.getMenu();
     const appElement = this.htmlConstructor.div(['app']);
     const headerElement = this.header.view();

@@ -12,7 +12,14 @@ export default class Menu {
 
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
-    this.sidebar = this.htmlConstructor.createHtmlElement('nav', ['sidebar', 'd-flex', 'flex-column', 'text-bg-dark']);
+    this.sidebar = this.htmlConstructor.createHtmlElement('nav', [
+      'sidebar',
+      'd-flex',
+      'flex-column',
+      'flex-shrink-0',
+      'p-3',
+      'text-bg-dark',
+    ]);
     const menuButton = this.htmlConstructor.button(['navbar-toggler'], 'button');
     const header = this.htmlConstructor.div(['sidebar__header']);
     menuButton.dataset.bsToggle = 'offcanvas';
@@ -37,10 +44,13 @@ export default class Menu {
 
   fillMenu() {
     this.menu.innerHTML = '';
-    Object.values(Constants.MENU).forEach((menuName) => {
+    Object.values(Constants.MENU).forEach((menuName, index) => {
       // TODO: set href
       const item = this.htmlConstructor.createHtmlElement('li', ['nav-item', 'sidebar__nav-menu_item']);
-      const link = this.htmlConstructor.a('#', ['nav-link', 'active'], menuName);
+      const link = this.htmlConstructor.a('#', ['nav-link'], menuName);
+      if (index === 0) {
+        link.classList.add('active');
+      }
       item.appendChild(link);
       this.menu.appendChild(item);
     });
