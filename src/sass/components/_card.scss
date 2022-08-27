@@ -68,11 +68,12 @@
   margin: 20px auto;
 }
 
-.card-ourteam {
+.card.card-ourteam {
   flex-direction: row;
   box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px;
   background-color: rgb(255, 255, 255);
   width: 800px;
+  max-width: 800px;
 
   @media (max-width: 860px) {
     width: 600px;
