@@ -1,49 +1,103 @@
-.card-ourAdvantages {
-    width: 360px;
-    box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px;
-    background-color: rgb(255, 255, 255);
+// textbook
+.card {
+  max-width: 300px;
+  animation: append-animate 0.3s linear;
 
-    @media (max-width: 860px) {
-        width: 300px;
+  .card-body {
+    padding: 0px;
+
+    .word-container {
+      padding: 0.5rem;
+
+      .word {
+        text-transform: capitalize;
+      }
+
+      .word-translate {
+        text-transform: capitalize;
+        display: block;
+      }
+
+      .sound-icon {
+        width: 25px;
+        cursor: pointer;
+      }
     }
+
+    .text-meaning {
+      padding: 0.5rem;
+      .text-meaning-translate {
+        display: block;
+      }
+    }
+
+    .text-example {
+      padding: 0.5rem;
+      .text-example-translate {
+        display: block;
+      }
+    }
+  }
+}
+
+@keyframes append-animate {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// main
+.card-ourAdvantages {
+  width: 360px;
+  box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px;
+  background-color: rgb(255, 255, 255);
+
+  @media (max-width: 860px) {
+    width: 300px;
+  }
 }
 
 .card-ourAdvantages .card-img {
-    width: 85px;
-    height: auto;
-    margin: 20px auto;
+  width: 85px;
+  height: auto;
+  margin: 20px auto;
 }
 
 .card-ourteam {
-    flex-direction: row;
-    box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px;
-    background-color: rgb(255, 255, 255);
-    width: 800px;
+  flex-direction: row;
+  box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px;
+  background-color: rgb(255, 255, 255);
+  width: 800px;
 
-    @media (max-width: 860px) {
-        width: 600px;
-    }
+  @media (max-width: 860px) {
+    width: 600px;
+  }
 
-    @media (max-width: 650px) {
-        width: auto;
-        flex-direction: column;
-    }
+  @media (max-width: 650px) {
+    width: auto;
+    flex-direction: column;
+  }
 }
 
 .card-img-ourteam {
-    width: 220px;
-    height: auto;
+  width: 220px;
+  height: auto;
 }
 
 .card-body-preview {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
 }
 
 .card-preview {
-    @media (max-width: 860px) {
-        width: calc(80vw);
-        margin: 0 auto;
-    }
+  @media (max-width: 860px) {
+    width: calc(80vw);
+    margin: 0 auto;
+  }
 }

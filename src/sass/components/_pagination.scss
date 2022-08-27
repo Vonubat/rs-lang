@@ -1,0 +1,91 @@
+//textbook
+.page-link {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.scrollable-menu {
+  max-height: 200px;
+  overflow-x: hidden;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+#group-number-1-top,
+#group-number-1-bottom {
+  background-color: $pink-100;
+  &:hover {
+    background-color: var(--bs-dropdown-link-hover-bg);
+  }
+  &:active {
+    background-color: $primary;
+  }
+}
+
+#group-number-2-top,
+#group-number-2-bottom {
+  background-color: $orange-100;
+  &:hover {
+    background-color: var(--bs-dropdown-link-hover-bg);
+  }
+  &:active {
+    background-color: $primary;
+  }
+}
+
+#group-number-3-top,
+#group-number-3-bottom {
+  background-color: $green-100;
+  &:hover {
+    background-color: var(--bs-dropdown-link-hover-bg);
+  }
+  &:active {
+    background-color: $primary;
+  }
+}
+
+#group-number-4-top,
+#group-number-4-bottom {
+  background-color: $yellow-100;
+  &:hover {
+    background-color: var(--bs-dropdown-link-hover-bg);
+  }
+  &:active {
+    background-color: $primary;
+  }
+}
+
+#group-number-5-top,
+#group-number-5-bottom {
+  background-color: $cyan-100;
+  &:hover {
+    background-color: var(--bs-dropdown-link-hover-bg);
+  }
+  &:active {
+    background-color: $primary;
+  }
+}
+
+#group-number-6-top,
+#group-number-6-bottom {
+  background-color: $indigo-100;
+  &:hover {
+    background-color: var(--bs-dropdown-link-hover-bg);
+  }
+  &:active {
+    background-color: $primary;
+  }
+}
+
+#group-number-7-top,
+#group-number-7-bottom {
+  background-color: $danger;
+  &:hover {
+    background-color: var(--bs-dropdown-link-hover-bg);
+  }
+  &:active {
+    background-color: $primary;
+  }
+}

@@ -20,7 +20,7 @@ export default class HttpClient extends CheckApiParams {
         'Content-Type': 'application/json',
       },
     };
-    const response = await fetch(link, props);
+    const response: Response = await fetch(link, props);
     return this.responseHandler(response);
   }
 
@@ -40,7 +40,7 @@ export default class HttpClient extends CheckApiParams {
       },
       body,
     };
-    const response = await fetch(link, props);
+    const response: Response = await fetch(link, props);
     return this.responseHandler(response);
   }
 
@@ -60,7 +60,7 @@ export default class HttpClient extends CheckApiParams {
       },
       body,
     };
-    const response = await fetch(link, props);
+    const response: Response = await fetch(link, props);
     return this.responseHandler(response);
   }
 
@@ -75,7 +75,7 @@ export default class HttpClient extends CheckApiParams {
         'Content-Type': 'application/json',
       },
     };
-    const response = await fetch(link, props);
+    const response: Response = await fetch(link, props);
     return this.responseHandler(response);
   }
 }

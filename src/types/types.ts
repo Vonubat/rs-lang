@@ -112,3 +112,12 @@ export type CookiesOptions = {
 export enum StatusCodes {
   IncorrectEmailOrPassword = 403,
 }
+
+export type Action = '+' | '-';
+
+export interface PageConfigResponce {
+  pageNumber: number;
+  groupNumber: number;
+}
+
+export type TypeOfPagination = 'Page' | 'Group';
