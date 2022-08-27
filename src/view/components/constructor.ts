@@ -62,9 +62,9 @@ export default class HTMLConstructor {
     return element;
   }
 
-  public button(classList?: string[]): HTMLButtonElement {
+  public button(classList?: string[], type?: string): HTMLButtonElement {
     const element = document.createElement('button');
-    element.type = 'button';
+    if (type) element.type = type;
     if (classList) {
       classList.forEach((elem) => {
         element.classList.add(elem);
