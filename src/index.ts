@@ -1,5 +1,5 @@
 import 'normalize.css';
-import './sass/main.scss';
+import './sass/styles.scss';
 import 'bootstrap';
 import './app/app';
 import './services/services';

@@ -2,13 +2,6 @@ import Tokens from '../services/auth/tokens';
 import CheckApiParams from '../utilities/check-api-params';
 
 export default class HttpClient extends CheckApiParams {
-  private responseHandler(res: Response): Response {
-    if (!res.ok) {
-      throw Error(res.statusText);
-    }
-    return res;
-  }
-
   public async get(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
     this.checkTokens(token);
 
@@ -21,7 +14,7 @@ export default class HttpClient extends CheckApiParams {
       },
     };
     const response: Response = await fetch(link, props);
-    return this.responseHandler(response);
+    return response;
   }
 
   public async put(
@@ -41,7 +34,7 @@ export default class HttpClient extends CheckApiParams {
       body,
     };
     const response: Response = await fetch(link, props);
-    return this.responseHandler(response);
+    return response;
   }
 
   public async post(
@@ -61,7 +54,7 @@ export default class HttpClient extends CheckApiParams {
       body,
     };
     const response: Response = await fetch(link, props);
-    return this.responseHandler(response);
+    return response;
   }
 
   public async delete(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
@@ -76,6 +69,6 @@ export default class HttpClient extends CheckApiParams {
       },
     };
     const response: Response = await fetch(link, props);
-    return this.responseHandler(response);
+    return response;
   }
 }

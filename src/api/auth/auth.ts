@@ -11,7 +11,7 @@ export default class Auth extends HttpClient {
    * @return {Promise<AuthResponseSchema>} - object which contains: message, token, refreshToken, userId, name.
    */
 
-  public async signIn(credentials: CredentialsSchema): Promise<AuthResponseSchema> {
+  public async signIn(credentials: CredentialsSchema): Promise<AuthResponseSchema | Response> {
     const { email, password } = credentials;
     this.checkEmail(email);
     this.checkPassword(password);
@@ -24,6 +24,12 @@ export default class Auth extends HttpClient {
         password,
       })
     );
+
+    if (!response.ok) {
+      // status 403 -> Incorrect e-mail or password
+      return response;
+    }
+
     const content: AuthResponseSchema = await response.json();
 
     const { token, refreshToken } = content;
