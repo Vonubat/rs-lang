@@ -70,7 +70,7 @@ export default class TextbookService {
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
-    view.textbookView.drawCardsContainer(words);
+    view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
   }
@@ -82,7 +82,7 @@ export default class TextbookService {
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
-    view.textbookView.drawCardsContainer(words);
+    view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
   }
@@ -94,7 +94,7 @@ export default class TextbookService {
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
-    view.textbookView.drawCardsContainer(words);
+    view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
   }
@@ -106,7 +106,7 @@ export default class TextbookService {
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
-    view.textbookView.drawCardsContainer(words);
+    view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
   }
@@ -119,7 +119,7 @@ export default class TextbookService {
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
-    view.textbookView.drawCardsContainer(words);
+    view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
   }
@@ -132,7 +132,7 @@ export default class TextbookService {
     const words: WordsResponseSchema[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
-    view.textbookView.drawCardsContainer(words);
+    view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
   }

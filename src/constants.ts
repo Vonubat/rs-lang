@@ -24,4 +24,13 @@ export default class Constants {
   static readonly LEFT_ARROW = '&laquo;';
 
   static readonly RIGHT_ARROW = '&raquo;';
+
+  static readonly CONTAINER_COLORS = {
+    '$pink-100': 'rgb(247, 214, 230)',
+    '$orange-100': 'rgb(255, 229, 208)',
+    '$green-100': 'rgb(209, 231, 221)',
+    '$yellow-100': 'rgb(255, 243, 205)',
+    '$cyan-100': 'rgb(207, 244, 252)',
+    '$indigo-100': 'rgb(224, 207, 252)',
+  };
 }
