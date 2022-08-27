@@ -1,4 +1,5 @@
 import { api } from '../../api/api';
+import Constants from '../../constants';
 import { AuthResponseSchema } from '../../types/types';
 import CheckApiParams from '../../utilities/check-api-params';
 import Credentials from './credentials';
@@ -52,6 +53,19 @@ export default class AuthService {
     return false;
   }
 
+  checkTokenExpiring(): void {
+    if (this.checkUser()) {
+      const userId: string = Credentials.getUserId();
+      const currentTime: number = Date.now();
+      const tokenCreationTime: number = Credentials.getTimeStamp();
+      const delta: number = tokenCreationTime - currentTime;
+
+      if (delta > Constants.TOKEN_LIFE_TIME) {
+        api.users.getNewUserTokens(userId);
+      }
+    }
+  }
+
   async signIn(): Promise<boolean> {
     try {
       this.errorMessageLogin.style.display = 'none';
@@ -68,6 +82,7 @@ export default class AuthService {
       }
 
       const { token, refreshToken, userId, name } = response;
+      Credentials.setTimeStamp();
       Credentials.setToken(token);
       Credentials.setRefreshToken(refreshToken);
       Credentials.setUserId(userId);
@@ -95,7 +110,8 @@ export default class AuthService {
     this.passwordRegistrationInput = document.getElementById('password-registration-input') as HTMLInputElement;
   }
 
-  listenModalWindows() {
+  listenAuth() {
     this.signInButton.addEventListener('click', this.signIn.bind(this));
+    document.addEventListener('DOMContentLoaded', this.checkTokenExpiring.bind(this));
   }
 }

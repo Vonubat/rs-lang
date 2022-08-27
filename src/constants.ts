@@ -33,4 +33,6 @@ export default class Constants {
     '$cyan-100': 'rgb(207, 244, 252)',
     '$indigo-100': 'rgb(224, 207, 252)',
   };
+
+  static readonly TOKEN_LIFE_TIME = 1.44e7;
 }

@@ -56,6 +56,14 @@ export default class Credentials {
     localStorage.setItem('email', email);
   }
 
+  public static getTimeStamp(): number {
+    return Number(localStorage.getItem('timestamp'));
+  }
+
+  public static setTimeStamp(): void {
+    localStorage.setItem('timestamp', String(Date.now()));
+  }
+
   public static delCredentials(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');

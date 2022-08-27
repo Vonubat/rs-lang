@@ -21,4 +21,4 @@ export const services: Services = new Services();
 services.textbookService.drawPage();
 services.headerService.draw();
 services.authService.setModalWindowsItems();
-services.authService.listenModalWindows();
+services.authService.listenAuth();
