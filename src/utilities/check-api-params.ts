@@ -2,10 +2,10 @@ import Constants from '../constants';
 
 export default class CheckApiParams {
   checkGroupsPagesOfWords(groupNumber: number, pageNumber: number): void {
-    if (groupNumber > 5 && groupNumber < 0) {
+    if (groupNumber > 6 || groupNumber < 0) {
       throw new Error('groupNumber value should be from 0 to 5');
     }
-    if (pageNumber > 5 && pageNumber < 0) {
+    if (pageNumber > 29 || pageNumber < 0) {
       throw new Error('pageNumber value should be from 0 to 5');
     }
   }

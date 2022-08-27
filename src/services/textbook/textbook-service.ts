@@ -154,7 +154,7 @@ export default class TextbookService {
     this.groupNumber.forEach((item: Element): void => item.addEventListener('click', this.setGroupNumber.bind(this)));
   }
 
-  playSound(event: Event): false | true {
+  playSound(event: Event): boolean {
     let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
     if (elem instanceof SVGUseElement) {
       elem = elem.parentNode as SVGSVGElement;
