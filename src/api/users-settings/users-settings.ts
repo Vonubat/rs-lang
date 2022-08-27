@@ -17,7 +17,7 @@ export default class UserSettings extends HttpClient {
     const response: Response = await this.get(url);
 
     if (!response.ok) {
-      // status 401 -> 	Access token is missing or invalid
+      // status 401 -> Access token is missing or invalid
       // status 404 -> Settings not found
       return response;
     }
@@ -44,8 +44,8 @@ export default class UserSettings extends HttpClient {
     const response: Response = await this.put(url, JSON.stringify(body));
 
     if (!response.ok) {
-      // status 400 -> 	Bad request
-      // status 401 -> 	Access token is missing or invalid
+      // status 400 -> Bad request
+      // status 401 -> Access token is missing or invalid
       return response;
     }
 

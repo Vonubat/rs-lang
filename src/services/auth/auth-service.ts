@@ -40,7 +40,7 @@ export default class AuthService {
       const password: string = this.passwordLoginInput.value;
       this.checkParams.checkEmail(email);
       this.checkParams.checkPassword(password);
-      api.auth.signIn({ email, password });
+      const response: Promise<AuthResponseSchema | Response> = api.auth.signIn({ email, password });
       this.closeModalLogin.dispatchEvent(new Event('click'));
       return true;
     } catch {

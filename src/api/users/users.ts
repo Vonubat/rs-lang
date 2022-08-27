@@ -21,7 +21,7 @@ export default class Users extends HttpClient {
     const response: Response = await this.post(url, JSON.stringify(user));
 
     if (!response.ok) {
-      // status 422 - 	Incorrect e-mail or password
+      // status 422 -> Incorrect e-mail or password
       return response;
     }
 
@@ -34,7 +34,7 @@ export default class Users extends HttpClient {
   /**
    * Endpoint: /users/{id} [GET method].
    * Gets user.
-   * @param {string} userId - id of user that we want to get.
+   * @param {string} userId -> id of user that we want to get.
    * @returns {Promise<UserSchema>} returned specific user.
    */
 
@@ -121,7 +121,7 @@ export default class Users extends HttpClient {
     const response: Response = await this.get(url, Tokens.getRefreshToken());
 
     if (!response.ok) {
-      // status 403 -> 	Access token is missing, expired or invalid
+      // status 403 -> Access token is missing, expired or invalid
       return response;
     }
 

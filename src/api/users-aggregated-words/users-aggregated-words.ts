@@ -40,7 +40,7 @@ export default class UsersAggregatedWords extends HttpClient {
     const response: Response = await this.get(url);
 
     if (!response.ok) {
-      // status 401 -> 	Access token is missing or invalid
+      // status 401 -> Access token is missing or invalid
       return response;
     }
 
@@ -66,8 +66,8 @@ export default class UsersAggregatedWords extends HttpClient {
     const response: Response = await this.get(url);
 
     if (!response.ok) {
-      // status 401 -> 	Access token is missing or invalid
-      // status 404 -> 	User's word not found
+      // status 401 -> Access token is missing or invalid
+      // status 404 -> User's word not found
       return response;
     }
 
