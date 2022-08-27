@@ -1,5 +1,5 @@
 import Constants from '../../constants';
-import Tokens from '../../services/auth/tokens';
+import Credentials from '../../services/auth/credentials';
 import { CredentialsSchema, UserResponseSchema, UserSchema, TokensSchema } from '../../types/types';
 import HttpClient from '../http-client';
 
@@ -118,7 +118,7 @@ export default class Users extends HttpClient {
     this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/tokens`);
-    const response: Response = await this.get(url, Tokens.getRefreshToken());
+    const response: Response = await this.get(url, Credentials.getRefreshToken());
 
     if (!response.ok) {
       // status 403 -> Access token is missing, expired or invalid
@@ -127,8 +127,8 @@ export default class Users extends HttpClient {
 
     const content: TokensSchema = await response.json();
     const { token, refreshToken } = content;
-    Tokens.setToken(token);
-    Tokens.setRefreshToken(refreshToken);
+    Credentials.setToken(token);
+    Credentials.setRefreshToken(refreshToken);
 
     // console.log(content);
     return content;

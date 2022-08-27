@@ -84,6 +84,14 @@ export default class Modal extends HTMLConstructor {
   private modalFooter(typeofModal: 'Login' | 'Registration'): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const footer: HTMLDivElement = this.div(['modal-footer', 'flex-column']);
+    const errorMessage: HTMLElement = this.createHtmlElement(
+      'span',
+      ['text-danger'],
+      `error-message-${typeofModal.toLocaleLowerCase()}`,
+      undefined,
+      'Failed to connect'
+    );
+    errorMessage.style.display = 'none';
     const button: HTMLButtonElement = this.button(['btn', 'btn-primary'], 'submit');
     const linkTo: HTMLElement = this.createHtmlElement('a', [], undefined, [['data-bs-toggle', 'modal']]);
     if (typeofModal === 'Login') {
@@ -98,6 +106,7 @@ export default class Modal extends HTMLConstructor {
       linkTo.setAttribute('href', '#LoginModal');
       linkTo.innerText = 'Do you have an account? Sign In';
     }
+    footer.appendChild(errorMessage);
     footer.appendChild(button);
     footer.appendChild(linkTo);
     fragment.appendChild(footer);

@@ -1,8 +1,8 @@
-import Tokens from '../services/auth/tokens';
+import Credentials from '../services/auth/credentials';
 import CheckApiParams from '../utilities/check-api-params';
 
 export default class HttpClient extends CheckApiParams {
-  public async get(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
+  public async get(link: RequestInfo | URL, token: string = Credentials.getToken()): Promise<Response> {
     this.checkTokens(token);
 
     const props: RequestInit = {
@@ -20,7 +20,7 @@ export default class HttpClient extends CheckApiParams {
   public async put(
     link: RequestInfo | URL,
     body: BodyInit | null,
-    token: string = Tokens.getToken()
+    token: string = Credentials.getToken()
   ): Promise<Response> {
     this.checkTokens(token);
 
@@ -40,7 +40,7 @@ export default class HttpClient extends CheckApiParams {
   public async post(
     link: RequestInfo | URL,
     body: BodyInit | null,
-    token: string = Tokens.getToken()
+    token: string = Credentials.getToken()
   ): Promise<Response> {
     this.checkTokens(token);
 
@@ -57,7 +57,7 @@ export default class HttpClient extends CheckApiParams {
     return response;
   }
 
-  public async delete(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
+  public async delete(link: RequestInfo | URL, token: string = Credentials.getToken()): Promise<Response> {
     this.checkTokens(token);
 
     const props: RequestInit = {

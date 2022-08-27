@@ -1,7 +1,6 @@
 import Constants from '../../constants';
 import HttpClient from '../http-client';
 import { AuthResponseSchema, CredentialsSchema } from '../../types/types';
-import Tokens from '../../services/auth/tokens';
 
 export default class Auth extends HttpClient {
   /**
@@ -31,10 +30,6 @@ export default class Auth extends HttpClient {
     }
 
     const content: AuthResponseSchema = await response.json();
-
-    const { token, refreshToken } = content;
-    Tokens.setToken(token);
-    Tokens.setRefreshToken(refreshToken);
 
     // console.log(content);
 
