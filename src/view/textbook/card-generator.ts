@@ -146,7 +146,42 @@ export default class CardGenerator extends HTMLConstructor {
       undefined,
       'Learned'
     );
-    controlsWrapper.append(difficultBtn, learnedtBtn);
+    const divider: HTMLElement = this.createHtmlElement('div', ['vr']);
+    const badgesWrapper: HTMLElement = this.createBadges(word);
+
+    controlsWrapper.append(difficultBtn, learnedtBtn, divider, badgesWrapper);
     return controlsWrapper;
+  }
+
+  createBadges(word: WordsResponseSchema): HTMLElement {
+    const badgesWrapper: HTMLElement = this.createHtmlElement('div', [
+      'd-flex',
+      'justify-content-center',
+      'align-items-center',
+      'flex-column',
+      'badges-wrapper',
+    ]);
+    const correctAttempts: HTMLElement = this.createHtmlElement(
+      'span',
+      ['badge', 'bg-primary'],
+      `badge-correct-${word.id}`,
+      [
+        ['data-bs-toggle', 'custom-tooltip'],
+        ['title', 'Correct attempts'],
+      ],
+      '0'
+    );
+    const incorrectAttempts: HTMLElement = this.createHtmlElement(
+      'span',
+      ['badge', 'bg-secondary'],
+      `badge-incorrect-${word.id}`,
+      [
+        ['data-bs-toggle', 'custom-tooltip'],
+        ['title', 'Incorrect attempts'],
+      ],
+      '0'
+    );
+    badgesWrapper.append(correctAttempts, incorrectAttempts);
+    return badgesWrapper;
   }
 }

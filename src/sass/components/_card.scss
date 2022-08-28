@@ -40,6 +40,14 @@
 
     .controls-btns-wrapper {
       gap: 20px;
+
+      .badges-wrapper {
+        gap: 5px;
+
+        .badge {
+          width: 35px;
+        }
+      }
     }
   }
 }
