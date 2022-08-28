@@ -117,7 +117,7 @@ export default class HTMLConstructor {
     return element;
   }
 
-  public a(href: string, classList?: string[]): HTMLAnchorElement {
+  public a(href: string, classList?: string[], innerText?: string): HTMLAnchorElement {
     const element = document.createElement('a');
     element.setAttribute('target', '_blanc');
     element.href = href;
@@ -126,6 +126,7 @@ export default class HTMLConstructor {
         element.classList.add(elem);
       });
     }
+    element.innerText = innerText ?? '';
 
     return element;
   }
