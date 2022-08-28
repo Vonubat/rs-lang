@@ -35,4 +35,14 @@ export default class Constants {
   };
 
   static readonly TOKEN_LIFE_TIME = 1.44e7;
+
+  static readonly MENU = {
+    MAIN: 'Main',
+    TEXTBOOK: 'Textbook',
+    MINIGAMES: 'Minigames',
+    STATISTICS: 'Statistics',
+  };
+
+  static readonly BODY_INDEX = 'body';
+
 }
