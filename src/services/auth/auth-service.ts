@@ -1,6 +1,6 @@
 import { api } from '../../api/api';
 import Constants from '../../constants';
-import { AuthResponseSchema } from '../../types/types';
+import { AuthResponseSchema, UserResponseSchema } from '../../types/types';
 import CheckApiParams from '../../utilities/check-api-params';
 import { view } from '../../view/view';
 import Credentials from './credentials';
@@ -37,7 +37,7 @@ export default class AuthService {
   }
 
   errorHandler(response: Response): false {
-    if (response.status === 403) {
+    if (response.status === (403 || 422)) {
       this.errorMessageLogin.innerHTML = 'Incorrect e-mail or password';
       this.errorMessageLogin.style.display = '';
     }
@@ -46,6 +46,27 @@ export default class AuthService {
       this.errorMessageLogin.style.display = '';
     }
     return false;
+  }
+
+  checkUser(): boolean {
+    const userName: string | null = localStorage.getItem('userName');
+    if (userName) {
+      return true;
+    }
+    return false;
+  }
+
+  checkTokenExpiring(): void {
+    if (this.checkUser()) {
+      const userId: string = Credentials.getUserId();
+      const currentTime: number = Date.now();
+      const tokenCreationTime: number = Credentials.getTimeStamp();
+      const delta: number = tokenCreationTime - currentTime;
+
+      if (delta > Constants.TOKEN_LIFE_TIME) {
+        api.users.getNewUserTokens(userId);
+      }
+    }
   }
 
   changeBtnState(): void {
@@ -72,28 +93,7 @@ export default class AuthService {
     return false;
   }
 
-  checkUser(): boolean {
-    const userName: string | null = localStorage.getItem('userName');
-    if (userName) {
-      return true;
-    }
-    return false;
-  }
-
-  checkTokenExpiring(): void {
-    if (this.checkUser()) {
-      const userId: string = Credentials.getUserId();
-      const currentTime: number = Date.now();
-      const tokenCreationTime: number = Credentials.getTimeStamp();
-      const delta: number = tokenCreationTime - currentTime;
-
-      if (delta > Constants.TOKEN_LIFE_TIME) {
-        api.users.getNewUserTokens(userId);
-      }
-    }
-  }
-
-  async signIn(): Promise<boolean> {
+  async signIn(event: Event): Promise<boolean> {
     try {
       this.errorMessageLogin.style.display = 'none';
 
@@ -101,6 +101,7 @@ export default class AuthService {
       const password: string = this.passwordLoginInput.value;
       this.checkParams.checkEmail(email);
       this.checkParams.checkPassword(password);
+      event.preventDefault();
 
       const response: AuthResponseSchema | Response = await api.auth.signIn({ email, password });
 
@@ -109,13 +110,39 @@ export default class AuthService {
       }
 
       const { token, refreshToken, userId, name } = response;
-      Credentials.setTimeStamp();
-      Credentials.setToken(token);
-      Credentials.setRefreshToken(refreshToken);
-      Credentials.setUserId(userId);
-      Credentials.setName(name);
-      Credentials.setEmail(email);
+      Credentials.setCredentials(token, refreshToken, userId, name, email);
       this.closeModalLogin.dispatchEvent(new Event('click'));
+      this.changeBtnState();
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async signUp(event: Event): Promise<boolean> {
+    try {
+      this.errorMessageRegistarion.style.display = 'none';
+
+      let response: AuthResponseSchema | UserResponseSchema | Response;
+      const email: string = this.emailRegistrationInput.value;
+      const password: string = this.passwordRegistrationInput.value;
+      const userName: string = this.nameRegistrationInput.value;
+
+      this.checkParams.checkEmail(email);
+      this.checkParams.checkPassword(password);
+      event.preventDefault();
+
+      response = await api.users.createUser({ name: userName, email, password });
+      response = await api.auth.signIn({ email, password });
+
+      if (response instanceof Response) {
+        return this.errorHandler(response);
+      }
+
+      const { token, refreshToken, userId } = response;
+      Credentials.setCredentials(token, refreshToken, userId, userName, email);
+      this.closeModalRegistration.dispatchEvent(new Event('click'));
       this.changeBtnState();
 
       return true;
@@ -139,8 +166,9 @@ export default class AuthService {
     this.passwordRegistrationInput = document.getElementById('password-registration-input') as HTMLInputElement;
   }
 
-  listenAuth() {
+  listenAuth(): void {
     this.signInButton.addEventListener('click', this.signIn.bind(this));
+    this.signUpButton.addEventListener('click', this.signUp.bind(this));
     this.loginBtn.addEventListener('click', this.logOut.bind(this));
     document.addEventListener('DOMContentLoaded', this.checkTokenExpiring.bind(this));
     document.addEventListener('DOMContentLoaded', this.changeBtnState.bind(this));

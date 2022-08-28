@@ -64,6 +64,21 @@ export default class Credentials {
     localStorage.setItem('timestamp', String(Date.now()));
   }
 
+  public static setCredentials(
+    token: string,
+    refreshToken: string,
+    userId: string,
+    userName: string,
+    email: string
+  ): void {
+    this.setTimeStamp();
+    this.setToken(token);
+    this.setRefreshToken(refreshToken);
+    this.setUserId(userId);
+    this.setName(userName);
+    this.setEmail(email);
+  }
+
   public static delCredentials(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');

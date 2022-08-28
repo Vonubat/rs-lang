@@ -56,6 +56,7 @@ export default class Modal extends HTMLConstructor {
     ) as HTMLInputElement;
     input.required = true;
     if (typeOfInput === 'password') input.setAttribute('minlength', '8');
+    if (typeOfInput === 'text') input.setAttribute('minlength', '1');
     div.appendChild(label);
     div.appendChild(input);
     fragment.appendChild(div);
@@ -97,7 +98,7 @@ export default class Modal extends HTMLConstructor {
       'Failed to connect'
     );
     errorMessage.style.display = 'none';
-    const button: HTMLButtonElement = this.button(['btn', 'btn-primary'], 'button');
+    const button: HTMLButtonElement = this.button(['btn', 'btn-primary'], 'submit');
     const linkTo: HTMLElement = this.createHtmlElement('a', [], undefined, [['data-bs-toggle', 'modal']]);
     if (typeofModal === 'Login') {
       button.innerText = 'SIGN IN';
