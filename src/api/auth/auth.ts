@@ -1,6 +1,7 @@
 import Constants from '../../constants';
 import HttpClient from '../http-client';
 import { AuthResponseSchema, CredentialsSchema } from '../../types/types';
+import Tokens from '../../services/auth/tokens';
 
 export default class Auth extends HttpClient {
   /**
@@ -10,7 +11,7 @@ export default class Auth extends HttpClient {
    * @return {Promise<AuthResponseSchema>} - object which contains: message, token, refreshToken, userId, name.
    */
 
-  public async signIn(credentials: CredentialsSchema): Promise<AuthResponseSchema | Response> {
+  public async signIn(credentials: CredentialsSchema): Promise<AuthResponseSchema> {
     const { email, password } = credentials;
     this.checkEmail(email);
     this.checkPassword(password);
@@ -23,13 +24,11 @@ export default class Auth extends HttpClient {
         password,
       })
     );
-
-    if (!response.ok) {
-      // status 403 -> Incorrect e-mail or password
-      return response;
-    }
-
     const content: AuthResponseSchema = await response.json();
+
+    const { token, refreshToken } = content;
+    Tokens.setToken(token);
+    Tokens.setRefreshToken(refreshToken);
 
     // console.log(content);
 

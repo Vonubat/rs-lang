@@ -1,8 +1,15 @@
-import Credentials from '../services/auth/credentials';
+import Tokens from '../services/auth/tokens';
 import CheckApiParams from '../utilities/check-api-params';
 
 export default class HttpClient extends CheckApiParams {
-  public async get(link: RequestInfo | URL, token: string = Credentials.getToken()): Promise<Response> {
+  private responseHandler(res: Response): Response {
+    if (!res.ok) {
+      throw Error(res.statusText);
+    }
+    return res;
+  }
+
+  public async get(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
     this.checkTokens(token);
 
     const props: RequestInit = {
@@ -14,13 +21,13 @@ export default class HttpClient extends CheckApiParams {
       },
     };
     const response: Response = await fetch(link, props);
-    return response;
+    return this.responseHandler(response);
   }
 
   public async put(
     link: RequestInfo | URL,
     body: BodyInit | null,
-    token: string = Credentials.getToken()
+    token: string = Tokens.getToken()
   ): Promise<Response> {
     this.checkTokens(token);
 
@@ -34,13 +41,13 @@ export default class HttpClient extends CheckApiParams {
       body,
     };
     const response: Response = await fetch(link, props);
-    return response;
+    return this.responseHandler(response);
   }
 
   public async post(
     link: RequestInfo | URL,
     body: BodyInit | null,
-    token: string = Credentials.getToken()
+    token: string = Tokens.getToken()
   ): Promise<Response> {
     this.checkTokens(token);
 
@@ -54,10 +61,10 @@ export default class HttpClient extends CheckApiParams {
       body,
     };
     const response: Response = await fetch(link, props);
-    return response;
+    return this.responseHandler(response);
   }
 
-  public async delete(link: RequestInfo | URL, token: string = Credentials.getToken()): Promise<Response> {
+  public async delete(link: RequestInfo | URL, token: string = Tokens.getToken()): Promise<Response> {
     this.checkTokens(token);
 
     const props: RequestInit = {
@@ -69,6 +76,6 @@ export default class HttpClient extends CheckApiParams {
       },
     };
     const response: Response = await fetch(link, props);
-    return response;
+    return this.responseHandler(response);
   }
 }

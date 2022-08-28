@@ -38,12 +38,15 @@ export default class HTMLConstructor {
     return element;
   }
 
-  public span(classList?: string[]): HTMLSpanElement {
+  public span(classList?: string[], innerText?: string): HTMLSpanElement {
     const element = document.createElement('span');
     if (classList) {
       classList.forEach((elem) => {
         element.classList.add(elem);
       });
+    }
+    if (innerText) {
+      element.innerText = innerText;
     }
 
     return element;
@@ -119,7 +122,7 @@ export default class HTMLConstructor {
 
   public a(href: string, classList?: string[], innerText?: string): HTMLAnchorElement {
     const element = document.createElement('a');
-    element.setAttribute('target', '_blank');
+    element.setAttribute('target', '_blanc');
     element.href = href;
     if (classList) {
       classList.forEach((elem) => {

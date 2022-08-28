@@ -1,6 +1,12 @@
 .sidebar {
-  width: 280px;
+  // width: 280px;
   height: 100vh;
   position: sticky;
   top: 0px;
+}
+
+.nav-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
 }
