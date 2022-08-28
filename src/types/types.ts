@@ -121,3 +121,8 @@ export interface PageConfigResponce {
 }
 
 export type TypeOfPagination = 'Page' | 'Group';
+
+export interface Team {
+  name: string;
+  github: string;
+}

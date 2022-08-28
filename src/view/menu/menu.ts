@@ -10,14 +10,18 @@ export default class Menu {
 
   // private logout: HTMLDivElement;
 
+  private sidebarWrapper: HTMLDivElement;
+
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
+    this.sidebarWrapper = this.htmlConstructor.div(['col-md-3', 'col-xl-2', 'px-sm-2', 'px-0', 'text-bg-dark']);
     this.sidebar = this.htmlConstructor.createHtmlElement('nav', [
       'sidebar',
       'd-flex',
       'flex-column',
       'flex-shrink-0',
-      'p-3',
+      'px-3',
+      'pt-2',
       'text-bg-dark',
     ]);
     const menuButton = this.htmlConstructor.button(['navbar-toggler'], 'button');
@@ -40,14 +44,19 @@ export default class Menu {
     // this.logout = this.htmlConstructor.div(['sidebar__logout']);
     this.fillMenu();
     this.sidebar.append(this.menu /* , this.logout */);
+    this.sidebarWrapper.appendChild(this.sidebar);
   }
 
   fillMenu() {
     this.menu.innerHTML = '';
-    Object.values(Constants.MENU).forEach((menuName, index) => {
+    Object.values(Constants.MENU).forEach((menuInfo, index) => {
       // TODO: set href
       const item = this.htmlConstructor.createHtmlElement('li', ['nav-item', 'sidebar__nav-menu_item']);
-      const link = this.htmlConstructor.a('#', ['nav-link'], menuName);
+      const link = this.htmlConstructor.a('#', ['nav-link']);
+      link.id = `menu${menuInfo.NAME}`;
+      link.dataset.bsToggle = 'collapse';
+      const icon = this.htmlConstructor.svg(`${menuInfo.ICON}`, ['bi', 'px-0', 'me-2', 'nav-icon']);
+      link.innerHTML = `${icon.outerHTML} ${menuInfo.NAME}`;
       if (index === 0) {
         link.classList.add('active');
       }
@@ -57,6 +66,6 @@ export default class Menu {
   }
 
   getMenu() {
-    return this.sidebar;
+    return this.sidebarWrapper;
   }
 }
