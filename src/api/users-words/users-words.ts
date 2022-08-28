@@ -10,11 +10,17 @@ export default class UsersWords extends HttpClient {
    * @returns {Promise<UsersWordsResponseSchema[]>} return all user words.
    */
 
-  public async getAllUserWords(userId: string): Promise<UsersWordsResponseSchema[]> {
+  public async getAllUserWords(userId: string): Promise<UsersWordsResponseSchema[] | Response> {
     this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/`);
     const response: Response = await this.get(url);
+
+    if (!response.ok) {
+      // status 402 -> Access token is missing or invalid
+      return response;
+    }
+
     const content: UsersWordsResponseSchema[] = await response.json();
 
     // console.log(content);
@@ -35,12 +41,19 @@ export default class UsersWords extends HttpClient {
     userId: string,
     wordId: string,
     body: UsersWordsRequestSchema
-  ): Promise<UsersWordsResponseSchema> {
+  ): Promise<UsersWordsResponseSchema | Response> {
     this.checkId(userId);
     this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
     const response: Response = await this.post(url, JSON.stringify(body));
+
+    if (!response.ok) {
+      // status 400 -> Bad request
+      // status 401 -> Access token is missing or invalid
+      return response;
+    }
+
     const content: UsersWordsResponseSchema = await response.json();
 
     // console.log(content);
@@ -55,12 +68,19 @@ export default class UsersWords extends HttpClient {
    * @returns {Promise<UsersWordsResponseSchema>} return specific word.
    */
 
-  public async getUserWordById(userId: string, wordId: string): Promise<UsersWordsResponseSchema> {
+  public async getUserWordById(userId: string, wordId: string): Promise<UsersWordsResponseSchema | Response> {
     this.checkId(userId);
     this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
     const response: Response = await this.get(url);
+
+    if (!response.ok) {
+      // status 401 -> Access token is missing or invalid
+      // status 404 -> User's word not found
+      return response;
+    }
+
     const content: UsersWordsResponseSchema = await response.json();
 
     // console.log(content);
@@ -81,12 +101,19 @@ export default class UsersWords extends HttpClient {
     userId: string,
     wordId: string,
     body: UsersWordsRequestSchema
-  ): Promise<UsersWordsResponseSchema> {
+  ): Promise<UsersWordsResponseSchema | Response> {
     this.checkId(userId);
     this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
     const response: Response = await this.put(url, JSON.stringify(body));
+
+    if (!response.ok) {
+      // status 400 -> Bad request
+      // status 401 -> Access token is missing or invalid
+      return response;
+    }
+
     const content: UsersWordsResponseSchema = await response.json();
 
     // console.log(content);
@@ -101,11 +128,19 @@ export default class UsersWords extends HttpClient {
    * @returns {Promise<void>} return nothing.
    */
 
-  public async deleteUserWord(userId: string, wordId: string): Promise<void> {
+  public async deleteUserWord(userId: string, wordId: string): Promise<Response> {
     this.checkId(userId);
     this.checkId(wordId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/words/${wordId}`);
-    await this.delete(url);
+    const response: Response = await this.delete(url);
+
+    if (!response.ok) {
+      // status 401 -> Access token is missing or invalid
+      return response;
+    }
+
+    // status 204 -> The user word has been deleted
+    return response;
   }
 }

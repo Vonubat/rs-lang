@@ -6,7 +6,6 @@ import Main from './main/main';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 
-
 export class View {
   htmlConstructor: HTMLConstructor;
 
@@ -17,7 +16,7 @@ export class View {
   menu: Menu;
 
   main: Main;
- 
+
   footer: Footer;
 
   constructor() {
@@ -34,13 +33,13 @@ export class View {
     const appWrapper = this.htmlConstructor.div(['app-wrapper', 'd-flex', 'flex-nowrap']);
     const menuElement = this.menu.getMenu();
     const appElement = this.htmlConstructor.div(['app']);
-
     const mainElement = this.htmlConstructor.createHtmlElement('main');
     mainElement.id = 'main';
     const mainContent = this.main.view();
     mainElement.append(mainContent);
     const footerElement = this.footer.view();
-    appElement.append(mainElement, footerElement);
+    const headerElement = this.header.view();
+    appElement.append(headerElement, mainElement, footerElement);
     appWrapper.append(menuElement, appElement);
     if (body) {
       body.appendChild(appWrapper);

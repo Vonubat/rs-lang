@@ -1,24 +1,29 @@
 import HTMLConstructor from '../components/constructor';
 
 export default class Modal extends HTMLConstructor {
-  modal(type: string): DocumentFragment {
-    const fragment = document.createDocumentFragment();
-    const modal = this.createHtmlElement('div', ['modal', 'fade'], `${type}Modal`, [
-      ['aria-hidden', 'true'],
-      ['aria-labelledby', 'popTitleLabel'],
-      ['tabindex', '-1'],
-    ]);
-    const modalDial = this.div(['modal-dialog', 'modal-dialog-centered']);
-    const modalContent = this.div(['modal-content']);
-    const modalHeader = this.modalHeader(type);
-    const form = this.createHtmlElement('form', ['modal-body']);
-    if (type === 'Registration') {
-      const formName = this.formInput('Name', 'text');
+  modal(typeofModal: 'Login' | 'Registration'): DocumentFragment {
+    const fragment: DocumentFragment = document.createDocumentFragment();
+    const modal: HTMLElement = this.createHtmlElement(
+      'div',
+      ['modal', 'fade'],
+      `${typeofModal.toLocaleLowerCase()}-modal`,
+      [
+        ['aria-hidden', 'true'],
+        ['aria-labelledby', 'popTitleLabel'],
+        ['tabindex', '-1'],
+      ]
+    );
+    const modalDial: HTMLDivElement = this.div(['modal-dialog', 'modal-dialog-centered']);
+    const modalContent: HTMLDivElement = this.div(['modal-content']);
+    const modalHeader: DocumentFragment = this.modalHeader(typeofModal);
+    const form: HTMLElement = this.createHtmlElement('form', ['modal-body']);
+    if (typeofModal === 'Registration') {
+      const formName: DocumentFragment = this.formInput('Name', 'text', typeofModal);
       form.appendChild(formName);
     }
-    const formLogin = this.formInput('Email', 'email');
-    const formPass = this.formInput('Password', 'password');
-    const modalFooter = this.modalFooter(type);
+    const formLogin: DocumentFragment = this.formInput(`Email`, 'email', typeofModal);
+    const formPass: DocumentFragment = this.formInput(`Password`, 'password', typeofModal);
+    const modalFooter: DocumentFragment = this.modalFooter(typeofModal);
     form.appendChild(formLogin);
     form.appendChild(formPass);
     modalContent.appendChild(modalHeader);
@@ -30,53 +35,84 @@ export default class Modal extends HTMLConstructor {
     return fragment;
   }
 
-  private formInput(name: string, type: string): DocumentFragment {
-    const fragment = document.createDocumentFragment();
-    const div = this.div([`form-div-${name}`]);
-    const label = this.createHtmlElement('label', ['form-label'], undefined, [['for', `${name}InputLabel`]]);
-    const input = this.createHtmlElement('input', ['form-control'], `${name}InputLabel`, [
-      ['placeholder', `${name}`],
-      ['type', type],
-    ]) as HTMLInputElement;
+  private formInput(
+    name: string,
+    typeOfInput: 'email' | 'password' | 'text',
+    typeofModal: 'Login' | 'Registration'
+  ): DocumentFragment {
+    const fragment: DocumentFragment = document.createDocumentFragment();
+    const div: HTMLDivElement = this.div([`form-div-${name}`]);
+    const label: HTMLElement = this.createHtmlElement('label', ['form-label'], undefined, [
+      ['for', `${name}InputLabel`],
+    ]);
+    const input: HTMLInputElement = this.createHtmlElement(
+      'input',
+      ['form-control'],
+      `${name.toLowerCase()}-${typeofModal.toLowerCase()}-input`,
+      [
+        ['placeholder', `${name}`],
+        ['type', typeOfInput],
+      ]
+    ) as HTMLInputElement;
     input.required = true;
-    input.autocomplete = 'off';   
-    if (type === 'password') input.setAttribute('minlength', '8');
+    input.autocomplete = 'off';
+    if (typeOfInput === 'password') input.setAttribute('minlength', '8');
     div.appendChild(label);
     div.appendChild(input);
     fragment.appendChild(div);
     return fragment;
   }
 
-  private modalHeader(type: string): DocumentFragment {
-    const fragment = document.createDocumentFragment();
-    const header = this.div(['modal-header']);
-    const title = this.createHtmlElement('h5', ['modal-title', 'text-center'], `${type}popTitleLabel`);
-    title.innerText = type;
-    const closeButton = this.createHtmlElement('button', ['btn-close'], undefined, [
-      ['data-bs-dismiss', 'modal'],
-      ['aria-label', 'Закрыть'],
-    ]);
+  private modalHeader(typeofModal: 'Login' | 'Registration'): DocumentFragment {
+    const fragment: DocumentFragment = document.createDocumentFragment();
+    const header: HTMLDivElement = this.div(['modal-header']);
+    const title: HTMLElement = this.createHtmlElement(
+      'h5',
+      ['modal-title', 'text-center'],
+      `${typeofModal}popTitleLabel`
+    );
+    title.innerText = typeofModal;
+    const closeButton: HTMLElement = this.createHtmlElement(
+      'button',
+      ['btn-close'],
+      `close-modal-${typeofModal.toLocaleLowerCase()}`,
+      [
+        ['data-bs-dismiss', 'modal'],
+        ['aria-label', 'Закрыть'],
+      ]
+    );
     header.appendChild(title);
     header.appendChild(closeButton);
     fragment.appendChild(header);
     return fragment;
   }
 
-  private modalFooter(type: string): DocumentFragment {
-    const fragment = document.createDocumentFragment();
-    const footer = this.div(['modal-footer', 'flex-column']);
-    const button = this.button(['btn', 'btn-primary'], 'submit');
-    const linkTo = this.createHtmlElement('a', [], undefined, [['data-bs-toggle', 'modal']]);
-    if (type === 'Login') {
+  private modalFooter(typeofModal: 'Login' | 'Registration'): DocumentFragment {
+    const fragment: DocumentFragment = document.createDocumentFragment();
+    const footer: HTMLDivElement = this.div(['modal-footer', 'flex-column']);
+    const errorMessage: HTMLElement = this.createHtmlElement(
+      'span',
+      ['text-danger'],
+      `error-message-${typeofModal.toLocaleLowerCase()}`,
+      undefined,
+      'Failed to connect'
+    );
+    errorMessage.style.display = 'none';
+    const button: HTMLButtonElement = this.button(['btn', 'btn-primary'], 'submit');
+    const linkTo: HTMLElement = this.createHtmlElement('a', [], undefined, [['data-bs-toggle', 'modal']]);
+    if (typeofModal === 'Login') {
       button.innerText = 'SIGN IN';
-      linkTo.setAttribute('href', '#RegistrationModal');
+      button.id = 'sign-in';
+      linkTo.setAttribute('href', '#registration-modal');
       linkTo.innerText = "Don't have an account? Sign Up";
     }
-    if (type === 'Registration') {
+    if (typeofModal === 'Registration') {
       button.innerText = 'SIGN UP';
-      linkTo.setAttribute('href', '#LoginModal');
+      button.id = 'sign-up';
+      linkTo.setAttribute('href', '#login-modal');
       linkTo.innerText = 'Do you have an account? Sign In';
     }
+    footer.appendChild(errorMessage);
     footer.appendChild(button);
     footer.appendChild(linkTo);
     fragment.appendChild(footer);
