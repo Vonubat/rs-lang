@@ -6,12 +6,14 @@ import Main from './main/main';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 
+
 export class View {
   htmlConstructor: HTMLConstructor;
 
   textbookView: TextbookView;
 
   header: Header;
+
 
   private menu: Menu;
 
