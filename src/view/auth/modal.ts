@@ -3,11 +3,16 @@ import HTMLConstructor from '../components/constructor';
 export default class Modal extends HTMLConstructor {
   modal(typeofModal: 'Login' | 'Registration'): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
-    const modal: HTMLElement = this.createHtmlElement('div', ['modal', 'fade'], `${typeofModal}Modal`, [
-      ['aria-hidden', 'true'],
-      ['aria-labelledby', 'popTitleLabel'],
-      ['tabindex', '-1'],
-    ]);
+    const modal: HTMLElement = this.createHtmlElement(
+      'div',
+      ['modal', 'fade'],
+      `${typeofModal.toLocaleLowerCase()}-modal`,
+      [
+        ['aria-hidden', 'true'],
+        ['aria-labelledby', 'popTitleLabel'],
+        ['tabindex', '-1'],
+      ]
+    );
     const modalDial: HTMLDivElement = this.div(['modal-dialog', 'modal-dialog-centered']);
     const modalContent: HTMLDivElement = this.div(['modal-content']);
     const modalHeader: DocumentFragment = this.modalHeader(typeofModal);
@@ -92,18 +97,18 @@ export default class Modal extends HTMLConstructor {
       'Failed to connect'
     );
     errorMessage.style.display = 'none';
-    const button: HTMLButtonElement = this.button(['btn', 'btn-primary'], 'submit');
+    const button: HTMLButtonElement = this.button(['btn', 'btn-primary'], 'button');
     const linkTo: HTMLElement = this.createHtmlElement('a', [], undefined, [['data-bs-toggle', 'modal']]);
     if (typeofModal === 'Login') {
       button.innerText = 'SIGN IN';
       button.id = 'sign-in';
-      linkTo.setAttribute('href', '#RegistrationModal');
+      linkTo.setAttribute('href', '#registration-modal');
       linkTo.innerText = "Don't have an account? Sign Up";
     }
     if (typeofModal === 'Registration') {
       button.innerText = 'SIGN UP';
       button.id = 'sign-up';
-      linkTo.setAttribute('href', '#LoginModal');
+      linkTo.setAttribute('href', '#login-modal');
       linkTo.innerText = 'Do you have an account? Sign In';
     }
     footer.appendChild(errorMessage);
