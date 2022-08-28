@@ -6,10 +6,16 @@
 @import './components/svg';
 @import './components/video';
 @import './components/img';
+@import './components/menu';
 @import './layout/main';
 
 html {
   scroll-behavior: smooth;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: row;
 }
 
 .disabled {
