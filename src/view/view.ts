@@ -13,11 +13,11 @@ export class View {
 
   header: Header;
 
-  private menu: Menu;
+  menu: Menu;
 
-  private main: Main;
+  main: Main;
 
-  private footer: Footer;
+  footer: Footer;
 
   constructor() {
     this.textbookView = new TextbookView();
