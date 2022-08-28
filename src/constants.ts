@@ -33,4 +33,19 @@ export default class Constants {
   };
 
   static readonly BODY_INDEX = 'body';
+
+  static readonly TEAM = [
+    {
+      name: 'Vonubat',
+      github: 'https://github.com/vonubat',
+    },
+    {
+      name: 'SlavikusVOG',
+      github: 'https://github.com/slavikusvog',
+    },
+    {
+      name: 'Der_Thun',
+      github: 'https://github.com/der-thun',
+    },
+  ];
 }
