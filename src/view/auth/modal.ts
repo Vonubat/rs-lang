@@ -56,7 +56,6 @@ export default class Modal extends HTMLConstructor {
     ) as HTMLInputElement;
     input.required = true;
     if (typeOfInput === 'password') input.setAttribute('minlength', '8');
-    if (typeOfInput === 'text') input.setAttribute('minlength', '1');
     div.appendChild(label);
     div.appendChild(input);
     fragment.appendChild(div);

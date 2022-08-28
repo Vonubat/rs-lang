@@ -38,7 +38,7 @@ export default class AuthService {
 
   errorHandler(response: Response): false {
     if (response.status === 422) {
-      this.errorMessageRegistration.innerHTML = 'Email address or name is not valid';
+      this.errorMessageRegistration.innerHTML = 'Name or email address is not valid';
       this.errorMessageRegistration.style.display = '';
     }
     if (response.status === 417) {
@@ -57,7 +57,7 @@ export default class AuthService {
     return false;
   }
 
-  checkUser(): boolean {
+  static checkUser(): boolean {
     const userName: string | null = localStorage.getItem('userName');
     if (userName) {
       return true;
@@ -66,7 +66,7 @@ export default class AuthService {
   }
 
   checkTokenExpiring(): void {
-    if (this.checkUser()) {
+    if (AuthService.checkUser()) {
       const userId: string = Credentials.getUserId();
       const currentTime: number = Date.now();
       const tokenCreationTime: number = Credentials.getTimeStamp();
@@ -80,7 +80,7 @@ export default class AuthService {
 
   changeBtnState(): void {
     const icon: SVGUseElement = view.header.icon.firstChild as SVGUseElement;
-    if (this.checkUser()) {
+    if (AuthService.checkUser()) {
       const email: string = Credentials.getEmail();
       this.loginBtn.dataset.bsToggle = '';
       (this.loginBtn.childNodes[0] as Text).data = `Log Out (${email})`;
