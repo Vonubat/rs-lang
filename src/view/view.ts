@@ -1,6 +1,7 @@
 import Constants from '../constants';
 import HTMLConstructor from './components/constructor';
 import Header from './components/header';
+import Footer from './footer/footer';
 import Main from './main/main';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
@@ -16,12 +17,15 @@ class View {
 
   private main: Main;
 
+  private footer: Footer;
+
   constructor() {
     this.textbookView = new TextbookView();
     this.htmlConstructor = new HTMLConstructor();
     this.menu = new Menu();
     this.header = new Header();
     this.main = new Main();
+    this.footer = new Footer();
   }
 
   drawPage() {
@@ -31,7 +35,8 @@ class View {
     const appElement = this.htmlConstructor.div(['app']);
     const headerElement = this.header.view();
     const mainElement = this.main.view();
-    appElement.append(headerElement, mainElement);
+    const footerElement = this.footer.view();
+    appElement.append(headerElement, mainElement, footerElement);
     appWrapper.append(menuElement, appElement);
     if (body) {
       body.appendChild(appWrapper);
