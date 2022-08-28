@@ -14,7 +14,7 @@ export default class Menu {
 
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
-    this.sidebarWrapper = this.htmlConstructor.div(['col-auto', 'col-md-3', 'col-xl-2', 'px-sm-2', 'px-0']);
+    this.sidebarWrapper = this.htmlConstructor.div(['col-md-3', 'col-xl-2', 'px-sm-2', 'px-0', 'text-bg-dark']);
     this.sidebar = this.htmlConstructor.createHtmlElement('nav', [
       'sidebar',
       'd-flex',
