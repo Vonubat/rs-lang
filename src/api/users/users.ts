@@ -21,6 +21,7 @@ export default class Users extends HttpClient {
     const response: Response = await this.post(url, JSON.stringify(user));
 
     if (!response.ok) {
+      // status 422 -> Email address is already registered
       // status 422 -> Incorrect e-mail or password
       return response;
     }

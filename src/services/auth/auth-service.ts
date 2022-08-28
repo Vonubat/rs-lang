@@ -16,7 +16,7 @@ export default class AuthService {
 
   errorMessageLogin!: HTMLSpanElement;
 
-  errorMessageRegistarion!: HTMLSpanElement;
+  errorMessageRegistration!: HTMLSpanElement;
 
   closeModalLogin!: HTMLButtonElement;
 
@@ -37,13 +37,22 @@ export default class AuthService {
   }
 
   errorHandler(response: Response): false {
-    if (response.status === (403 || 422)) {
+    if (response.status === 422) {
+      this.errorMessageRegistration.innerHTML = 'Incorrect e-mail or password';
+      this.errorMessageRegistration.style.display = '';
+    }
+    if (response.status === 417) {
+      this.errorMessageRegistration.innerHTML = 'Email address is already registered';
+      this.errorMessageRegistration.style.display = '';
+    }
+    if (response.status === 403) {
       this.errorMessageLogin.innerHTML = 'Incorrect e-mail or password';
       this.errorMessageLogin.style.display = '';
     }
     if (response.status === 404) {
       this.errorMessageLogin.innerHTML = 'Failed to connect';
       this.errorMessageLogin.style.display = '';
+      this.errorMessageRegistration.style.display = '';
     }
     return false;
   }
@@ -122,7 +131,7 @@ export default class AuthService {
 
   async signUp(event: Event): Promise<boolean> {
     try {
-      this.errorMessageRegistarion.style.display = 'none';
+      this.errorMessageRegistration.style.display = 'none';
 
       let response: AuthResponseSchema | UserResponseSchema | Response;
       const email: string = this.emailRegistrationInput.value;
@@ -134,6 +143,11 @@ export default class AuthService {
       event.preventDefault();
 
       response = await api.users.createUser({ name: userName, email, password });
+
+      if (response instanceof Response) {
+        return this.errorHandler(response);
+      }
+
       response = await api.auth.signIn({ email, password });
 
       if (response instanceof Response) {
@@ -156,7 +170,7 @@ export default class AuthService {
     this.signInButton = document.getElementById('sign-in') as HTMLButtonElement;
     this.signUpButton = document.getElementById('sign-up') as HTMLButtonElement;
     this.errorMessageLogin = document.getElementById('error-message-login') as HTMLSpanElement;
-    this.errorMessageRegistarion = document.getElementById('error-message-registration') as HTMLSpanElement;
+    this.errorMessageRegistration = document.getElementById('error-message-registration') as HTMLSpanElement;
     this.closeModalLogin = document.getElementById('close-modal-login') as HTMLButtonElement;
     this.closeModalRegistration = document.getElementById('close-modal-registration') as HTMLButtonElement;
     this.emailLoginInput = document.getElementById('email-login-input') as HTMLInputElement;
