@@ -38,7 +38,7 @@ export default class AuthService {
 
   errorHandler(response: Response): false {
     if (response.status === 422) {
-      this.errorMessageRegistration.innerHTML = 'Incorrect e-mail or password';
+      this.errorMessageRegistration.innerHTML = 'Email address or name is not valid';
       this.errorMessageRegistration.style.display = '';
     }
     if (response.status === 417) {
