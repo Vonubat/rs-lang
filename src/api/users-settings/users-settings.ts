@@ -10,18 +10,11 @@ export default class UserSettings extends HttpClient {
    * @returns {Promise<Settings>} return settings.
    */
 
-  public async getSettings(userId: string): Promise<Settings | Response> {
+  public async getSettings(userId: string): Promise<Settings> {
     this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/settings`);
     const response: Response = await this.get(url);
-
-    if (!response.ok) {
-      // status 401 -> Access token is missing or invalid
-      // status 404 -> Settings not found
-      return response;
-    }
-
     const content: Settings = await response.json();
 
     // console.log(content);
@@ -37,18 +30,11 @@ export default class UserSettings extends HttpClient {
    * @returns {Promise<Settings>} return settings.
    */
 
-  public async setSettings(userId: string, body: Settings): Promise<Settings | Response> {
+  public async setSettings(userId: string, body: Settings): Promise<Settings> {
     this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/settings`);
     const response: Response = await this.put(url, JSON.stringify(body));
-
-    if (!response.ok) {
-      // status 400 -> Bad request
-      // status 401 -> Access token is missing or invalid
-      return response;
-    }
-
     const content: Settings = await response.json();
 
     // console.log(content);

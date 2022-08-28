@@ -16,11 +16,6 @@ export default class Words extends HttpClient {
 
     const url: URL = new URL(`${Constants.BASE_URL}/words?group=${groupNumber}&page=${pageNumber}`);
     const response: Response = await this.get(url);
-
-    if (!response.ok) {
-      throw new Error(`Can't get a chunk of words`);
-    }
-
     const content: WordsResponseSchema[] = await response.json();
 
     // console.log(content);
@@ -39,11 +34,6 @@ export default class Words extends HttpClient {
 
     const url: URL = new URL(`${Constants.BASE_URL}/words/${wordId}`);
     const response: Response = await this.get(url);
-
-    if (!response.ok) {
-      throw new Error(`Can't gets a word with assets by id`);
-    }
-
     const content: WordsResponseSchema = await response.json();
 
     // console.log(content);

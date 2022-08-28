@@ -6,6 +6,7 @@ import Main from './main/main';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 
+
 export class View {
   htmlConstructor: HTMLConstructor;
 
@@ -13,11 +14,11 @@ export class View {
 
   header: Header;
 
-  private menu: Menu;
+  menu: Menu;
 
-  private main: Main;
-
-  private footer: Footer;
+  main: Main;
+ 
+  footer: Footer;
 
   constructor() {
     this.textbookView = new TextbookView();
@@ -33,6 +34,7 @@ export class View {
     const appWrapper = this.htmlConstructor.div(['app-wrapper', 'd-flex', 'flex-nowrap']);
     const menuElement = this.menu.getMenu();
     const appElement = this.htmlConstructor.div(['app']);
+
     const mainElement = this.htmlConstructor.createHtmlElement('main');
     mainElement.id = 'main';
     const mainContent = this.main.view();
