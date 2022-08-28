@@ -26,10 +26,23 @@ export default class Constants {
   static readonly RIGHT_ARROW = '&raquo;';
 
   static readonly MENU = {
-    MAIN: 'Main',
-    TEXTBOOK: 'Textbook',
-    MINIGAMES: 'Minigames',
-    STATISTICS: 'Statistics',
+    MAIN: {
+      NAME: 'Main',
+      ICON: 'bi-house',
+    },
+    TEXTBOOK: {
+      NAME: 'Textbook',
+      ICON: 'bi-book',
+    },
+
+    MINIGAMES: {
+      NAME: 'Minigames',
+      ICON: 'bi-controller',
+    },
+    STATISTICS: {
+      NAME: 'Statistics',
+      ICON: 'bi-graph-up',
+    },
   };
 
   static readonly BODY_INDEX = 'body';
