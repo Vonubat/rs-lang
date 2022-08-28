@@ -47,6 +47,17 @@ export default class Constants {
 
   static readonly BODY_INDEX = 'body';
 
+
+  static readonly BOOTSTRAP_COLORS = [
+    'text-primary',
+    'text-secondary',
+    'text-success',
+    'text-danger',
+    'text-warning',
+    'text-info',
+    'text-dark'
+  ];
+
   static readonly TEAM = [
     {
       name: 'Vonubat',
@@ -60,5 +71,6 @@ export default class Constants {
       name: 'Der_Thun',
       github: 'https://github.com/der-thun',
     },
+
   ];
 }
