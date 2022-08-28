@@ -6,7 +6,7 @@ export default class Header extends HTMLConstructor {
 
   icon!: SVGSVGElement;
 
-  loginBtn!: HTMLAnchorElement;
+  loginBtn!: HTMLElement;
 
   constructor() {
     super();
@@ -30,7 +30,10 @@ export default class Header extends HTMLConstructor {
     header.appendChild(this.modal.modal('Login'));
     header.appendChild(this.modal.modal('Registration'));
     const buttonWrapper: HTMLDivElement = this.div(['login-btn-wrapper']);
-    const loginButton: HTMLAnchorElement = this.a('#login-modal', ['btn', 'btn-outline-dark']);
+    const loginButton: HTMLElement = this.createHtmlElement('a', ['btn', 'btn-outline-dark'], 'login-btn', [
+      ['data-bs-toggle', 'modal'],
+      ['data-bs-target', '#login-modal'],
+    ]);
     loginButton.setAttribute('data-bs-toggle', 'modal');
     loginButton.setAttribute('data-bs-target', '#login-modal');
     const svg: SVGSVGElement = this.svg('lock', ['login-svg']);
@@ -41,7 +44,6 @@ export default class Header extends HTMLConstructor {
     fragment.appendChild(header);
 
     this.icon = svg;
-    this.loginBtn = loginButton;
     return fragment;
   }
 }
