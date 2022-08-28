@@ -6,10 +6,18 @@ import Main from './main/main';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 
-class View {
+export class View {
+<<<<<<< HEAD
   textbookView: TextbookView;
 
   htmlConstructor: HTMLConstructor;
+=======
+  htmlConstructor: HTMLConstructor;
+
+  textbookView: TextbookView;
+
+  header: Header;
+>>>>>>> aa89f8c3a72730f119cd6c5dd7c1d486a1ee40a3
 
   private menu: Menu;
 

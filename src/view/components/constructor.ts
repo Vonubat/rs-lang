@@ -122,7 +122,7 @@ export default class HTMLConstructor {
 
   public a(href: string, classList?: string[], innerText?: string): HTMLAnchorElement {
     const element = document.createElement('a');
-    element.setAttribute('target', '_blanc');
+    element.setAttribute('target', '_blank');
     element.href = href;
     if (classList) {
       classList.forEach((elem) => {
