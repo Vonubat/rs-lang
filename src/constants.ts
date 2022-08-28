@@ -72,4 +72,14 @@ export default class Constants {
       github: 'https://github.com/der-thun',
     },
   ];
+
+  static readonly BOOTSTRAP_COLORS = [
+    'text-primary',
+    'text-secondary',
+    'text-success',
+    'text-danger',
+    'text-warning',
+    'text-info',
+    'text-dark',
+  ];
 }

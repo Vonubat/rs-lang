@@ -16,12 +16,11 @@ export default class Header extends HTMLConstructor {
   view(): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const header: HTMLElement = this.createHtmlElement('header', [
-      'header',
-      'container-fluid',
       'justify-content-between',
       'd-flex',
       'text-center',
       'align-items-center',
+      'header',
     ]);
     const a: HTMLAnchorElement = this.a('..main/index.html', ['logo-link']);
     const img: HTMLImageElement = this.img('../../assets/favicons/favicon-96.png', 'logo', ['logo-img']);

@@ -38,7 +38,8 @@ export class View {
     const mainContent = this.main.view();
     mainElement.append(mainContent);
     const footerElement = this.footer.view();
-    appElement.append(mainElement, footerElement);
+    const headerElement = this.header.view();
+    appElement.append(headerElement, mainElement, footerElement);
     appWrapper.append(menuElement, appElement);
     if (body) {
       body.appendChild(appWrapper);
