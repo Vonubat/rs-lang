@@ -6,7 +6,9 @@ import Main from './main/main';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 
-class View {
+
+export class View {
+
   textbookView: TextbookView;
 
   htmlConstructor: HTMLConstructor;
