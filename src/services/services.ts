@@ -18,7 +18,7 @@ export class Services {
 
 export const services: Services = new Services();
 
-services.textbookService.drawPage();
+/* services.textbookService.drawPage(); 
 services.headerService.draw();
 services.authService.setModalWindowsItems();
-services.authService.listenAuth();
+services.authService.listenAuth(); */
