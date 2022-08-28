@@ -28,20 +28,20 @@ export default class Constants {
   static readonly MENU = {
     MAIN: {
       NAME: 'Main',
-      ICON: 'bi-house',
+      ICON: 'house',
     },
     TEXTBOOK: {
       NAME: 'Textbook',
-      ICON: 'bi-book',
+      ICON: 'book',
     },
 
     MINIGAMES: {
       NAME: 'Minigames',
-      ICON: 'bi-controller',
+      ICON: 'controller',
     },
     STATISTICS: {
       NAME: 'Statistics',
-      ICON: 'bi-graph-up',
+      ICON: 'graph-up',
     },
   };
 

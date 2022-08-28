@@ -29,21 +29,17 @@ export default class Main {
     this.HTMLConstructor = new HTMLConstructor();
   }
 
-  view() {
-    const main = this.HTMLConstructor.createHtmlElement('main');
+  view(): DocumentFragment {
+    const fragment = document.createDocumentFragment();
     const preview = this.preview();
-    main.appendChild(preview);
     const ourAdvantages = this.advantages();
-    main.appendChild(ourAdvantages);
     const posibilities = this.posibilities();
-    main.appendChild(posibilities);
     const team = this.team();
-    main.appendChild(team);
-
-    return main;
+    fragment.append(preview, ourAdvantages, posibilities, team);
+    return fragment;
   }
 
-  private preview() {
+  private preview(): HTMLElement {
     const previewSection = this.HTMLConstructor.createHtmlElement('section', ['preview']);
     const previewContainer = this.HTMLConstructor.div(['container-fluid', 'justify-content-around', 'd-flex']);
     const previewCard = this.card('preview', 'RS Lang', 'If you can dream it, you can do it', this.previewText);
@@ -52,7 +48,6 @@ export default class Main {
     button.innerText = "Let's start";
     cardBody.appendChild(button);
     previewContainer.appendChild(previewCard);
-
     const previewImg = this.HTMLConstructor.img('../../assets/favicons/favicon-180.png', 'preview-img', [
       'preview-img',
     ]);
@@ -61,7 +56,7 @@ export default class Main {
     return previewSection;
   }
 
-  private advantages() {
+  private advantages(): HTMLElement {
     const advantagesSection = this.HTMLConstructor.createHtmlElement('section', ['ourAdvantages']);
     const advantagesContainer = this.HTMLConstructor.div(['container-fluid']);
     const title = this.HTMLConstructor.createHtmlElement('h2', ['text-center', 'section-title']);
@@ -93,7 +88,7 @@ export default class Main {
     return advantagesSection;
   }
 
-  private posibilities() {
+  private posibilities(): HTMLElement {
     const posibilitiesSection = this.HTMLConstructor.createHtmlElement('section', ['ourPosibilities']);
     const title = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
     title.innerText = 'Our posibilities';
@@ -109,7 +104,7 @@ export default class Main {
     return posibilitiesSection;
   }
 
-  private team() {
+  private team(): HTMLElement {
     const teamSection = this.HTMLConstructor.createHtmlElement('section', ['ourTeam']);
     const title = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
     title.innerText = 'Our team';
@@ -172,3 +167,5 @@ export default class Main {
     return card;
   }
 }
+
+export const main = new Main();

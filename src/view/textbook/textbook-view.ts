@@ -22,6 +22,7 @@ export default class TextbookView {
   }
 
   drawPage(words: WordsResponseSchema[], pageConfig: PageConfigResponce): void {
+    this.textbook = document.getElementById('main') as HTMLElement;
     this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
     this.paginationTopInstance = this.pagination.generatePaginationContainer('top', pageConfig);
     this.paginationBottomInstance = this.pagination.generatePaginationContainer('bottom', pageConfig);

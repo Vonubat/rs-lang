@@ -53,8 +53,9 @@ export default class Menu {
       // TODO: set href
       const item = this.htmlConstructor.createHtmlElement('li', ['nav-item', 'sidebar__nav-menu_item']);
       const link = this.htmlConstructor.a('#', ['nav-link']);
+      link.id = `menu${menuInfo.NAME}`;
       link.dataset.bsToggle = 'collapse';
-      const icon = this.htmlConstructor.createHtmlElement('i', ['bi', 'px-0', 'me-2', `${menuInfo.ICON}`, 'nav-icon']);
+      const icon = this.htmlConstructor.svg(`${menuInfo.ICON}`, ['bi', 'px-0', 'me-2', 'nav-icon']);
       link.innerHTML = `${icon.outerHTML} ${menuInfo.NAME}`;
       if (index === 0) {
         link.classList.add('active');
