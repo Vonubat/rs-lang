@@ -22,7 +22,8 @@ export default class TextbookView {
   }
 
   drawPage(words: WordsResponseSchema[], pageConfig: PageConfigResponce): void {
-    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+    this.textbook = document.getElementById('main') as HTMLElement;
+    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words, pageConfig);
     this.paginationTopInstance = this.pagination.generatePaginationContainer('top', pageConfig);
     this.paginationBottomInstance = this.pagination.generatePaginationContainer('bottom', pageConfig);
 
@@ -30,8 +31,8 @@ export default class TextbookView {
     this.pagination.disableArrows(this.textbook, pageConfig);
   }
 
-  drawCardsContainer(words: WordsResponseSchema[]): void {
-    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+  drawCardsContainer(words: WordsResponseSchema[], pageConfig: PageConfigResponce): void {
+    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words, pageConfig);
     this.paginationTopInstance.append(this.cardsContainerInstance);
   }
 

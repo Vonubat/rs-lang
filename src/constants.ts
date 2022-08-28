@@ -25,23 +25,34 @@ export default class Constants {
 
   static readonly RIGHT_ARROW = '&raquo;';
 
+  static readonly CONTAINER_COLORS = {
+    '$pink-100': 'rgb(247, 214, 230)',
+    '$orange-100': 'rgb(255, 229, 208)',
+    '$green-100': 'rgb(209, 231, 221)',
+    '$yellow-100': 'rgb(255, 243, 205)',
+    '$cyan-100': 'rgb(207, 244, 252)',
+    '$indigo-100': 'rgb(224, 207, 252)',
+  };
+
+  static readonly TOKEN_LIFE_TIME = 1.44e7;
+
   static readonly MENU = {
     MAIN: {
       NAME: 'Main',
-      ICON: 'bi-house',
+      ICON: 'house',
     },
     TEXTBOOK: {
       NAME: 'Textbook',
-      ICON: 'bi-book',
+      ICON: 'book',
     },
 
     MINIGAMES: {
       NAME: 'Minigames',
-      ICON: 'bi-controller',
+      ICON: 'controller',
     },
     STATISTICS: {
       NAME: 'Statistics',
-      ICON: 'bi-graph-up',
+      ICON: 'graph-up',
     },
   };
 
@@ -60,5 +71,15 @@ export default class Constants {
       name: 'Der_Thun',
       github: 'https://github.com/der-thun',
     },
+  ];
+
+  static readonly BOOTSTRAP_COLORS = [
+    'text-primary',
+    'text-secondary',
+    'text-success',
+    'text-danger',
+    'text-warning',
+    'text-info',
+    'text-dark',
   ];
 }
