@@ -10,11 +10,11 @@ export class View {
 
   htmlConstructor: HTMLConstructor;
 
-  private menu: Menu;
+  menu: Menu;
 
-  private header: Header;
+  header: Header;
 
-  private main: Main;
+  main: Main;
 
   constructor() {
     this.textbookView = new TextbookView();
@@ -29,9 +29,9 @@ export class View {
     const appWrapper = this.htmlConstructor.div(['app-wrapper', 'd-flex', 'flex-nowrap']);
     const menuElement = this.menu.getMenu();
     const appElement = this.htmlConstructor.div(['app']);
-    const headerElement = this.header.view();
+    // const headerElement = this.header.view();
     const mainElement = this.main.view();
-    appElement.append(headerElement, mainElement);
+    appElement.append(/* headerElement, */ mainElement);
     appWrapper.append(menuElement, appElement);
     if (body) {
       body.appendChild(appWrapper);

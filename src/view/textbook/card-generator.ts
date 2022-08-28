@@ -15,7 +15,11 @@ export default class CardGenerator extends HTMLConstructor {
   }
 
   createCardBody(word: WordsResponseSchema): HTMLElement {
-    return this.createHtmlElement('div', ['card-body'], `card-body-${word.id}`);
+    return this.createHtmlElement(
+      'div',
+      ['d-flex', 'flex-column', 'justify-content-between', 'card-body'],
+      `card-body-${word.id}`
+    );
   }
 
   createWordContainer(word: WordsResponseSchema): HTMLElement {
@@ -94,7 +98,7 @@ export default class CardGenerator extends HTMLConstructor {
     );
   }
 
-  generateCard(word: WordsResponseSchema): HTMLElement {
+  generateCard(word: WordsResponseSchema, authorized: boolean): HTMLElement {
     const card: HTMLElement = this.createCard(word);
     const img: HTMLElement = this.createImg(word);
     const cardBody: HTMLElement = this.createCardBody(word);
@@ -112,8 +116,37 @@ export default class CardGenerator extends HTMLConstructor {
     textMeaning.append(textMeaningTranslate);
     textExample.append(textExampleTranslate);
     cardBody.append(wordContainer, textMeaning, textExample);
+
+    if (authorized) {
+      cardBody.append(this.createControls(word));
+    }
     card.append(img, cardBody);
 
     return card;
+  }
+
+  createControls(word: WordsResponseSchema): HTMLElement {
+    const controlsWrapper = this.createHtmlElement('div', [
+      'd-flex',
+      'justify-content-center',
+      'align-items-center',
+      'controls-btns-wrapper',
+    ]);
+    const difficultBtn: HTMLElement = this.createHtmlElement(
+      'button',
+      ['btn', 'btn-outline-danger'],
+      `word-difficult-${word.id}`,
+      undefined,
+      'Difficult'
+    );
+    const learnedtBtn: HTMLElement = this.createHtmlElement(
+      'button',
+      ['btn', 'btn-outline-success'],
+      `word-learned-${word.id}`,
+      undefined,
+      'Learned'
+    );
+    controlsWrapper.append(difficultBtn, learnedtBtn);
+    return controlsWrapper;
   }
 }

@@ -1,4 +1,5 @@
 import Constants from '../../constants';
+import AuthService from '../../services/auth/auth-service';
 import { PageConfigResponce, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 import CardGenerator from './card-generator';
@@ -53,10 +54,13 @@ export default class CardsContainer extends HTMLConstructor {
   }
 
   generateCardContainer(words: WordsResponseSchema[], pageConfig: PageConfigResponce): HTMLElement {
+    const authorized: boolean = AuthService.checkUser();
     const cardsContainer: HTMLElement = this.createCardContainer(pageConfig);
     cardsContainer.innerHTML = '';
 
-    words.forEach((item: WordsResponseSchema): void => cardsContainer.append(this.cardGenerator.generateCard(item)));
+    words.forEach((item: WordsResponseSchema): void => {
+      cardsContainer.append(this.cardGenerator.generateCard(item, authorized));
+    });
 
     return cardsContainer;
   }
