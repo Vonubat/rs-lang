@@ -29,7 +29,7 @@ export default class UsersAggregatedWords extends HttpClient {
     wordsPerPage = 5,
     groupNumber = 0,
     pageNumber = 0
-  ): Promise<AggregatedWords[] | Response> {
+  ): Promise<AggregatedWords[]> {
     this.checkId(userId);
     this.checkGroupsPagesOfWords(groupNumber, pageNumber);
 
@@ -38,12 +38,6 @@ export default class UsersAggregatedWords extends HttpClient {
     );
 
     const response: Response = await this.get(url);
-
-    if (!response.ok) {
-      // status 401 -> Access token is missing or invalid
-      return response;
-    }
-
     const content: AggregatedWords[] = await response.json();
 
     // console.log(content);
@@ -64,13 +58,6 @@ export default class UsersAggregatedWords extends HttpClient {
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/aggregatedWords/${wordId}/`);
     const response: Response = await this.get(url);
-
-    if (!response.ok) {
-      // status 401 -> Access token is missing or invalid
-      // status 404 -> User's word not found
-      return response;
-    }
-
     const content: PaginatedResult = await response.json();
 
     // console.log(content);
