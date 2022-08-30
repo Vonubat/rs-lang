@@ -22,12 +22,10 @@ export class Burger extends HTMLConstructor {
     });
 
     nav.addEventListener('click', (event) => {
-      console.log('nav');
       if ((event.target as HTMLElement).classList.contains('nav-link')) {
-        console.log('list');
-        navWrapper.classList.toggle('show');
-        headerTitle.classList.toggle('hide');
-        burger.classList.toggle('active');
+        navWrapper.classList.remove('show');
+        headerTitle.classList.remove('hide');
+        burger.classList.remove('active');
       }
     });
   }

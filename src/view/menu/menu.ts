@@ -32,12 +32,12 @@ export default class Menu {
       'pt-2',
       'text-bg-dark',
     ]);
-    // const menuButton = this.htmlConstructor.button(['navbar-toggler'], 'button');
+    // const menuButton = this.htmlConstructor.button(['navbar-toggler'], 'button'); menuButton.dataset.bsToggle = 'offcanvas';
     const header = this.htmlConstructor.div(['sidebar__header']);
-    /* menuButton.dataset.bsToggle = 'offcanvas';
-    menuButton.dataset.bsTarget = '#offcanvasNavbar'; menuButton.setAttribute('aria-controls', 'offcanvasNavbar');
+    /* menuButton.dataset.bsTarget = '#offcanvasNavbar'; menuButton.setAttribute('aria-controls', 'offcanvasNavbar');
     const buttonIcon = this.htmlConstructor.span(['navbar-toggler-icon']); menuButton.appendChild(buttonIcon); */
-    const brand = this.htmlConstructor.a('#', ['navbar-brand'], 'RSLang');
+    // const brand = this.htmlConstructor.a('#', ['navbar-brand'], 'RSLang');
+    const brand = this.htmlConstructor.span(['navbar-brand'], 'RSLang');
     header.append(brand);
     this.sidebar.append(header, document.createElement('hr'));
     this.menu = this.htmlConstructor.createHtmlElement('ul', [
