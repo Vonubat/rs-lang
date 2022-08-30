@@ -12,23 +12,23 @@ export default class TextbookService {
 
   loading: Loading;
 
-  pageNumberItemsLeft!: NodeListOf<Element>;
+  pageNumberItemsLeft!: NodeListOf<HTMLElement>;
 
-  pageNumberItemsRight!: NodeListOf<Element>;
+  pageNumberItemsRight!: NodeListOf<HTMLElement>;
 
-  groupNumberItemsLeft!: NodeListOf<Element>;
+  groupNumberItemsLeft!: NodeListOf<HTMLElement>;
 
-  groupNumberItemsRight!: NodeListOf<Element>;
+  groupNumberItemsRight!: NodeListOf<HTMLElement>;
 
-  pageNumberCurrent!: NodeListOf<Element>;
+  pageNumberCurrent!: NodeListOf<HTMLElement>;
 
-  groupNumberCurrent!: NodeListOf<Element>;
+  groupNumberCurrent!: NodeListOf<HTMLElement>;
 
-  pageNumber!: NodeListOf<Element>;
+  pageNumber!: NodeListOf<HTMLElement>;
 
-  groupNumber!: NodeListOf<Element>;
+  groupNumber!: NodeListOf<HTMLElement>;
 
-  soundIcons!: NodeListOf<Element>;
+  soundIcons!: NodeListOf<HTMLElement>;
 
   constructor() {
     this.pageConfig = new PageConfig();

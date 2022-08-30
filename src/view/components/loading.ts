@@ -2,7 +2,14 @@ import Constants from '../../constants';
 import HTMLConstructor from './constructor';
 
 export default class Loading extends HTMLConstructor {
+  body: HTMLElement;
+
   spinnersWrapper!: HTMLElement;
+
+  constructor() {
+    super();
+    this.body = document.getElementById('body') as HTMLElement;
+  }
 
   createSpinners(): void {
     const spinnersWrapper: HTMLElement = this.createHtmlElement(
@@ -32,8 +39,7 @@ export default class Loading extends HTMLConstructor {
       spinnersWrapper.append(spinner);
     });
 
-    const body: HTMLElement = document.getElementById('body') as HTMLElement;
-    body.append(spinnersWrapper);
+    this.body.append(spinnersWrapper);
   }
 
   delSpinners(): void {

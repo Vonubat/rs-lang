@@ -5,7 +5,7 @@ export default class MainView {
 
   private previewText = 'Learn English Or DIE!';
 
-  private videoSrc = 'https://www.youtube.com/embed/ZXsQAXx_ao0';
+  private videoSrc = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
 
   private gitVonubat = 'https://github.com/vonubat';
 
@@ -33,9 +33,9 @@ export default class MainView {
     const fragment = document.createDocumentFragment();
     const preview = this.preview();
     const ourAdvantages = this.advantages();
-    const posibilities = this.posibilities();
+    const possibilities = this.possibilities();
     const team = this.team();
-    fragment.append(preview, ourAdvantages, posibilities, team);
+    fragment.append(preview, ourAdvantages, possibilities, team);
     return fragment;
   }
 
@@ -88,20 +88,20 @@ export default class MainView {
     return advantagesSection;
   }
 
-  private posibilities(): HTMLElement {
-    const posibilitiesSection = this.HTMLConstructor.createHtmlElement('section', ['ourPosibilities']);
+  private possibilities(): HTMLElement {
+    const possibilitiesSection = this.HTMLConstructor.createHtmlElement('section', ['ourPosibilities']);
     const title = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
-    title.innerText = 'Our posibilities';
-    posibilitiesSection.appendChild(title);
-    const posibilitiesContainer = this.HTMLConstructor.div(['container-fluid']);
+    title.innerText = 'Our possibilities';
+    possibilitiesSection.appendChild(title);
+    const possibilitiesContainer = this.HTMLConstructor.div(['container-fluid']);
     const videoContainer = this.HTMLConstructor.div(['video-container']);
     const videoWrapper = this.HTMLConstructor.div(['video-wrapper']);
     const video = this.HTMLConstructor.createHtmlElement('iframe', ['video'], undefined, [['src', this.videoSrc]]);
     videoWrapper.appendChild(video);
     videoContainer.appendChild(videoWrapper);
-    posibilitiesContainer.appendChild(videoContainer);
-    posibilitiesSection.appendChild(posibilitiesContainer);
-    return posibilitiesSection;
+    possibilitiesContainer.appendChild(videoContainer);
+    possibilitiesSection.appendChild(possibilitiesContainer);
+    return possibilitiesSection;
   }
 
   private team(): HTMLElement {
