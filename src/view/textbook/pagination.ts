@@ -71,7 +71,7 @@ export default class Pagination extends HTMLConstructor {
     );
   }
 
-  updateNumberCurrent(elements: NodeListOf<Element>, pageConfig: PageConfigResponce): void {
+  updateNumberCurrent(elements: NodeListOf<HTMLElement>, pageConfig: PageConfigResponce): void {
     let pageName: TypeOfPagination;
     let lastPage: number;
     let value: number;

@@ -1,104 +1,116 @@
 import Constants from '../../constants';
-import { WordsResponseSchema } from '../../types/types';
+import { PaginatedResult, TypeOfWordIsPaginatedResult, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 
 export default class CardGenerator extends HTMLConstructor {
-  createCard(word: WordsResponseSchema): HTMLElement {
-    return this.createHtmlElement('div', ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'], `card-${word.id}`);
+  createCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+    return this.createHtmlElement('div', ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'], `card-${wordId}`);
   }
 
-  createImg(word: WordsResponseSchema): HTMLElement {
-    return this.createHtmlElement('img', ['img-fluid', 'rounded', 'image'], `image-${word.id}`, [
+  createImg(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+    return this.createHtmlElement('img', ['img-fluid', 'rounded', 'image'], `image-${wordId}`, [
       ['alt', `image-${word.word}`],
       ['src', `${Constants.BASE_URL}/${word.image}`],
     ]);
   }
 
-  createCardBody(word: WordsResponseSchema): HTMLElement {
+  createCardBody(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'div',
       ['d-flex', 'flex-column', 'justify-content-between', 'card-body'],
-      `card-body-${word.id}`
+      `card-body-${wordId}`
     );
   }
 
-  createWordContainer(word: WordsResponseSchema): HTMLElement {
-    return this.createHtmlElement('h5', ['card-title', 'mb-3', 'word-container'], `word-container-${word.id}`);
+  createWordContainer(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+    return this.createHtmlElement('h5', ['card-title', 'mb-3', 'word-container'], `word-container-${wordId}`);
   }
 
-  createWord(word: WordsResponseSchema): HTMLElement {
-    return this.createHtmlElement('span', ['word'], `word-${word.id}`, undefined, `${word.word} `);
+  createWord(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+    return this.createHtmlElement('span', ['word'], `word-${wordId}`, undefined, `${word.word} `);
   }
 
-  createTranscription(word: WordsResponseSchema): HTMLElement {
+  createTranscription(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'span',
       ['transcription'],
-      `transcription-${word.id}`,
+      `transcription-${wordId}`,
       undefined,
       `${word.transcription} `
     );
   }
 
-  createSoundIcon(word: WordsResponseSchema): SVGSVGElement {
-    return this.svg('volume-up-fill', ['sound-icon'], `sound-icon-${word.id}`, [
+  createSoundIcon(word: WordsResponseSchema | PaginatedResult): SVGSVGElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+    return this.svg('volume-up-fill', ['sound-icon'], `sound-icon-${wordId}`, [
       ['data-audio', `${word.audio}`],
       ['data-audio-meaning', `${word.audioMeaning}`],
       ['data-audio-example', `${word.audioExample}`],
     ]);
   }
 
-  createWordTranslate(word: WordsResponseSchema): HTMLElement {
+  createWordTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'small',
       ['text-muted', 'word-translate'],
-      `word-translate-${word.id}`,
+      `word-translate-${wordId}`,
       undefined,
       `${word.wordTranslate} `
     );
   }
 
-  createTextMeaning(word: WordsResponseSchema): HTMLElement {
+  createTextMeaning(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'p',
       ['card-text', 'mb-3', 'rounded', 'shadow', 'text-meaning'],
-      `text-meaning-${word.id}`,
+      `text-meaning-${wordId}`,
       undefined,
       `${word.textMeaning} `
     );
   }
 
-  createTextMeaningTranslate(word: WordsResponseSchema): HTMLElement {
+  createTextMeaningTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'small',
       ['text-muted', 'text-meaning-translate'],
-      `text-meaning-translate-${word.id}`,
+      `text-meaning-translate-${wordId}`,
       undefined,
       `${word.textMeaningTranslate} `
     );
   }
 
-  createTextExample(word: WordsResponseSchema): HTMLElement {
+  createTextExample(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'p',
       ['card-text', 'mb-3', 'rounded', 'shadow', 'text-example'],
-      `text-example-${word.id}`,
+      `text-example-${wordId}`,
       undefined,
       `${word.textExample} `
     );
   }
 
-  createTextExampleTranslate(word: WordsResponseSchema): HTMLElement {
+  createTextExampleTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'small',
       ['text-muted', 'text-example-translate'],
-      `text-example-translate-${word.id}`,
+      `text-example-translate-${wordId}`,
       undefined,
       `${word.textExampleTranslate} `
     );
   }
 
-  generateCard(word: WordsResponseSchema, authorized: boolean): HTMLElement {
+  generateCard(word: WordsResponseSchema | PaginatedResult, authorized: boolean): HTMLElement {
     const card: HTMLElement = this.createCard(word);
     const img: HTMLElement = this.createImg(word);
     const cardBody: HTMLElement = this.createCardBody(word);
@@ -125,8 +137,9 @@ export default class CardGenerator extends HTMLConstructor {
     return card;
   }
 
-  createControls(word: WordsResponseSchema): HTMLElement {
-    const controlsWrapper = this.createHtmlElement('div', [
+  createControls(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+    const controlsWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
       'justify-content-center',
       'align-items-center',
@@ -135,14 +148,14 @@ export default class CardGenerator extends HTMLConstructor {
     const difficultBtn: HTMLElement = this.createHtmlElement(
       'button',
       ['btn', 'btn-outline-danger'],
-      `word-difficult-${word.id}`,
+      `word-difficult-${wordId}`,
       undefined,
       'Difficult'
     );
     const learnedtBtn: HTMLElement = this.createHtmlElement(
       'button',
       ['btn', 'btn-outline-success'],
-      `word-learned-${word.id}`,
+      `word-learned-${wordId}`,
       undefined,
       'Learned'
     );
@@ -153,7 +166,8 @@ export default class CardGenerator extends HTMLConstructor {
     return controlsWrapper;
   }
 
-  createBadges(word: WordsResponseSchema): HTMLElement {
+  createBadges(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     const badgesWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
       'justify-content-center',
@@ -164,7 +178,7 @@ export default class CardGenerator extends HTMLConstructor {
     const correctAttempts: HTMLElement = this.createHtmlElement(
       'span',
       ['badge', 'bg-primary'],
-      `badge-correct-${word.id}`,
+      `badge-correct-${wordId}`,
       [
         ['data-bs-toggle', 'custom-tooltip'],
         ['title', 'Correct attempts'],
@@ -174,7 +188,7 @@ export default class CardGenerator extends HTMLConstructor {
     const incorrectAttempts: HTMLElement = this.createHtmlElement(
       'span',
       ['badge', 'bg-secondary'],
-      `badge-incorrect-${word.id}`,
+      `badge-incorrect-${wordId}`,
       [
         ['data-bs-toggle', 'custom-tooltip'],
         ['title', 'Incorrect attempts'],

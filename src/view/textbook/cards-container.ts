@@ -1,5 +1,5 @@
 import AuthService from '../../services/auth/auth-service';
-import { PageConfigResponce, WordsResponseSchema } from '../../types/types';
+import { PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 import CardGenerator from './card-generator';
 import TextbookColor from './textbook-color';
@@ -33,12 +33,12 @@ export default class CardsContainer extends HTMLConstructor {
     return cardsContainer;
   }
 
-  generateCardContainer(words: WordsResponseSchema[], pageConfig: PageConfigResponce): HTMLElement {
+  generateCardContainer(words: WordsResponseSchema[] | PaginatedResult[], pageConfig: PageConfigResponce): HTMLElement {
     const authorized: boolean = AuthService.checkUser();
     const cardsContainer: HTMLElement = this.createCardContainer(pageConfig);
     cardsContainer.innerHTML = '';
 
-    words.forEach((item: WordsResponseSchema): void => {
+    words.forEach((item: WordsResponseSchema | PaginatedResult): void => {
       cardsContainer.append(this.cardGenerator.generateCard(item, authorized));
     });
 

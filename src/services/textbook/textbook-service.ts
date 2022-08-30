@@ -1,9 +1,11 @@
 import { api } from '../../api/api';
 import { view } from '../../view/view';
-import { PageConfigResponce, WordsResponseSchema } from '../../types/types';
+import { AggregatedWords, PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
 import PageConfig from './page-config';
 import SoundHelper from './sound-helper';
 import Loading from '../../view/components/loading';
+import AuthService from '../auth/auth-service';
+import Credentials from '../auth/credentials';
 
 export default class TextbookService {
   pageConfig: PageConfig;
@@ -36,15 +38,29 @@ export default class TextbookService {
     this.loading = new Loading();
   }
 
-  async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[]> {
-    const words: WordsResponseSchema[] = await api.words.getWords(pageConfig.groupNumber, pageConfig.pageNumber);
+  async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[] | PaginatedResult[]> {
+    let words: WordsResponseSchema[] | PaginatedResult[];
+
+    if (AuthService.checkUser()) {
+      const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
+        Credentials.getUserId(),
+        '',
+        undefined,
+        pageConfig.groupNumber,
+        pageConfig.pageNumber
+      );
+      words = aggregatedWords.paginatedResults;
+    } else {
+      words = await api.words.getWords(pageConfig.groupNumber, pageConfig.pageNumber);
+    }
+
     return words;
   }
 
   async drawPage(): Promise<void> {
     this.loading.createSpinners();
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.drawPage(words, pageConfig);
     this.setPaginationItems();
@@ -74,7 +90,7 @@ export default class TextbookService {
     this.pageConfig.shiftPageNumber('-');
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -88,7 +104,7 @@ export default class TextbookService {
     this.pageConfig.shiftPageNumber('+');
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -102,7 +118,7 @@ export default class TextbookService {
     this.pageConfig.shiftGroupNumber('-');
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -116,7 +132,7 @@ export default class TextbookService {
     this.pageConfig.shiftGroupNumber('+');
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -131,7 +147,7 @@ export default class TextbookService {
     this.pageConfig.setPageNumber(value);
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -146,7 +162,7 @@ export default class TextbookService {
     this.pageConfig.setGroupNumber(value);
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
