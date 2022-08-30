@@ -1,6 +1,9 @@
 // Import all of Bootstrap's CSS
 
 @import '~bootstrap/scss/bootstrap';
+
+@import './base/base';
+
 @import './components/card';
 @import './components/pagination';
 @import './components/svg';
@@ -8,11 +11,9 @@
 @import './components/img';
 @import './components/menu';
 @import './components/footer';
-@import './layout/main';
+@import './components/header';
 
-html {
-  scroll-behavior: smooth;
-}
+@import './layout/main';
 
 .app-wrapper {
   display: flex;

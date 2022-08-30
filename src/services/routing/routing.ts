@@ -32,6 +32,7 @@ export class Rout {
       if (id !== this.oldId) {
         this.onNavigate(id);
         this.onActiveNav(id);
+        this.pageName(id);
       }
     }
   }
@@ -81,6 +82,20 @@ export class Rout {
     }
     return false;
   }
+
+  private pageName = (id: string): void => {
+    const name = id.slice(4);
+    const menuTitle = document.querySelector('.header-title') as HTMLElement;
+    menuTitle.innerText = name;
+  };
+
+  /* private burger() {
+    const burgerButton = document.querySelector('.burger') as HTMLElement;
+    const menu = document.getElementById('navmenu') as HTMLElement;
+    burgerButton.addEventListener('click', () => {
+      menu.classList.toggle('hide');
+    })
+  } */
 }
 
 export const routing: Rout = new Rout();
