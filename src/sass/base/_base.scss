@@ -1,0 +1,14 @@
+html {
+    background-color: RGBA(33, 37, 41, var(--bs-bg-opacity, 1));
+    scroll-behavior: smooth;
+}
+
+body {
+    max-width: 1920px;
+    margin: 0 auto;
+} 
+
+.app {
+    width: 100%;
+    min-height: 100%;
+}

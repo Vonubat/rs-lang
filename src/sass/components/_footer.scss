@@ -5,12 +5,21 @@
   padding: 0px 20px;
   height: 60px;
   align-items: center;
+
+  @media (max-width: 530px) {
+    height: auto;
+    padding-bottom: 10px;
+  }
 }
 
 .footer__team {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  @media (max-width: 530px) {
+    flex-direction: column;
+  }
 }
 
 .footer__team_member {

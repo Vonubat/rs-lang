@@ -1,51 +1,53 @@
 // textbook
-.card {
-  max-width: 300px;
-  animation: append-animate 0.3s linear;
+#cards-container{
+  .card {
+    max-width: 300px;
+    animation: append-animate 0.3s linear;
 
-  .card-body {
-    padding: 0px;
+    .card-body {
+      padding: 0px;
 
-    .word-container {
-      padding: 0.5rem;
+      .word-container {
+        padding: 0.5rem;
 
-      .word {
-        text-transform: capitalize;
+        .word {
+          text-transform: capitalize;
+        }
+
+        .word-translate {
+          text-transform: capitalize;
+          display: block;
+        }
+
+        .sound-icon {
+          width: 25px;
+          cursor: pointer;
+        }
       }
 
-      .word-translate {
-        text-transform: capitalize;
-        display: block;
+      .text-meaning {
+        padding: 0.5rem;
+        .text-meaning-translate {
+          display: block;
+        }
       }
 
-      .sound-icon {
-        width: 25px;
-        cursor: pointer;
+      .text-example {
+        padding: 0.5rem;
+        .text-example-translate {
+          display: block;
+        }
       }
-    }
 
-    .text-meaning {
-      padding: 0.5rem;
-      .text-meaning-translate {
-        display: block;
-      }
-    }
+      .controls-btns-wrapper {
+        gap: 20px;
 
-    .text-example {
-      padding: 0.5rem;
-      .text-example-translate {
-        display: block;
-      }
-    }
+        .badges-wrapper {
+          gap: 5px;
 
-    .controls-btns-wrapper {
-      gap: 20px;
-
-      .badges-wrapper {
-        gap: 5px;
-
-        .badge {
-          width: 35px;
+          .badge {
+            width: 35px;
+          }
         }
       }
     }
@@ -87,8 +89,9 @@
   width: 800px;
   max-width: 800px;
 
-  @media (max-width: 860px) {
-    width: 600px;
+  @media (max-width: 1180px) {
+    width: 100%;
+    max-width: 100%;
   }
 
   @media (max-width: 650px) {
@@ -110,7 +113,7 @@
 
 .card-preview {
   @media (max-width: 860px) {
-    width: calc(80vw);
     margin: 0 auto;
   }
 }
+

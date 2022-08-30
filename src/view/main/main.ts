@@ -48,9 +48,7 @@ export default class Main {
     button.innerText = "Let's start";
     cardBody.appendChild(button);
     previewContainer.appendChild(previewCard);
-    const previewImg = this.HTMLConstructor.img('../../assets/favicons/favicon-180.png', 'preview-img', [
-      'preview-img',
-    ]);
+    const previewImg = this.HTMLConstructor.img('../../assets/img/statue.png', 'preview-img', ['preview-img']);
     previewContainer.appendChild(previewImg);
     previewSection.appendChild(previewContainer);
     return previewSection;
