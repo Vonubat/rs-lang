@@ -32,6 +32,8 @@ export default class TextbookService {
 
   soundIcons!: NodeListOf<HTMLElement>;
 
+  words!: WordsResponseSchema[] | PaginatedResult[];
+
   constructor() {
     this.pageConfig = new PageConfig();
     this.soundHelper = new SoundHelper();
@@ -53,6 +55,8 @@ export default class TextbookService {
     } else {
       words = await api.words.getWords(pageConfig.groupNumber, pageConfig.pageNumber);
     }
+
+    this.words = words;
 
     return words;
   }

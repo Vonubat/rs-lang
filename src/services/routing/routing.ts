@@ -73,6 +73,14 @@ export class Rout {
       if (link.id === id) link.classList.add('active');
     });
   };
+
+  static checkUrl(address: string): boolean {
+    const url: boolean = window.location.href.includes(`${address}`);
+    if (url) {
+      return true;
+    }
+    return false;
+  }
 }
 
 export const routing: Rout = new Rout();

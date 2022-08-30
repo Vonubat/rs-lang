@@ -1,8 +1,10 @@
 import { api } from '../../api/api';
 import Constants from '../../constants';
-import { AuthResponseSchema, UserResponseSchema } from '../../types/types';
+import { AuthResponseSchema, PageConfigResponce, UserResponseSchema } from '../../types/types';
 import CheckApiParams from '../../utilities/check-api-params';
 import { view } from '../../view/view';
+import { Rout } from '../routing/routing';
+import { services } from '../services';
 import Credentials from './credentials';
 
 export default class AuthService {
@@ -97,6 +99,7 @@ export default class AuthService {
     if (content.includes('Log Out')) {
       Credentials.delCredentials();
       this.changeBtnState();
+      this.updateCardsState();
       return true;
     }
     return false;
@@ -122,6 +125,10 @@ export default class AuthService {
       Credentials.setCredentials(token, refreshToken, userId, name, email);
       this.closeModalLogin.dispatchEvent(new Event('click'));
       this.changeBtnState();
+
+      if (Rout.checkUrl('textbook')) {
+        this.updateCardsState();
+      }
 
       return true;
     } catch {
@@ -159,10 +166,20 @@ export default class AuthService {
       this.closeModalRegistration.dispatchEvent(new Event('click'));
       this.changeBtnState();
 
+      if (Rout.checkUrl('textbook')) {
+        this.updateCardsState();
+      }
+
       return true;
     } catch {
       return false;
     }
+  }
+
+  updateCardsState(): void {
+    const { words } = services.textbookService;
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
+    view.textbookView.drawCardsContainer(words, pageConfig);
   }
 
   setModalWindowsItems(): void {
