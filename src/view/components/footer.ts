@@ -1,5 +1,5 @@
 import Constants from '../../constants';
-import HTMLConstructor from '../components/constructor';
+import HTMLConstructor from './constructor';
 
 export default class Footer {
   private htmlConstructor: HTMLConstructor;
@@ -18,14 +18,14 @@ export default class Footer {
     this.footer.append(logo, this.team, copyright);
   }
 
-  fillTeam() {
+  fillTeam(): void {
     Constants.TEAM.forEach((member) => {
       const a = this.htmlConstructor.a(`${member.github}`, ['footer__team_member'], `${member.name}`);
       this.team.appendChild(a);
     });
   }
 
-  view() {
+  view(): HTMLElement {
     return this.footer;
   }
 }

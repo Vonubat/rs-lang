@@ -56,8 +56,6 @@ export default class Constants {
     },
   };
 
-  static readonly BODY_INDEX = 'body';
-
   static readonly BOOTSTRAP_COLORS = [
     'text-primary',
     'text-secondary',

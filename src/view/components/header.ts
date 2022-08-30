@@ -1,4 +1,4 @@
-import HTMLConstructor from '../components/constructor';
+import HTMLConstructor from './constructor';
 import Modal from '../auth/modal';
 import { burger } from '../../services/components/burger';
 

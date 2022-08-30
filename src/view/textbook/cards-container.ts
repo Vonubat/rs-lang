@@ -1,15 +1,18 @@
-import Constants from '../../constants';
 import AuthService from '../../services/auth/auth-service';
 import { PageConfigResponce, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 import CardGenerator from './card-generator';
+import TextbookColor from './textbook-color';
 
 export default class CardsContainer extends HTMLConstructor {
   cardGenerator: CardGenerator;
 
+  textbookColor: TextbookColor;
+
   constructor() {
     super();
     this.cardGenerator = new CardGenerator();
+    this.textbookColor = new TextbookColor();
   }
 
   createCardContainer(pageConfig: PageConfigResponce): HTMLElement {
@@ -25,31 +28,8 @@ export default class CardsContainer extends HTMLConstructor {
       `cards-container`
     );
 
-    switch (pageConfig.groupNumber) {
-      case 0:
-        cardsContainer.style.backgroundColor = Constants.CONTAINER_COLORS['$pink-100'];
-        break;
-      case 1:
-        cardsContainer.style.backgroundColor = Constants.CONTAINER_COLORS['$orange-100'];
-        break;
-      case 2:
-        cardsContainer.style.backgroundColor = Constants.CONTAINER_COLORS['$green-100'];
-        break;
-      case 3:
-        cardsContainer.style.backgroundColor = Constants.CONTAINER_COLORS['$yellow-100'];
-        break;
-      case 4:
-        cardsContainer.style.backgroundColor = Constants.CONTAINER_COLORS['$cyan-100'];
-        break;
-      case 5:
-        cardsContainer.style.backgroundColor = Constants.CONTAINER_COLORS['$indigo-100'];
-        break;
+    this.textbookColor.switchColor(cardsContainer, pageConfig);
 
-      default:
-        cardsContainer.style.backgroundColor = 'white';
-
-        break;
-    }
     return cardsContainer;
   }
 

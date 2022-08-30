@@ -1,49 +1,70 @@
-import Constants from '../constants';
+import { services } from '../services/services';
 import HTMLConstructor from './components/constructor';
-import Header from './header/header';
-import Footer from './footer/footer';
-import Main from './main/main';
+import Header from './components/header';
+import Loading from './components/loading';
+import Footer from './components/footer';
+import MainView from './main/main-view';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 
 export class View {
   htmlConstructor: HTMLConstructor;
 
-  textbookView: TextbookView;
+  menu: Menu;
 
   header: Header;
 
-  menu: Menu;
-
-  main: Main;
-
   footer: Footer;
 
+  mainView: MainView;
+
+  textbookView: TextbookView;
+
+  loading: Loading;
+
   constructor() {
-    this.textbookView = new TextbookView();
     this.htmlConstructor = new HTMLConstructor();
     this.menu = new Menu();
     this.header = new Header();
-    this.main = new Main();
     this.footer = new Footer();
+    this.mainView = new MainView();
+    this.textbookView = new TextbookView();
+    this.loading = new Loading();
   }
 
-  drawPage() {
-    const body = document.getElementById(Constants.BODY_INDEX);
-    const appWrapper = this.htmlConstructor.div(['app-wrapper', 'd-flex', 'flex-nowrap']);
-    const menuElement = this.menu.getMenu();
-    const appElement = this.htmlConstructor.div(['app']);
-    const mainElement = this.htmlConstructor.createHtmlElement('main');
-    mainElement.id = 'main';
-    const mainContent = this.main.view();
+  drawHeader(): DocumentFragment {
+    const headerElement: DocumentFragment = this.header.view();
+    return headerElement;
+  }
+
+  drawFooter(): HTMLElement {
+    const footerElement: HTMLElement = this.footer.view();
+    return footerElement;
+  }
+
+  async drawTextbook(): Promise<void> {
+    await services.textbookService.drawPage();
+  }
+
+  drawMainPage(): void {
+    const body: HTMLElement = document.getElementById('body') as HTMLElement;
+    const appWrapper: HTMLDivElement = this.htmlConstructor.div(['app-wrapper', 'd-flex', 'flex-nowrap']);
+    body.append(appWrapper);
+
+    const menuElement: HTMLDivElement = this.menu.getMenu();
+    const appElement: HTMLDivElement = this.htmlConstructor.div(['app']);
+    const mainElement: HTMLElement = this.htmlConstructor.createHtmlElement('main', undefined, 'main');
+    const mainContent: DocumentFragment = this.mainView.view();
     mainElement.append(mainContent);
-    const footerElement = this.footer.view();
-    const headerElement = this.header.view();
+
+    const footerElement: HTMLElement = this.drawFooter();
+    const headerElement: DocumentFragment = this.drawHeader();
+
     appElement.append(headerElement, mainElement, footerElement);
     appWrapper.append(menuElement, appElement);
-    if (body) {
-      body.appendChild(appWrapper);
-    }
+
+    services.authService.setModalWindowsItems();
+    services.authService.listenAuth();
   }
 }
 
