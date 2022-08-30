@@ -1,8 +1,17 @@
 import Constants from '../../constants';
 import { PageConfigResponce, TypeOfPagination } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
+import TextbookColor from './textbook-color';
 
 export default class Pagination extends HTMLConstructor {
+  textbookColor: TextbookColor;
+
+  constructor() {
+    super();
+
+    this.textbookColor = new TextbookColor();
+  }
+
   createPaginationContainer(): HTMLElement {
     return this.createHtmlElement('div', [
       'd-flex',
@@ -190,5 +199,13 @@ export default class Pagination extends HTMLConstructor {
     paginationContainer.append(paginationPageNumber, paginationGroupNumber);
 
     return paginationContainer;
+  }
+
+  updateColor(pageConfig: PageConfigResponce): void {
+    const paginationContainers: NodeListOf<HTMLElement> = document.querySelectorAll('.pagination-container');
+
+    paginationContainers.forEach((item: HTMLElement): void => {
+      this.textbookColor.switchColor(item, pageConfig);
+    });
   }
 }

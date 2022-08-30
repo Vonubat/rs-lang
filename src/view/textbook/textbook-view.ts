@@ -29,15 +29,17 @@ export default class TextbookView {
 
     this.textbook.append(this.paginationTopInstance, this.cardsContainerInstance, this.paginationBottomInstance);
     this.pagination.disableArrows(this.textbook, pageConfig);
+    this.pagination.updateColor(pageConfig);
   }
 
   drawCardsContainer(words: WordsResponseSchema[], pageConfig: PageConfigResponce): void {
     this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words, pageConfig);
-    this.paginationTopInstance.append(this.cardsContainerInstance);
+    this.paginationTopInstance.after(this.cardsContainerInstance);
   }
 
   updatePaginationNumberCurrent(elements: NodeListOf<Element>, pageConfig: PageConfigResponce) {
     this.pagination.updateNumberCurrent(elements, pageConfig);
     this.pagination.disableArrows(this.textbook, pageConfig);
+    this.pagination.updateColor(pageConfig);
   }
 }

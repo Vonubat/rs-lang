@@ -1,5 +1,4 @@
-import Main from '../../view/main/main';
-import TextbookService from '../textbook/textbook-service';
+import { View } from '../../view/view';
 
 export class Rout {
   private routes = [
@@ -10,9 +9,7 @@ export class Rout {
     ['menuStatistics', '/statistic'],
   ];
 
-  private main: Main;
-
-  private textbookService: TextbookService;
+  view: View;
 
   private textbook = '/textbook';
 
@@ -25,8 +22,7 @@ export class Rout {
   private oldId = 'menuMain';
 
   constructor() {
-    this.main = new Main();
-    this.textbookService = new TextbookService();
+    this.view = new View();
   }
 
   routing(event: Event): void {
@@ -46,11 +42,11 @@ export class Rout {
     switch (id) {
       case 'menuMain':
         window.history.pushState({}, '/', `${window.location.origin}/`);
-        rootDiv?.append(this.main.view());
+        rootDiv?.append(this.view.mainView.view());
         break;
       case 'menuTextbook':
         window.history.pushState({}, '/textbook', `${window.location.origin}/textbook`);
-        this.textbookService.drawPage();
+        this.view.drawTextbook();
         break;
       case 'menuDictionary':
         window.history.pushState({}, '/dictionary', `${window.location.origin}/dictionary`);
