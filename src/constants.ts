@@ -56,7 +56,7 @@ export default class Constants {
     },
   };
 
-  static readonly BOOTSTRAP_COLORS = [
+  static readonly BOOTSTRAP_TEXT_COLORS = [
     'text-primary',
     'text-secondary',
     'text-success',

@@ -1,6 +1,12 @@
 import { api } from '../../api/api';
 import Constants from '../../constants';
-import { AuthResponseSchema, PageConfigResponce, UserResponseSchema } from '../../types/types';
+import {
+  AuthResponseSchema,
+  PageConfigResponce,
+  PaginatedResult,
+  UserResponseSchema,
+  WordsResponseSchema,
+} from '../../types/types';
 import CheckApiParams from '../../utilities/check-api-params';
 import { view } from '../../view/view';
 import { Rout } from '../routing/routing';
@@ -129,7 +135,6 @@ export default class AuthService {
       if (Rout.checkUrl('textbook')) {
         this.updateCardsState();
       }
-
       return true;
     } catch {
       return false;
@@ -169,16 +174,15 @@ export default class AuthService {
       if (Rout.checkUrl('textbook')) {
         this.updateCardsState();
       }
-
       return true;
     } catch {
       return false;
     }
   }
 
-  updateCardsState(): void {
-    const { words } = services.textbookService;
+  async updateCardsState(): Promise<void> {
     const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
+    const words: WordsResponseSchema[] | PaginatedResult[] = await services.textbookService.getWords(pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     services.textbookService.setCardsItems();
     services.textbookService.listenCards();

@@ -38,8 +38,6 @@ export default class TextbookService {
 
   soundIcons!: NodeListOf<HTMLElement>;
 
-  words!: WordsResponseSchema[] | PaginatedResult[];
-
   difficultBtns!: NodeListOf<HTMLElement>;
 
   learnedBtns!: NodeListOf<HTMLElement>;
@@ -65,8 +63,6 @@ export default class TextbookService {
     } else {
       words = await api.words.getWords(pageConfig.groupNumber, pageConfig.pageNumber);
     }
-
-    this.words = words;
 
     return words;
   }
@@ -229,7 +225,7 @@ export default class TextbookService {
     return true;
   }
 
-  async addDiffcultWord(event: Event) {
+  async addDiffcultWord(event: Event): Promise<UsersWordsResponseSchema> {
     this.loading.createSpinners();
     const { id } = event.target as HTMLButtonElement;
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
@@ -239,13 +235,14 @@ export default class TextbookService {
     const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
 
     if (response instanceof Response) {
-      console.log(`create hard word ${wordId}`);
+      // console.log(`create hard word ${wordId}`);
       userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
     } else {
-      console.log(`update hard word ${wordId}`);
+      // console.log(`update hard word ${wordId}`);
       userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
     }
 
+    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'red');
     this.loading.delSpinners();
     return userWord;
   }
@@ -260,13 +257,14 @@ export default class TextbookService {
     const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
 
     if (response instanceof Response) {
-      console.log(`create learned word ${wordId}`);
+      // console.log(`create learned word ${wordId}`);
       userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
     } else {
-      console.log(`update learned word ${wordId}`);
+      // console.log(`update learned word ${wordId}`);
       userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
     }
 
+    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'green');
     this.loading.delSpinners();
     return userWord;
   }

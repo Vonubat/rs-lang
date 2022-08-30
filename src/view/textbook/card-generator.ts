@@ -1,11 +1,37 @@
 import Constants from '../../constants';
 import { PaginatedResult, TypeOfWordIsPaginatedResult, WordsResponseSchema } from '../../types/types';
+import DomHelper from '../../utilities/DOM-helpers';
 import HTMLConstructor from '../components/constructor';
 
 export default class CardGenerator extends HTMLConstructor {
   createCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
-    return this.createHtmlElement('div', ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'], `card-${wordId}`);
+
+    const card: HTMLElement = this.createHtmlElement(
+      'div',
+      ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'],
+      `card-${wordId}`
+    );
+
+    if (TypeOfWordIsPaginatedResult(word)) {
+      if (word.userWord?.difficulty === 'hard') {
+        card.style.borderColor = 'red';
+        card.style.borderWidth = '3px';
+      }
+      if (word.userWord?.difficulty === 'learned') {
+        card.style.borderColor = 'green';
+        card.style.borderWidth = '3px';
+      }
+    }
+
+    return card;
+  }
+
+  updateCardColor(element: HTMLElement, color: 'red' | 'green'): HTMLElement {
+    const card: HTMLElement = DomHelper.findAncestor(element, 'card');
+    card.style.borderColor = `${color}`;
+    card.style.borderWidth = '3px';
+    return card;
   }
 
   createImg(word: WordsResponseSchema | PaginatedResult): HTMLElement {
@@ -110,7 +136,7 @@ export default class CardGenerator extends HTMLConstructor {
     );
   }
 
-  generateCard(word: WordsResponseSchema | PaginatedResult, authorized: boolean): HTMLElement {
+  generateCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const card: HTMLElement = this.createCard(word);
     const img: HTMLElement = this.createImg(word);
     const cardBody: HTMLElement = this.createCardBody(word);
@@ -129,7 +155,7 @@ export default class CardGenerator extends HTMLConstructor {
     textExample.append(textExampleTranslate);
     cardBody.append(wordContainer, textMeaning, textExample);
 
-    if (authorized) {
+    if (TypeOfWordIsPaginatedResult(word)) {
       cardBody.append(this.createControls(word));
     }
     card.append(img, cardBody);

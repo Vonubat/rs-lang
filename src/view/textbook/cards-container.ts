@@ -1,4 +1,3 @@
-import AuthService from '../../services/auth/auth-service';
 import { PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 import CardGenerator from './card-generator';
@@ -24,7 +23,7 @@ export default class CardsContainer extends HTMLConstructor {
 
     cardsContainer = this.createHtmlElement(
       'div',
-      ['d-flex', 'flex-row', 'flex-wrap', 'justify-content-center', 'cards-container', 'rounded'],
+      ['d-flex', 'flex-row', 'flex-wrap', 'justify-content-center', 'cards-container'],
       `cards-container`
     );
 
@@ -34,12 +33,11 @@ export default class CardsContainer extends HTMLConstructor {
   }
 
   generateCardContainer(words: WordsResponseSchema[] | PaginatedResult[], pageConfig: PageConfigResponce): HTMLElement {
-    const authorized: boolean = AuthService.checkUser();
     const cardsContainer: HTMLElement = this.createCardContainer(pageConfig);
     cardsContainer.innerHTML = '';
 
     words.forEach((item: WordsResponseSchema | PaginatedResult): void => {
-      cardsContainer.append(this.cardGenerator.generateCard(item, authorized));
+      cardsContainer.append(this.cardGenerator.generateCard(item));
     });
 
     return cardsContainer;

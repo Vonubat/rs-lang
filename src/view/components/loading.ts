@@ -32,7 +32,7 @@ export default class Loading extends HTMLConstructor {
     this.spinnersWrapper = spinnersWrapper;
     spinnersWrapper.style.zIndex = '10';
 
-    Constants.BOOTSTRAP_COLORS.forEach((item) => {
+    Constants.BOOTSTRAP_TEXT_COLORS.forEach((item) => {
       const spinner: HTMLElement = this.createHtmlElement('div', ['spinner-grow', `${item}`], undefined, [
         ['role', 'status'],
       ]);
