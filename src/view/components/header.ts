@@ -1,5 +1,6 @@
 import HTMLConstructor from './constructor';
 import Modal from '../auth/modal';
+import { burger } from '../../services/components/burger';
 
 export default class Header extends HTMLConstructor {
   modal: Modal;
@@ -21,15 +22,16 @@ export default class Header extends HTMLConstructor {
       'text-center',
       'align-items-center',
       'header',
+      'text-bg-dark',
     ]);
-    const a: HTMLAnchorElement = this.a('..main/index.html', ['logo-link']);
-    const img: HTMLImageElement = this.img('../../assets/favicons/favicon-96.png', 'logo', ['logo-img']);
-    a.appendChild(img);
-    header.appendChild(a);
+    header.appendChild(burger.draw());
+    const h1 = this.createHtmlElement('h1', ['header-title']);
+    h1.innerText = 'Main';
+    header.appendChild(h1);
     header.appendChild(this.modal.modal('Login'));
     header.appendChild(this.modal.modal('Registration'));
     const buttonWrapper: HTMLDivElement = this.div(['login-btn-wrapper']);
-    const loginButton: HTMLElement = this.createHtmlElement('a', ['btn', 'btn-outline-dark'], 'login-btn', [
+    const loginButton: HTMLElement = this.createHtmlElement('a', ['btn', 'btn-outline-light'], 'login-btn', [
       ['data-bs-toggle', 'modal'],
       ['data-bs-target', '#login-modal'],
     ]);
@@ -41,7 +43,6 @@ export default class Header extends HTMLConstructor {
     buttonWrapper.appendChild(loginButton);
     header.appendChild(buttonWrapper);
     fragment.appendChild(header);
-
     this.icon = svg;
     return fragment;
   }

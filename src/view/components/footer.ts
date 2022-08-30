@@ -11,7 +11,7 @@ export default class Footer {
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
     this.footer = this.htmlConstructor.createHtmlElement('footer', ['footer', 'text-bg-dark']);
-    const logo = this.htmlConstructor.img('./assets/img/logo-rs.svg', 'rs-logo', ['footer__logo']);
+    const logo = this.htmlConstructor.svg('logo-rs', ['footer__logo']);
     this.team = this.htmlConstructor.div(['footer__team']);
     this.fillTeam();
     const copyright = this.htmlConstructor.createHtmlElement('p', ['copyright'], '', [], '© 2022');

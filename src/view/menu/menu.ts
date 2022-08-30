@@ -14,7 +14,15 @@ export default class Menu {
 
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
-    this.sidebarWrapper = this.htmlConstructor.div(['col-md-3', 'col-xl-2', 'px-sm-2', 'px-0', 'text-bg-dark']);
+    this.sidebarWrapper = this.htmlConstructor.div([
+      'col-md-3',
+      'col-xl-2',
+      'px-sm-2',
+      'px-0',
+      'text-bg-dark',
+      'offcanvas-md',
+    ]);
+    this.sidebarWrapper.id = 'navmenu';
     this.sidebar = this.htmlConstructor.createHtmlElement('nav', [
       'sidebar',
       'd-flex',
@@ -24,15 +32,13 @@ export default class Menu {
       'pt-2',
       'text-bg-dark',
     ]);
-    const menuButton = this.htmlConstructor.button(['navbar-toggler'], 'button');
+    // const menuButton = this.htmlConstructor.button(['navbar-toggler'], 'button'); menuButton.dataset.bsToggle = 'offcanvas';
     const header = this.htmlConstructor.div(['sidebar__header']);
-    menuButton.dataset.bsToggle = 'offcanvas';
-    menuButton.dataset.bsTarget = '#offcanvasNavbar';
-    menuButton.setAttribute('aria-controls', 'offcanvasNavbar');
-    const buttonIcon = this.htmlConstructor.span(['navbar-toggler-icon']);
-    menuButton.appendChild(buttonIcon);
-    const brand = this.htmlConstructor.a('#', ['navbar-brand'], 'RSLang');
-    header.append(menuButton, brand);
+    /* menuButton.dataset.bsTarget = '#offcanvasNavbar'; menuButton.setAttribute('aria-controls', 'offcanvasNavbar');
+    const buttonIcon = this.htmlConstructor.span(['navbar-toggler-icon']); menuButton.appendChild(buttonIcon); */
+    // const brand = this.htmlConstructor.a('#', ['navbar-brand'], 'RSLang');
+    const brand = this.htmlConstructor.span(['navbar-brand'], 'RSLang');
+    header.append(brand);
     this.sidebar.append(header, document.createElement('hr'));
     this.menu = this.htmlConstructor.createHtmlElement('ul', [
       'sidebar__nav-menu',

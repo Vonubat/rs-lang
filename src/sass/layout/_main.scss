@@ -1,5 +1,9 @@
-.header {
-    padding: 20px 20px 0;
+#main {
+    min-height: calc(100% - 140px);
+
+    @media (max-width: 767px) {
+        min-height: calc(100vh - 140px);
+    }
 }
 
 .preview, .ourAdvantages, .ourPosibilities, .ourTeam {
@@ -17,6 +21,11 @@
 .preview .card-title {
     font-size: 60px;
     font-weight: 700;
+    text-align: center;
+
+    @media (max-width: 767px) {
+        height: auto;
+    }
 }
 
 main .section-title {
@@ -27,6 +36,16 @@ main .section-title {
 .preview .container-fluid {
     @media (max-width: 860px) {
         flex-direction: column;
+        gap: 15px;
+    }
+}
+
+.ourAdvantages .d-flex {
+    max-width: 995px;
+    margin: 0 auto;
+
+    @media (max-width: 1710px) {
+        
     }
 }
 

@@ -1,0 +1,30 @@
+.header {
+    padding: 0 20px;
+    height: 80px;
+}
+
+.header-title {
+    color: $white;
+}
+
+.header-title.hide {
+    @media (max-width: 767px) {
+        visibility: hidden;
+        transition: all 0.3s;
+      }
+}
+
+.burger {
+    fill: white;
+    display: none;
+    cursor: pointer;
+
+    @media (max-width: 767px) {
+        display: block;
+      }
+}
+
+.burger.active {
+    transform: translateX(170px);
+    transition: all 0.3s;
+}
