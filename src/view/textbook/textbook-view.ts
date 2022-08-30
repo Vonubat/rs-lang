@@ -1,13 +1,13 @@
 import { PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
-import CardsContainer from './cards-container';
+import TextbookCardsContainer from './cards-container';
 import Pagination from './pagination';
 
 export default class TextbookView {
-  cardsContainer: CardsContainer;
+  cardsContainer: TextbookCardsContainer;
 
   pagination: Pagination;
 
-  textbook: HTMLElement;
+  textbook!: HTMLElement;
 
   cardsContainerInstance!: HTMLElement;
 
@@ -16,9 +16,8 @@ export default class TextbookView {
   paginationBottomInstance!: HTMLElement;
 
   constructor() {
-    this.cardsContainer = new CardsContainer();
+    this.cardsContainer = new TextbookCardsContainer();
     this.pagination = new Pagination();
-    this.textbook = document.getElementById('body') as HTMLElement;
   }
 
   drawPage(words: WordsResponseSchema[] | PaginatedResult[], pageConfig: PageConfigResponce): void {

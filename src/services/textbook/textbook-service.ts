@@ -7,8 +7,8 @@ import {
   UsersWordsResponseSchema,
   WordsResponseSchema,
 } from '../../types/types';
-import PageConfig from './page-config';
-import SoundHelper from './sound-helper';
+import PageConfig from '../components/page-config';
+import SoundHelper from '../components/sound-helper';
 import Loading from '../../view/components/loading';
 import AuthService from '../auth/auth-service';
 import Credentials from '../auth/credentials';

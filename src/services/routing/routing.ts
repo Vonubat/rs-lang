@@ -51,7 +51,7 @@ export class Rout {
         break;
       case 'menuDictionary':
         window.history.pushState({}, '/dictionary', `${window.location.origin}/dictionary`);
-        // TO DO
+        this.view.drawDictionary();
         break;
       case 'menuMinigames':
         window.history.pushState({}, '/games', `${window.location.origin}/games`);

@@ -41,15 +41,22 @@ export default class Constants {
       NAME: 'Main',
       ICON: 'house',
     },
+
     TEXTBOOK: {
       NAME: 'Textbook',
       ICON: 'book',
+    },
+
+    DICTIONARY: {
+      NAME: 'Dictionary',
+      ICON: 'bookmark-check',
     },
 
     MINIGAMES: {
       NAME: 'Minigames',
       ICON: 'controller',
     },
+
     STATISTICS: {
       NAME: 'Statistics',
       ICON: 'graph-up',

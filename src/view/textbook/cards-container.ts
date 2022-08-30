@@ -1,16 +1,16 @@
 import { PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
-import CardGenerator from './card-generator';
+import TextbookCardGenerator from './card-generator';
 import TextbookColor from './textbook-color';
 
-export default class CardsContainer extends HTMLConstructor {
-  cardGenerator: CardGenerator;
+export default class TextbookCardsContainer extends HTMLConstructor {
+  cardGenerator: TextbookCardGenerator;
 
   textbookColor: TextbookColor;
 
   constructor() {
     super();
-    this.cardGenerator = new CardGenerator();
+    this.cardGenerator = new TextbookCardGenerator();
     this.textbookColor = new TextbookColor();
   }
 

@@ -3,7 +3,7 @@ import { PaginatedResult, TypeOfWordIsPaginatedResult, WordsResponseSchema } fro
 import DomHelper from '../../utilities/DOM-helpers';
 import HTMLConstructor from '../components/constructor';
 
-export default class CardGenerator extends HTMLConstructor {
+export default class TextbookCardGenerator extends HTMLConstructor {
   createCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
 
