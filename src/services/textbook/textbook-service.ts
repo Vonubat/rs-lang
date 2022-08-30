@@ -1,6 +1,12 @@
 import { api } from '../../api/api';
 import { view } from '../../view/view';
-import { AggregatedWords, PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
+import {
+  AggregatedWords,
+  PageConfigResponce,
+  PaginatedResult,
+  UsersWordsResponseSchema,
+  WordsResponseSchema,
+} from '../../types/types';
 import PageConfig from './page-config';
 import SoundHelper from './sound-helper';
 import Loading from '../../view/components/loading';
@@ -91,9 +97,8 @@ export default class TextbookService {
 
   setCardsItems(): void {
     this.soundIcons = view.textbookView.textbook.querySelectorAll('.sound-icon');
-
-    this.difficultBtns = view.textbookView.textbook.querySelectorAll('word-difficult-btn');
-    this.learnedBtns = view.textbookView.textbook.querySelectorAll('word-learned-btn');
+    this.difficultBtns = view.textbookView.textbook.querySelectorAll('.word-difficult-btn');
+    this.learnedBtns = view.textbookView.textbook.querySelectorAll('.word-learned-btn');
   }
 
   async decreasePageNumber(): Promise<void> {
@@ -224,7 +229,53 @@ export default class TextbookService {
     return true;
   }
 
+  async addDiffcultWord(event: Event) {
+    this.loading.createSpinners();
+    const { id } = event.target as HTMLButtonElement;
+    const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
+    const wordId: string = id.slice(startPositionOfWordId);
+    const userId: string = Credentials.getUserId();
+    let userWord;
+    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
+
+    if (response instanceof Response) {
+      console.log(`create hard word ${wordId}`);
+      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
+    } else {
+      console.log(`update hard word ${wordId}`);
+      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
+    }
+
+    this.loading.delSpinners();
+    return userWord;
+  }
+
+  async addLearnedWord(event: Event): Promise<UsersWordsResponseSchema> {
+    this.loading.createSpinners();
+    const { id } = event.target as HTMLButtonElement;
+    const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
+    const wordId: string = id.slice(startPositionOfWordId);
+    const userId: string = Credentials.getUserId();
+    let userWord;
+    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
+
+    if (response instanceof Response) {
+      console.log(`create learned word ${wordId}`);
+      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
+    } else {
+      console.log(`update learned word ${wordId}`);
+      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
+    }
+
+    this.loading.delSpinners();
+    return userWord;
+  }
+
   listenCards(): void {
     this.soundIcons.forEach((item: Element): void => item.addEventListener('click', this.playSound.bind(this)));
+    this.difficultBtns.forEach((item: Element): void =>
+      item.addEventListener('click', this.addDiffcultWord.bind(this))
+    );
+    this.learnedBtns.forEach((item: Element): void => item.addEventListener('click', this.addLearnedWord.bind(this)));
   }
 }

@@ -180,6 +180,8 @@ export default class AuthService {
     const { words } = services.textbookService;
     const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     view.textbookView.drawCardsContainer(words, pageConfig);
+    services.textbookService.setCardsItems();
+    services.textbookService.listenCards();
   }
 
   setModalWindowsItems(): void {

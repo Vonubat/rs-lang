@@ -148,7 +148,7 @@ export default class CardGenerator extends HTMLConstructor {
     const difficultBtn: HTMLElement = this.createHtmlElement(
       'button',
       ['btn', 'btn-outline-danger', 'word-difficult-btn'],
-      `word-difficult-btn${wordId}`,
+      `word-difficult-btn-${wordId}`,
       undefined,
       'Difficult'
     );
