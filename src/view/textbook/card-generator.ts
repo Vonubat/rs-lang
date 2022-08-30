@@ -147,15 +147,15 @@ export default class CardGenerator extends HTMLConstructor {
     ]);
     const difficultBtn: HTMLElement = this.createHtmlElement(
       'button',
-      ['btn', 'btn-outline-danger'],
-      `word-difficult-${wordId}`,
+      ['btn', 'btn-outline-danger', 'word-difficult-btn'],
+      `word-difficult-btn${wordId}`,
       undefined,
       'Difficult'
     );
     const learnedtBtn: HTMLElement = this.createHtmlElement(
       'button',
-      ['btn', 'btn-outline-success'],
-      `word-learned-${wordId}`,
+      ['btn', 'btn-outline-success', 'word-learned-btn'],
+      `word-learned-btn-${wordId}`,
       undefined,
       'Learned'
     );
@@ -177,7 +177,7 @@ export default class CardGenerator extends HTMLConstructor {
     ]);
     const correctAttempts: HTMLElement = this.createHtmlElement(
       'span',
-      ['badge', 'bg-primary'],
+      ['badge', 'bg-primary', 'badge-correct'],
       `badge-correct-${wordId}`,
       [
         ['data-bs-toggle', 'custom-tooltip'],
@@ -187,7 +187,7 @@ export default class CardGenerator extends HTMLConstructor {
     );
     const incorrectAttempts: HTMLElement = this.createHtmlElement(
       'span',
-      ['badge', 'bg-secondary'],
+      ['badge', 'bg-secondary', 'badge-incorrect'],
       `badge-incorrect-${wordId}`,
       [
         ['data-bs-toggle', 'custom-tooltip'],

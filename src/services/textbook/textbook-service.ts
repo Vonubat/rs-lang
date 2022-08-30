@@ -34,6 +34,10 @@ export default class TextbookService {
 
   words!: WordsResponseSchema[] | PaginatedResult[];
 
+  difficultBtns!: NodeListOf<HTMLElement>;
+
+  learnedBtns!: NodeListOf<HTMLElement>;
+
   constructor() {
     this.pageConfig = new PageConfig();
     this.soundHelper = new SoundHelper();
@@ -87,6 +91,9 @@ export default class TextbookService {
 
   setCardsItems(): void {
     this.soundIcons = view.textbookView.textbook.querySelectorAll('.sound-icon');
+
+    this.difficultBtns = view.textbookView.textbook.querySelectorAll('word-difficult-btn');
+    this.learnedBtns = view.textbookView.textbook.querySelectorAll('word-learned-btn');
   }
 
   async decreasePageNumber(): Promise<void> {
