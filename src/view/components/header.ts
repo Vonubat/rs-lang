@@ -22,7 +22,7 @@ export default class Header extends HTMLConstructor {
       'text-center',
       'align-items-center',
       'header',
-      'text-bg-dark',
+      'bg-dark',
     ]);
     header.appendChild(burger.draw());
     const h1 = this.createHtmlElement('h1', ['header-title']);

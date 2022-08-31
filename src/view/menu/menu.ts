@@ -57,10 +57,13 @@ export default class Menu {
     this.menu.innerHTML = '';
     Object.values(Constants.MENU).forEach((menuInfo, index) => {
       // TODO: set href
+      const href = menuInfo.NAME === 'Main' ? '#' : `#${menuInfo.NAME.toLowerCase()}`;
       const item = this.htmlConstructor.createHtmlElement('li', ['nav-item', 'sidebar__nav-menu_item']);
-      const link = this.htmlConstructor.a('#', ['nav-link']);
-      link.id = `menu${menuInfo.NAME}`;
-      link.dataset.bsToggle = 'collapse';
+      const link = this.htmlConstructor.a(`${href}`, ['nav-link']);
+      // link.setAttribute('onclick', 'route()');
+      link.removeAttribute('target');
+      link.id = `menu-${menuInfo.NAME.toLowerCase()}`;
+      // link.dataset.bsToggle = 'collapse';
       const icon = this.htmlConstructor.svg(`${menuInfo.ICON}`, ['bi', 'px-0', 'me-2', 'nav-icon']);
       link.innerHTML = `${icon.outerHTML} ${menuInfo.NAME}`;
       if (index === 0) {
