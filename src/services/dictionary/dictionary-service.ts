@@ -5,6 +5,7 @@ import SoundHelper from '../components/sound-helper';
 import Loading from '../../view/components/loading';
 import Credentials from '../auth/credentials';
 import DomHelper from '../../utilities/DOM-helpers';
+import AuthService from '../auth/auth-service';
 
 export default class DictionaryService {
   soundHelper: SoundHelper;
@@ -20,6 +21,8 @@ export default class DictionaryService {
   learnedWordsBtn!: HTMLButtonElement;
 
   cardsCount!: number;
+
+  dictionaryMenuItem!: HTMLElement;
 
   constructor() {
     this.soundHelper = new SoundHelper();
@@ -136,5 +139,16 @@ export default class DictionaryService {
   listenSections(): void {
     this.difficultWordsBtn.addEventListener('click', this.updatePage.bind(this));
     this.learnedWordsBtn.addEventListener('click', this.updatePage.bind(this));
+  }
+
+  hideDictionaryItems(): void {
+    this.dictionaryMenuItem = document.getElementById('menuDictionary') as HTMLElement;
+    if (AuthService.checkUser()) {
+      if (this.dictionaryMenuItem) {
+        this.dictionaryMenuItem.style.display = '';
+      }
+    } else if (this.dictionaryMenuItem) {
+      this.dictionaryMenuItem.style.display = 'none';
+    }
   }
 }

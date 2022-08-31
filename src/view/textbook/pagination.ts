@@ -34,7 +34,7 @@ export default class Pagination extends HTMLConstructor {
     return this.createHtmlElement('li', ['page-item', 'active']);
   }
 
-  createArrow(direction: string, pageConfig: PageConfigResponce, typeOfPagination: TypeOfPagination): HTMLElement {
+  createArrow(direction: string, typeOfPagination: TypeOfPagination): HTMLElement {
     const classList: string[] = ['page-item', 'page-link'];
 
     if (typeOfPagination === 'Page') {
@@ -59,7 +59,7 @@ export default class Pagination extends HTMLConstructor {
   }
 
   createNumberCurrent(id: string, i: number): HTMLElement {
-    const lastPage = id === 'page-number' ? 30 : 7;
+    const lastPage = id === 'page-number' ? 30 : 6;
     const pageName: TypeOfPagination = id === 'page-number' ? 'Page' : 'Group';
 
     return this.createHtmlElement(
@@ -82,7 +82,7 @@ export default class Pagination extends HTMLConstructor {
       value = pageConfig.pageNumber;
     } else {
       pageName = 'Group';
-      lastPage = 7;
+      lastPage = 6;
       value = pageConfig.groupNumber;
     }
 
@@ -126,7 +126,7 @@ export default class Pagination extends HTMLConstructor {
         item.classList.add('disabled');
       });
     }
-    if (pageConfig.groupNumber === 6) {
+    if (pageConfig.groupNumber === 5) {
       rightGroupArrows.forEach((item: Element): void => {
         item.classList.add('disabled');
       });
@@ -149,8 +149,8 @@ export default class Pagination extends HTMLConstructor {
     const nav: HTMLElement = this.createNav();
     const pagination: HTMLElement = this.createPagination();
     const numberCurrentContainer: HTMLElement = this.createNumberCurrentContainer();
-    const leftArrow: HTMLElement = this.createArrow(Constants.LEFT_ARROW, pageConfig, 'Page');
-    const rightArrow: HTMLElement = this.createArrow(Constants.RIGHT_ARROW, pageConfig, 'Page');
+    const leftArrow: HTMLElement = this.createArrow(Constants.LEFT_ARROW, 'Page');
+    const rightArrow: HTMLElement = this.createArrow(Constants.RIGHT_ARROW, 'Page');
     const pageNumberCurrent: HTMLElement = this.createNumberCurrent('page-number', pageConfig.pageNumber);
     const dropdownMenu: HTMLElement = this.createDropdownMenu();
 
@@ -170,19 +170,15 @@ export default class Pagination extends HTMLConstructor {
     const nav: HTMLElement = this.createNav();
     const pagination: HTMLElement = this.createPagination();
     const numberCurrentContainer: HTMLElement = this.createNumberCurrentContainer();
-    const leftArrow: HTMLElement = this.createArrow(Constants.LEFT_ARROW, pageConfig, 'Group');
-    const rightArrow: HTMLElement = this.createArrow(Constants.RIGHT_ARROW, pageConfig, 'Group');
+    const leftArrow: HTMLElement = this.createArrow(Constants.LEFT_ARROW, 'Group');
+    const rightArrow: HTMLElement = this.createArrow(Constants.RIGHT_ARROW, 'Group');
     const groupNumberCurrent: HTMLElement = this.createNumberCurrent('group-number', pageConfig.groupNumber);
     const dropdownMenu: HTMLElement = this.createDropdownMenu();
-    const dropdownDivider: HTMLElement = this.createDropdownDivider();
 
     for (let i = 1; i <= 6; i += 1) {
       const dropdownItem: HTMLElement = this.createDropdownItem('group-number', i, position);
       dropdownMenu.append(dropdownItem);
     }
-
-    const dropdownItemUserWords: HTMLElement = this.createDropdownItem('group-number', 7, position);
-    dropdownMenu.append(dropdownDivider, dropdownItemUserWords);
 
     numberCurrentContainer.append(groupNumberCurrent, dropdownMenu);
     pagination.append(leftArrow, numberCurrentContainer, rightArrow);

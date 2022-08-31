@@ -93,10 +93,12 @@ export default class AuthService {
       this.loginBtn.dataset.bsToggle = '';
       (this.loginBtn.childNodes[0] as Text).data = `Log Out (${email})`;
       view.htmlConstructor.changeSvg(icon, 'box-arrow-in-right');
+      services.dictionaryService.hideDictionaryItems();
     } else {
       this.loginBtn.dataset.bsToggle = 'modal';
       (this.loginBtn.childNodes[0] as Text).data = `Log In`;
       view.htmlConstructor.changeSvg(icon, 'lock');
+      services.dictionaryService.hideDictionaryItems();
     }
   }
 
@@ -104,8 +106,14 @@ export default class AuthService {
     const content: string = (this.loginBtn.childNodes[0] as Text).data;
     if (content.includes('Log Out')) {
       Credentials.delCredentials();
+
+      if (Rout.checkUrl('dictionary')) {
+        document.getElementById('menuTextbook')?.dispatchEvent(new Event('click', { bubbles: true }));
+      }
+
       this.changeBtnState();
       this.updateCardsState();
+
       return true;
     }
     return false;
@@ -130,8 +138,8 @@ export default class AuthService {
       const { token, refreshToken, userId, name } = response;
       Credentials.setCredentials(token, refreshToken, userId, name, email);
       this.closeModalLogin.dispatchEvent(new Event('click'));
-      this.changeBtnState();
 
+      this.changeBtnState();
       if (Rout.checkUrl('textbook')) {
         this.updateCardsState();
       }
@@ -155,13 +163,10 @@ export default class AuthService {
       event.preventDefault();
 
       response = await api.users.createUser({ name: userName, email, password });
-
       if (response instanceof Response) {
         return this.errorHandler(response);
       }
-
       response = await api.auth.signIn({ email, password });
-
       if (response instanceof Response) {
         return this.errorHandler(response);
       }
@@ -169,8 +174,8 @@ export default class AuthService {
       const { token, refreshToken, userId } = response;
       Credentials.setCredentials(token, refreshToken, userId, userName, email);
       this.closeModalRegistration.dispatchEvent(new Event('click'));
-      this.changeBtnState();
 
+      this.changeBtnState();
       if (Rout.checkUrl('textbook')) {
         this.updateCardsState();
       }
@@ -209,5 +214,8 @@ export default class AuthService {
     this.loginBtn.addEventListener('click', this.logOut.bind(this));
     document.addEventListener('DOMContentLoaded', this.checkTokenExpiring.bind(this));
     document.addEventListener('DOMContentLoaded', this.changeBtnState.bind(this));
+    document.addEventListener('DOMContentLoaded', services.dictionaryService.hideDictionaryItems.bind(this));
   }
+
+  dictionaryHide() {}
 }
