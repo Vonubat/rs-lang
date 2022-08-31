@@ -6,7 +6,7 @@ import Footer from './components/footer';
 import MainView from './main/main-view';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
-import DictionaryView from './dictionaty/dictionary-view';
+import DictionaryView from './dictionary/dictionary-view';
 
 export class View {
   htmlConstructor: HTMLConstructor;

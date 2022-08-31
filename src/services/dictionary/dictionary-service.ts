@@ -1,9 +1,10 @@
 import { api } from '../../api/api';
 import { view } from '../../view/view';
-import { AggregatedWords, PaginatedResult, UsersWordsResponseSchema } from '../../types/types';
+import { AggregatedWords, PaginatedResult } from '../../types/types';
 import SoundHelper from '../components/sound-helper';
 import Loading from '../../view/components/loading';
 import Credentials from '../auth/credentials';
+import DomHelper from '../../utilities/DOM-helpers';
 
 export default class DictionaryService {
   soundHelper: SoundHelper;
@@ -13,6 +14,10 @@ export default class DictionaryService {
   soundIcons!: NodeListOf<HTMLElement>;
 
   removeBtns!: NodeListOf<HTMLElement>;
+
+  difficultWordsBtn!: HTMLButtonElement;
+
+  learnedWordsBtn!: HTMLButtonElement;
 
   constructor() {
     this.soundHelper = new SoundHelper();
@@ -37,12 +42,40 @@ export default class DictionaryService {
     view.dictionaryView.drawPage(words);
     this.setCardsItems();
     this.listenCards();
+    this.setSectionsItems();
+    this.listenSections();
+    this.loading.delSpinners();
+  }
+
+  async updatePage(event: Event): Promise<void> {
+    this.loading.createSpinners();
+    const { id } = event.target as HTMLButtonElement;
+    let typeOfWords: 'learned' | 'hard';
+
+    if (id === 'section-difficult-words') {
+      typeOfWords = 'hard';
+    } else {
+      typeOfWords = 'learned';
+    }
+
+    const words: PaginatedResult[] = await this.getWords(typeOfWords);
+
+    view.dictionaryView.drawCardsContainer(words);
+    this.setCardsItems();
+    this.listenCards();
     this.loading.delSpinners();
   }
 
   setCardsItems(): void {
-    this.soundIcons = view.textbookView.textbook.querySelectorAll('.sound-icon');
-    this.removeBtns = view.textbookView.textbook.querySelectorAll('.remove-word-btn');
+    this.soundIcons = view.dictionaryView.dictionary.querySelectorAll('.sound-icon');
+    this.removeBtns = view.dictionaryView.dictionary.querySelectorAll('.remove-word-btn');
+  }
+
+  setSectionsItems(): void {
+    this.difficultWordsBtn = view.dictionaryView.dictionary.querySelector(
+      '.section-difficult-words'
+    ) as HTMLButtonElement;
+    this.learnedWordsBtn = view.dictionaryView.dictionary.querySelector('.section-learned-words') as HTMLButtonElement;
   }
 
   playSound(event: Event): boolean {
@@ -70,30 +103,28 @@ export default class DictionaryService {
     return true;
   }
 
-  async removeWord(event: Event): Promise<UsersWordsResponseSchema> {
+  async removeWord(event: Event): Promise<void> {
     this.loading.createSpinners();
+    const { target } = event;
     const { id } = event.target as HTMLButtonElement;
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
     const wordId: string = id.slice(startPositionOfWordId);
     const userId: string = Credentials.getUserId();
-    let userWord;
-    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
+    const card = DomHelper.findAncestor(target as HTMLElement, 'card');
+    await api.usersWords.deleteUserWord(userId, wordId);
+    card.remove();
+    // console.log(`delete word ${wordId}`);
 
-    if (response instanceof Response) {
-      // console.log(`create learned word ${wordId}`);
-      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
-    } else {
-      // console.log(`update learned word ${wordId}`);
-      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
-    }
-
-    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'green');
     this.loading.delSpinners();
-    return userWord;
   }
 
   listenCards(): void {
     this.soundIcons.forEach((item: Element): void => item.addEventListener('click', this.playSound.bind(this)));
     this.removeBtns.forEach((item: Element): void => item.addEventListener('click', this.removeWord.bind(this)));
+  }
+
+  listenSections(): void {
+    this.difficultWordsBtn.addEventListener('click', this.updatePage.bind(this));
+    this.learnedWordsBtn.addEventListener('click', this.updatePage.bind(this));
   }
 }
