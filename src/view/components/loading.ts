@@ -12,6 +12,7 @@ export default class Loading extends HTMLConstructor {
   }
 
   createSpinners(): void {
+    this.body.classList.add('disabled');
     const spinnersWrapper: HTMLElement = this.createHtmlElement(
       'div',
       [
@@ -43,6 +44,7 @@ export default class Loading extends HTMLConstructor {
   }
 
   delSpinners(): void {
+    this.body.classList.remove('disabled');
     this.spinnersWrapper.remove();
   }
 }

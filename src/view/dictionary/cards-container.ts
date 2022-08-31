@@ -36,4 +36,13 @@ export default class DictionaryCardsContainer extends HTMLConstructor {
 
     return cardsContainer;
   }
+
+  generateEmptyCardContainer(): HTMLElement {
+    const cardsContainer: HTMLElement = this.createCardContainer();
+    cardsContainer.innerHTML = '';
+
+    cardsContainer.append(this.cardGenerator.createNoCardWord());
+
+    return cardsContainer;
+  }
 }

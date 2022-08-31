@@ -19,6 +19,8 @@ export default class DictionaryService {
 
   learnedWordsBtn!: HTMLButtonElement;
 
+  cardsCount!: number;
+
   constructor() {
     this.soundHelper = new SoundHelper();
     this.loading = new Loading();
@@ -28,7 +30,7 @@ export default class DictionaryService {
     const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
       Credentials.getUserId(),
       `{"userWord.difficulty":"${typeOfWords}"}`,
-      undefined,
+      3600,
       0,
       0
     );
@@ -67,6 +69,7 @@ export default class DictionaryService {
   }
 
   setCardsItems(): void {
+    this.cardsCount = view.dictionaryView.dictionary.querySelectorAll('.card').length;
     this.soundIcons = view.dictionaryView.dictionary.querySelectorAll('.sound-icon');
     this.removeBtns = view.dictionaryView.dictionary.querySelectorAll('.remove-word-btn');
   }
@@ -114,6 +117,13 @@ export default class DictionaryService {
     await api.usersWords.deleteUserWord(userId, wordId);
     card.remove();
     // console.log(`delete word ${wordId}`);
+
+    this.cardsCount -= 1;
+
+    if (this.cardsCount === 0) {
+      const emptyCard: HTMLElement = view.dictionaryView.cardsContainer.generateEmptyCardContainer();
+      view.dictionaryView.dictionary.append(emptyCard);
+    }
 
     this.loading.delSpinners();
   }

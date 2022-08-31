@@ -24,13 +24,24 @@ export default class DictionaryView {
 
   drawPage(words: PaginatedResult[]): void {
     this.dictionary = document.getElementById('main') as HTMLElement;
-    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+
+    if (!words.length) {
+      this.cardsContainerInstance = this.cardsContainer.generateEmptyCardContainer();
+    } else {
+      this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+    }
+
     this.dictionarySectionsInstance = this.dictionarySections.createSectionsWordsWrapper();
     this.dictionary.append(this.dictionarySectionsInstance, this.cardsContainerInstance);
   }
 
   drawCardsContainer(words: PaginatedResult[]): void {
-    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+    if (!words.length) {
+      this.cardsContainerInstance = this.cardsContainer.generateEmptyCardContainer();
+    } else {
+      this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+    }
+
     this.dictionary.append(this.cardsContainerInstance);
   }
 }

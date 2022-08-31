@@ -189,4 +189,25 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     badgesWrapper.append(correctAttempts, incorrectAttempts);
     return badgesWrapper;
   }
+
+  createNoCardWord(): HTMLElement {
+    const card: HTMLElement = this.createHtmlElement(
+      'div',
+      ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'],
+      `card-sorry}`
+    );
+    const img: HTMLElement = this.createHtmlElement('img', ['img-fluid', 'rounded', 'image'], undefined, [
+      ['alt', `image-sorry`],
+      ['src', `../../assets/img/sorry.jpg`],
+    ]);
+    const text: HTMLElement = this.createHtmlElement(
+      'h5',
+      ['card-title', 'mb-3', 'text-center', 'word-container'],
+      undefined,
+      undefined,
+      'No words found to display on this page.'
+    );
+    card.append(img, text);
+    return card;
+  }
 }
