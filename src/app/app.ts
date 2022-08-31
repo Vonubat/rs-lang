@@ -6,4 +6,4 @@ view.drawMainPage();
 (document.querySelector('.sidebar') as HTMLElement).addEventListener('click', (event) => {
   routing.routing(event);
 });
-burger.lisener();
+burger.listener();

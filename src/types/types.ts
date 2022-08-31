@@ -126,3 +126,7 @@ export interface Team {
   name: string;
   github: string;
 }
+
+export function TypeOfWordIsPaginatedResult(word: WordsResponseSchema | PaginatedResult): word is PaginatedResult {
+  return '_id' in word;
+}

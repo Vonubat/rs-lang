@@ -51,7 +51,7 @@ export class Rout {
         break;
       case 'menuDictionary':
         window.history.pushState({}, '/dictionary', `${window.location.origin}/dictionary`);
-        // TO DO
+        this.view.drawDictionary();
         break;
       case 'menuMinigames':
         window.history.pushState({}, '/games', `${window.location.origin}/games`);
@@ -75,6 +75,14 @@ export class Rout {
     });
   };
 
+  static checkUrl(address: string): boolean {
+    const url: boolean = window.location.href.includes(`${address}`);
+    if (url) {
+      return true;
+    }
+    return false;
+  }
+
   private pageName = (id: string): void => {
     const name = id.slice(4);
     const menuTitle = document.querySelector('.header-title') as HTMLElement;
@@ -86,7 +94,7 @@ export class Rout {
     const menu = document.getElementById('navmenu') as HTMLElement;
     burgerButton.addEventListener('click', () => {
       menu.classList.toggle('hide');
-    }) 
+    })
   } */
 }
 

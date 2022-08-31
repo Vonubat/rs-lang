@@ -1,17 +1,16 @@
-import AuthService from '../../services/auth/auth-service';
-import { PageConfigResponce, WordsResponseSchema } from '../../types/types';
+import { PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
-import CardGenerator from './card-generator';
+import TextbookCardGenerator from './card-generator';
 import TextbookColor from './textbook-color';
 
-export default class CardsContainer extends HTMLConstructor {
-  cardGenerator: CardGenerator;
+export default class TextbookCardsContainer extends HTMLConstructor {
+  cardGenerator: TextbookCardGenerator;
 
   textbookColor: TextbookColor;
 
   constructor() {
     super();
-    this.cardGenerator = new CardGenerator();
+    this.cardGenerator = new TextbookCardGenerator();
     this.textbookColor = new TextbookColor();
   }
 
@@ -24,7 +23,7 @@ export default class CardsContainer extends HTMLConstructor {
 
     cardsContainer = this.createHtmlElement(
       'div',
-      ['d-flex', 'flex-row', 'flex-wrap', 'justify-content-center', 'cards-container', 'rounded'],
+      ['d-flex', 'flex-row', 'flex-wrap', 'justify-content-center', 'cards-container'],
       `cards-container`
     );
 
@@ -33,13 +32,12 @@ export default class CardsContainer extends HTMLConstructor {
     return cardsContainer;
   }
 
-  generateCardContainer(words: WordsResponseSchema[], pageConfig: PageConfigResponce): HTMLElement {
-    const authorized: boolean = AuthService.checkUser();
+  generateCardContainer(words: WordsResponseSchema[] | PaginatedResult[], pageConfig: PageConfigResponce): HTMLElement {
     const cardsContainer: HTMLElement = this.createCardContainer(pageConfig);
     cardsContainer.innerHTML = '';
 
-    words.forEach((item: WordsResponseSchema): void => {
-      cardsContainer.append(this.cardGenerator.generateCard(item, authorized));
+    words.forEach((item: WordsResponseSchema | PaginatedResult): void => {
+      cardsContainer.append(this.cardGenerator.generateCard(item));
     });
 
     return cardsContainer;

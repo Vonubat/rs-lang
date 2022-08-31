@@ -6,6 +6,7 @@ import Footer from './components/footer';
 import MainView from './main/main-view';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
+import DictionaryView from './dictionary/dictionary-view';
 
 export class View {
   htmlConstructor: HTMLConstructor;
@@ -22,6 +23,8 @@ export class View {
 
   loading: Loading;
 
+  dictionaryView: DictionaryView;
+
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
     this.menu = new Menu();
@@ -29,6 +32,7 @@ export class View {
     this.footer = new Footer();
     this.mainView = new MainView();
     this.textbookView = new TextbookView();
+    this.dictionaryView = new DictionaryView();
     this.loading = new Loading();
   }
 
@@ -44,6 +48,10 @@ export class View {
 
   async drawTextbook(): Promise<void> {
     await services.textbookService.drawPage();
+  }
+
+  async drawDictionary(): Promise<void> {
+    await services.dictionaryService.drawPage();
   }
 
   drawMainPage(): void {

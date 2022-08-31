@@ -10,7 +10,7 @@ export class Burger extends HTMLConstructor {
     return fragment;
   }
 
-  lisener() {
+  listener() {
     const burger = document.querySelector('.burger') as HTMLElement;
     const navWrapper = document.querySelector('.offcanvas-md') as HTMLElement;
     const headerTitle = document.querySelector('.header-title') as HTMLElement;
