@@ -1,4 +1,5 @@
 import { View } from '../../view/view';
+import NotFound from '../../view/components/not_found';
 
 export class Route {
   /* private urlTitle = 'RS Lang';
@@ -38,8 +39,11 @@ export class Route {
 
   view: View;
 
+  notFound: NotFound;
+
   constructor() {
     this.view = new View();
+    this.notFound = new NotFound();
   }
 
   /* routing(): void {
@@ -64,11 +68,16 @@ export class Route {
   }; */
 
   private handleLocation = () => {
+    this.onNavigate();
     const path = window.location.hash;
     const id = `menu-${path === '' ? 'main' : path.slice(1)}`;
-    this.onNavigate();
-    this.onActiveNav(id);
-    this.pageName(id);
+    if (document.getElementById(id)) {
+      this.onActiveNav(id);
+      this.pageName(id);
+    } else {
+      this.onActiveNav('Page not found');
+      this.pageName('.....Page not found');
+    }
   };
 
   private onNavigate = (): void => {
@@ -81,7 +90,7 @@ export class Route {
     }
     switch (path) {
       case '/':
-        rootDiv?.append(this.view.mainView.view());
+        rootDiv.append(this.view.mainView.view());
         break;
       case 'textbook':
         this.view.drawTextbook();
@@ -96,9 +105,9 @@ export class Route {
         // TO DO
         break;
       default:
+        rootDiv.append(this.notFound.notFound());
         break;
     }
-    // this.oldId = id;
   };
 
   private onActiveNav = (id: string): void => {
