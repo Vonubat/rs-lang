@@ -10,9 +10,15 @@ export default class DomHelper {
     return el;
   }
 
+  // change bg-color of input element
   static resetBackground(el: HTMLElement, color: Color = '#FFFFFF'): HTMLElement {
     const element = el;
     element.style.backgroundColor = color;
     return element;
+  }
+
+  // makes the first letter of a string uppercase in JavaScript?
+  static capitalizeFirstLetter(string: string): string {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 }

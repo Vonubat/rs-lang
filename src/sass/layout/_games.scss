@@ -53,3 +53,22 @@
     }
   }
 }
+
+.wrapper-levels-sprint,
+.wrapper-levels-audio-challenge {
+  margin-top: 30px;
+  gap: 20px;
+
+  h2 {
+    font-weight: 700;
+  }
+
+  .levels-container {
+    padding: 20px;
+    gap: 20px;
+
+    .level {
+      border-radius: 50%;
+    }
+  }
+}
