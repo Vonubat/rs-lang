@@ -1,4 +1,5 @@
 import { PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
+import { view } from '../view';
 import TextbookCardsContainer from './cards-container';
 import Pagination from './pagination';
 
@@ -26,7 +27,12 @@ export default class TextbookView {
     this.paginationTopInstance = this.pagination.generatePaginationContainer('top', pageConfig);
     this.paginationBottomInstance = this.pagination.generatePaginationContainer('bottom', pageConfig);
 
-    this.textbook.append(this.paginationTopInstance, this.cardsContainerInstance, this.paginationBottomInstance);
+    this.textbook.append(
+      view.gamesView.drawMiniCards('textbook', pageConfig),
+      this.paginationTopInstance,
+      this.cardsContainerInstance,
+      this.paginationBottomInstance
+    );
     this.pagination.disableArrows(this.textbook, pageConfig);
     this.pagination.updateColor(pageConfig);
   }

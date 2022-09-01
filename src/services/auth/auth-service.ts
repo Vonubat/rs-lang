@@ -84,6 +84,7 @@ export default class AuthService {
       if (delta > Constants.TOKEN_LIFE_TIME) {
         const response: Response | TokensSchema = await api.users.getNewUserTokens(userId);
         if (response instanceof Response) {
+          window.location.hash = '#';
           this.logOut();
         }
       }
