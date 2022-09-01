@@ -113,7 +113,7 @@ export default class MainView {
       'ourteam',
       'Vonubat',
       'Team leader',
-      'Out team leader',
+      'Basic project settings, API communication, Authorization, Textbook, Dictionary, Minigames',
       '../../assets/img/vonubat.jpg',
       this.gitVonubat
     );
@@ -121,7 +121,7 @@ export default class MainView {
       'ourteam',
       'SlavikusVOG',
       'Frontend developer',
-      'Frontend developer',
+      'API communication, Statistics, Architecture',
       '../../assets/img/slavikusvog.jpg',
       this.gitSlavikusVOG
     );
@@ -129,7 +129,7 @@ export default class MainView {
       'ourteam',
       'Der_Thun',
       'Frontend developer',
-      'Frontend developer',
+      'Routing, Design, Adaptive, Main Page, Authorization',
       '../../assets/img/der-thun.jpg',
       this.gitDerThun
     );
