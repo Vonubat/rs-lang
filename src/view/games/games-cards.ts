@@ -1,6 +1,4 @@
-import { PageConfigResponce } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
-import { view } from '../view';
 
 export default class GamesCards extends HTMLConstructor {
   sprintCardText: string;
@@ -153,19 +151,14 @@ export default class GamesCards extends HTMLConstructor {
     return miniAudioChallengeCard;
   }
 
-  generateMiniCards(page: 'dictionary' | 'textbook', pageConfig: PageConfigResponce): HTMLElement {
+  generateMiniCards(page: 'dictionary' | 'textbook'): HTMLElement {
     const miniCardsWrapper: HTMLElement = this.createCardsWrapper(page);
     const miniSprintCard: HTMLElement = this.generateMiniSprintCard(page);
     const miniAudioChallengeCard: HTMLElement = this.generateMiniAudioChallengeCard(page);
     miniCardsWrapper.append(miniSprintCard, miniAudioChallengeCard);
 
     this.miniCardsWrapper = miniCardsWrapper;
-    this.updateMiniCardsColor(this.miniCardsWrapper, pageConfig);
 
     return miniCardsWrapper;
-  }
-
-  updateMiniCardsColor(elem: HTMLElement, pageConfig: PageConfigResponce): void {
-    view.textbookView.cardsContainer.textbookColor.switchColor(elem, pageConfig);
   }
 }

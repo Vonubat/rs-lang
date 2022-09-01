@@ -1,4 +1,3 @@
-import { PageConfigResponce } from '../../types/types';
 import GamesCards from './games-cards';
 
 export default class GamesView {
@@ -21,9 +20,9 @@ export default class GamesView {
     this.games.append(this.gamesCardsInstance);
   }
 
-  drawMiniCards(page: 'dictionary' | 'textbook', pageConfig: PageConfigResponce): HTMLElement {
+  drawMiniCards(page: 'dictionary' | 'textbook'): HTMLElement {
     this.games = document.getElementById('main') as HTMLElement;
-    this.gamesMiniCardsInstance = this.gamesCards.generateMiniCards(page, pageConfig);
+    this.gamesMiniCardsInstance = this.gamesCards.generateMiniCards(page);
 
     return this.gamesMiniCardsInstance;
   }

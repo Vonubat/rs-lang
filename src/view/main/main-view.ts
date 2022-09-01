@@ -50,7 +50,7 @@ export default class MainView {
     cardBody.appendChild(button);
     previewContainer.appendChild(previewCard);
     const previewImg = this.HTMLConstructor.createFreeSvg(
-      '../../assets/img/Silhouette_of_the_Statue_of_Liberty_in_New_York.svg',
+      '../../assets/img/statue.svg',
       'statue',
       ['preview-img'],
       'statue',

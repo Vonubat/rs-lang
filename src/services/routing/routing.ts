@@ -1,5 +1,6 @@
 import { View } from '../../view/view';
 import NotFound from '../../view/components/not_found';
+import DomHelper from '../../utilities/DOM-helpers';
 
 export class Route {
   /* private urlTitle = 'RS Lang';
@@ -53,7 +54,10 @@ export class Route {
   } */
 
   routingHash(): void {
-    window.addEventListener('hashchange', this.handleLocation);
+    window.addEventListener('hashchange', (): void => {
+      this.handleLocation();
+      this.pageBG();
+    });
     this.handleLocation();
     /* window.onpopstate = this.handleLocation;
     (window as any).route = this.route;
@@ -131,6 +135,13 @@ export class Route {
     const menuTitle = document.querySelector('.header-title') as HTMLElement;
     menuTitle.innerText = name;
   };
+
+  private pageBG(): void {
+    const main: HTMLElement = document.getElementById('main') as HTMLElement;
+    if (!Route.checkUrl('textbook')) {
+      DomHelper.resetBackground(main);
+    }
+  }
 }
 
 export const routing: Route = new Route();

@@ -1,20 +1,16 @@
-import { PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
+import { PaginatedResult, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 import TextbookCardGenerator from './card-generator';
-import TextbookColor from './textbook-color';
 
 export default class TextbookCardsContainer extends HTMLConstructor {
   cardGenerator: TextbookCardGenerator;
 
-  textbookColor: TextbookColor;
-
   constructor() {
     super();
     this.cardGenerator = new TextbookCardGenerator();
-    this.textbookColor = new TextbookColor();
   }
 
-  createCardContainer(pageConfig: PageConfigResponce): HTMLElement {
+  createCardContainer(): HTMLElement {
     let cardsContainer: HTMLElement | null = document.getElementById('cards-container');
 
     if (cardsContainer) {
@@ -27,13 +23,11 @@ export default class TextbookCardsContainer extends HTMLConstructor {
       `cards-container`
     );
 
-    this.textbookColor.switchColor(cardsContainer, pageConfig);
-
     return cardsContainer;
   }
 
-  generateCardContainer(words: WordsResponseSchema[] | PaginatedResult[], pageConfig: PageConfigResponce): HTMLElement {
-    const cardsContainer: HTMLElement = this.createCardContainer(pageConfig);
+  generateCardContainer(words: WordsResponseSchema[] | PaginatedResult[]): HTMLElement {
+    const cardsContainer: HTMLElement = this.createCardContainer();
     cardsContainer.innerHTML = '';
 
     words.forEach((item: WordsResponseSchema | PaginatedResult): void => {
