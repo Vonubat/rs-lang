@@ -49,7 +49,15 @@ export default class MainView {
     button.innerText = "Let's start";
     cardBody.appendChild(button);
     previewContainer.appendChild(previewCard);
-    const previewImg = this.HTMLConstructor.img('../../assets/img/statue.png', 'preview-img', ['preview-img']);
+    const previewImg = this.HTMLConstructor.createFreeSvg(
+      '../../assets/img/Silhouette_of_the_Statue_of_Liberty_in_New_York.svg',
+      'statue',
+      ['preview-img'],
+      'statue',
+      undefined,
+      250,
+      350
+    );
     previewContainer.appendChild(previewImg);
     previewSection.appendChild(previewContainer);
     return previewSection;
