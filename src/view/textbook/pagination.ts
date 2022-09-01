@@ -138,7 +138,7 @@ export default class Pagination extends HTMLConstructor {
   }
 
   createDropdownItem(id: string, i: number, position: string): HTMLElement {
-    return this.createHtmlElement('a', ['dropdown-item', `${id}`], `${id}-${i}-${position}`, [['href', '#']], `${i}`);
+    return this.createHtmlElement('a', ['dropdown-item', `${id}`], `${id}-${i}-${position}`, undefined, `${i}`);
   }
 
   createDropdownDivider(): HTMLElement {

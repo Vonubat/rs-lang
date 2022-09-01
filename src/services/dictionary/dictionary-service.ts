@@ -33,9 +33,7 @@ export default class DictionaryService {
     const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
       Credentials.getUserId(),
       `{"userWord.difficulty":"${typeOfWords}"}`,
-      3600,
-      0,
-      0
+      3600
     );
     return aggregatedWords.paginatedResults;
   }
