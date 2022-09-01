@@ -110,8 +110,8 @@ export class Route {
   };
 
   static checkUrl(address: string): boolean {
-    const url: boolean = window.location.href.includes(`${address}`);
-    if (url) {
+    const url: string = window.location.hash.slice(1);
+    if (url === address) {
       return true;
     }
     return false;

@@ -112,10 +112,10 @@ export default class AuthService {
       Credentials.delCredentials();
 
       if (Route.checkUrl('dictionary')) {
-        document.getElementById('menuTextbook')?.dispatchEvent(new Event('click', { bubbles: true }));
+        window.location.hash = 'textbook';
       }
 
-      if (Rout.checkUrl('textbook')) {
+      if (Route.checkUrl('textbook')) {
         this.updateCardsState();
       }
 

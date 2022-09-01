@@ -142,7 +142,7 @@ export default class DictionaryService {
   }
 
   hideDictionaryItems(): void {
-    this.dictionaryMenuItem = document.getElementById('menuDictionary') as HTMLElement;
+    this.dictionaryMenuItem = document.getElementById('menu-dictionary') as HTMLElement;
     if (AuthService.checkUser()) {
       if (this.dictionaryMenuItem) {
         this.dictionaryMenuItem.style.display = '';
