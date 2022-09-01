@@ -22,14 +22,15 @@ export default class Header extends HTMLConstructor {
       'text-center',
       'align-items-center',
       'header',
-      'text-bg-dark',
+      'bg-dark',
     ]);
     header.appendChild(burger.draw());
+    const div = this.div(['header-wrapper']);
     const h1 = this.createHtmlElement('h1', ['header-title']);
     h1.innerText = 'Main';
-    header.appendChild(h1);
-    header.appendChild(this.modal.modal('Login'));
-    header.appendChild(this.modal.modal('Registration'));
+    div.appendChild(h1);
+    div.appendChild(this.modal.modal('Login'));
+    div.appendChild(this.modal.modal('Registration'));
     const buttonWrapper: HTMLDivElement = this.div(['login-btn-wrapper']);
     const loginButton: HTMLElement = this.createHtmlElement('a', ['btn', 'btn-outline-light'], 'login-btn', [
       ['data-bs-toggle', 'modal'],
@@ -41,7 +42,8 @@ export default class Header extends HTMLConstructor {
     loginButton.innerText = 'Log In';
     loginButton.appendChild(svg);
     buttonWrapper.appendChild(loginButton);
-    header.appendChild(buttonWrapper);
+    div.appendChild(buttonWrapper);
+    header.appendChild(div);
     fragment.appendChild(header);
     this.icon = svg;
     return fragment;

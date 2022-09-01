@@ -12,6 +12,7 @@
 @import './components/menu';
 @import './components/footer';
 @import './components/header';
+@import './components/404';
 @import './layout/dictionary';
 @import './layout/main';
 
@@ -23,4 +24,8 @@
 .disabled {
   opacity: 0.6;
   pointer-events: none;
+}
+
+.hiden {
+  overflow: hidden;
 }

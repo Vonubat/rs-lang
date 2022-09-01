@@ -9,7 +9,7 @@ import {
 } from '../../types/types';
 import CheckApiParams from '../../utilities/check-api-params';
 import { view } from '../../view/view';
-import { Rout } from '../routing/routing';
+import { Route } from '../routing/routing';
 import { services } from '../services';
 import Credentials from './credentials';
 
@@ -107,7 +107,7 @@ export default class AuthService {
     if (content.includes('Log Out')) {
       Credentials.delCredentials();
 
-      if (Rout.checkUrl('dictionary')) {
+      if (Route.checkUrl('dictionary')) {
         document.getElementById('menuTextbook')?.dispatchEvent(new Event('click', { bubbles: true }));
       }
 
@@ -140,7 +140,7 @@ export default class AuthService {
       this.closeModalLogin.dispatchEvent(new Event('click'));
 
       this.changeBtnState();
-      if (Rout.checkUrl('textbook')) {
+      if (Route.checkUrl('textbook')) {
         this.updateCardsState();
       }
       return true;
@@ -176,7 +176,7 @@ export default class AuthService {
       this.closeModalRegistration.dispatchEvent(new Event('click'));
 
       this.changeBtnState();
-      if (Rout.checkUrl('textbook')) {
+      if (Route.checkUrl('textbook')) {
         this.updateCardsState();
       }
       return true;
