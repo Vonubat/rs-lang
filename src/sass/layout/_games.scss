@@ -1,0 +1,13 @@
+.card-wrapper-games {
+  gap: 30px;
+  margin: 20px;
+
+  .card {
+    max-width: 360px;
+    cursor: pointer;
+
+    .icon-audio-challenge {
+      margin-top: 10px;
+    }
+  }
+}

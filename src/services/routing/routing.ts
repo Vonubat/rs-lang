@@ -90,7 +90,7 @@ export class Route {
         this.view.drawDictionary();
         break;
       case 'minigames':
-        // TO DO
+        this.view.drawGamesCards();
         break;
       case 'statistics':
         // TO DO
