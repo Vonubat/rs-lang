@@ -1,4 +1,5 @@
 import { PaginatedResult } from '../../types/types';
+import { view } from '../view';
 import DictionaryCardsContainer from './cards-container';
 import DictionarySections from './dictionary-sections';
 
@@ -32,7 +33,11 @@ export default class DictionaryView {
     }
 
     this.dictionarySectionsInstance = this.dictionarySections.createSectionsWordsWrapper();
-    this.dictionary.append(this.dictionarySectionsInstance, this.cardsContainerInstance);
+    this.dictionary.append(
+      view.gamesView.drawMiniCards('dictionary'),
+      this.dictionarySectionsInstance,
+      this.cardsContainerInstance
+    );
   }
 
   drawCardsContainer(words: PaginatedResult[]): void {

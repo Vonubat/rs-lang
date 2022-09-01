@@ -134,7 +134,7 @@ export default class MainView {
       'ourteam',
       'SlavikusVOG',
       'Frontend developer',
-      'API communication, Statistics, Architecture',
+      'API communication, Statistics, Architecture, Menu',
       '../../assets/img/slavikusvog.jpg',
       this.gitSlavikusVOG
     );
