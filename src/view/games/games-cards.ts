@@ -19,7 +19,7 @@ export default class GamesCards extends HTMLConstructor {
     const classList: string[] = ['d-flex', 'flex-wrap', 'justify-content-center', 'align-items-center', 'text-center'];
 
     if (page !== 'minigames') {
-      classList.push('mini-card-wrapper-games', 'flex-column');
+      classList.push('mini-card-wrapper-games', 'shadow' /* , 'flex-column' */, 'bg-primary', 'bg-gradient');
     } else {
       classList.push('card-wrapper-games', 'flex-row');
     }
@@ -35,6 +35,8 @@ export default class GamesCards extends HTMLConstructor {
       'd-flex',
       'justify-content-center',
       'align-items-center',
+      'bg-light',
+      'bg-gradient',
       `card-${page}-${typeOfCard}`,
     ];
 

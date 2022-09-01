@@ -16,17 +16,3 @@
 @import './layout/dictionary';
 @import './layout/main';
 @import './layout/games';
-
-.app-wrapper {
-  display: flex;
-  flex-direction: row;
-}
-
-.disabled {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.hiden {
-  overflow: hidden;
-}

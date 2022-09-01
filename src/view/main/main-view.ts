@@ -3,7 +3,7 @@ import HTMLConstructor from '../components/constructor';
 export default class MainView {
   HTMLConstructor: HTMLConstructor;
 
-  private previewText = 'Learn English Or DIE!';
+  private previewText = 'Learn English or DIE!';
 
   private videoSrc = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
 
@@ -41,7 +41,12 @@ export default class MainView {
 
   private preview(): HTMLElement {
     const previewSection = this.HTMLConstructor.createHtmlElement('section', ['preview']);
-    const previewContainer = this.HTMLConstructor.div(['container-fluid', 'justify-content-around', 'd-flex']);
+    const previewContainer = this.HTMLConstructor.div([
+      'justify-content-around',
+      'd-flex',
+      'container-preview',
+      'text-center',
+    ]);
     const previewCard = this.card('preview', 'RS Lang', 'If you can dream it, you can do it', this.previewText);
     const cardBody = previewCard.querySelector('.card-body') as HTMLElement;
     const button = this.HTMLConstructor.a('#textbook', ['btn', 'btn-primary']);
@@ -55,7 +60,7 @@ export default class MainView {
       ['preview-img'],
       'statue',
       undefined,
-      250,
+      120,
       350
     );
     previewContainer.appendChild(previewImg);
@@ -151,7 +156,7 @@ export default class MainView {
   private card(type: string, title: string, subtitle: string, text: string, img?: string, git?: string) {
     const card = this.HTMLConstructor.div(['card', `card-${type}`]);
     if (img) {
-      const cardImg = this.HTMLConstructor.img(img, title, ['card-img', `card-img-${type}`]);
+      const cardImg = this.HTMLConstructor.img(img, title, ['card-img', `card-img-${type}`, 'img-fluid']);
       card.appendChild(cardImg);
     }
     const cardBody = this.HTMLConstructor.div(['card-body', `card-body-${type}`]);

@@ -1,14 +1,28 @@
 html {
-    background-color: RGBA(33, 37, 41, var(--bs-bg-opacity, 1));
-    scroll-behavior: smooth;
+  background-color: RGBA(33, 37, 41, var(--bs-bg-opacity, 1));
+  scroll-behavior: smooth;
 }
 
 body {
-    max-width: 1920px;
-    margin: 0 auto;
-} 
+  max-width: 1920px;
+  margin: 0 auto;
+}
 
 .app {
-    width: 100%;
-    min-height: 100%;
+  width: 100%;
+  min-height: 100%;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.hidden {
+  overflow: hidden;
 }
