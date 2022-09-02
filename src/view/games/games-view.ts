@@ -1,8 +1,11 @@
 import GamesCards from './games-cards';
-import GamesLevels from './games-leves';
+import GamesLevels from './games-levels';
+import StartGameView from './start-game';
 
 export default class GamesView {
   gamesCards: GamesCards;
+
+  startGameView: StartGameView;
 
   gamesLevels: GamesLevels;
 
@@ -14,9 +17,12 @@ export default class GamesView {
 
   gamesLevelsInstance!: HTMLElement;
 
+  startLocation!: HTMLElement;
+
   constructor() {
     this.gamesCards = new GamesCards();
     this.gamesLevels = new GamesLevels();
+    this.startGameView = new StartGameView();
   }
 
   drawCards(): void {
@@ -39,5 +45,11 @@ export default class GamesView {
 
     this.games.append(this.gamesLevelsInstance);
     return this.gamesLevelsInstance;
+  }
+
+  drawSprintStartLocation(game: 'sprint' | 'audio-challenge'): HTMLElement {
+    this.startLocation = this.startGameView.drawStartLocation(this.games, game);
+
+    return this.startLocation;
   }
 }

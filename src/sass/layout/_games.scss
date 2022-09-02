@@ -54,8 +54,7 @@
   }
 }
 
-.wrapper-levels-sprint,
-.wrapper-levels-audio-challenge {
+.wrapper-levels {
   margin-top: 30px;
   gap: 20px;
 
@@ -71,4 +70,13 @@
       border-radius: 50%;
     }
   }
+}
+
+.countdown-canvas-sprint-start,
+.countdown-canvas-audio-challenge-start {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  margin-top: -50px;
+  margin-right: -50px;
 }

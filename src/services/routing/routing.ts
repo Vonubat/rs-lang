@@ -138,9 +138,7 @@ export class Route {
 
   private pageBG(): void {
     const main: HTMLElement = document.getElementById('main') as HTMLElement;
-    if (!Route.checkUrl('textbook')) {
-      DomHelper.resetBackground(main);
-    }
+    DomHelper.resetBackground(main);
   }
 }
 

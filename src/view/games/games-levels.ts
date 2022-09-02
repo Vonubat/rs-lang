@@ -13,9 +13,9 @@ export default class GamesLevels extends HTMLConstructor {
       'justify-content-center',
       'align-items-center',
       'text-center',
-      `wrapper-levels-${game}`,
+      `wrapper-levels`,
     ];
-    const cardsWrapper: HTMLElement = this.createHtmlElement('div', classList, undefined, undefined);
+    const cardsWrapper: HTMLElement = this.createHtmlElement('div', classList, `wrapper-levels-${game}`, undefined);
     return cardsWrapper;
   }
 

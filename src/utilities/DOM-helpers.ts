@@ -13,6 +13,7 @@ export default class DomHelper {
   // change bg-color of input element
   static resetBackground(el: HTMLElement, color: Color = '#FFFFFF'): HTMLElement {
     const element = el;
+    element.style.backgroundImage = '';
     element.style.backgroundColor = color;
     return element;
   }
