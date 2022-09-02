@@ -7,6 +7,7 @@ import MainView from './main/main-view';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 import DictionaryView from './dictionary/dictionary-view';
+import GamesView from './games/games-view';
 
 export class View {
   htmlConstructor: HTMLConstructor;
@@ -25,6 +26,8 @@ export class View {
 
   dictionaryView: DictionaryView;
 
+  gamesView: GamesView;
+
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
     this.menu = new Menu();
@@ -33,6 +36,7 @@ export class View {
     this.mainView = new MainView();
     this.textbookView = new TextbookView();
     this.dictionaryView = new DictionaryView();
+    this.gamesView = new GamesView();
     this.loading = new Loading();
   }
 
@@ -52,6 +56,10 @@ export class View {
 
   async drawDictionary(): Promise<void> {
     await services.dictionaryService.drawPage();
+  }
+
+  drawGamesCards(): void {
+    services.gamesService.drawPage();
   }
 
   drawMainPage(): void {

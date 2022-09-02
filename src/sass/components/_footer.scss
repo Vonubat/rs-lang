@@ -2,9 +2,10 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0px 20px;
+  padding: 0px 10px;
   height: 60px;
   align-items: center;
+  background-image: url('../assets/img/random-grey-variations.png');
 
   @media (max-width: 530px) {
     height: auto;
@@ -25,9 +26,25 @@
 
 .footer__team_member {
   padding: 0px 10px;
+
+  &:link,
+  &:visited,
+  &:active {
+    text-decoration: none;
+    color: $white;
+  }
+
+  &:hover {
+    color: $primary;
+  }
 }
 
 .footer__logo {
   height: 50px;
   width: 100px;
+  transition: all 0.3s;
+
+  &:hover {
+    transform: scale(95%);
+  }
 }

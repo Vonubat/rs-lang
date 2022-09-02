@@ -27,14 +27,21 @@ export default class UsersAggregatedWords extends HttpClient {
     userId: string,
     filter: string,
     wordsPerPage = 20,
-    groupNumber = 0,
-    pageNumber = 0
+    groupNumber?: number,
+    pageNumber?: number
   ): Promise<AggregatedWords> {
     this.checkId(userId);
-    this.checkGroupsPagesOfWords(groupNumber, pageNumber);
+    let groupNumberLink = ``;
+    let pageNumberLink = ``;
+
+    if (groupNumber !== undefined && pageNumber !== undefined) {
+      this.checkGroupsPagesOfWords(groupNumber, pageNumber);
+      groupNumberLink = `group=${groupNumber}`;
+      pageNumberLink = `&page=${pageNumber}&`;
+    }
 
     const url: URL = new URL(
-      `${Constants.BASE_URL}/users/${userId}/aggregatedWords?group=${groupNumber}&page=${pageNumber}&wordsPerPage=${wordsPerPage}&filter=${filter}`
+      `${Constants.BASE_URL}/users/${userId}/aggregatedWords?${groupNumberLink}${pageNumberLink}wordsPerPage=${wordsPerPage}&filter=${filter}`
     );
 
     const response: Response = await this.get(url);

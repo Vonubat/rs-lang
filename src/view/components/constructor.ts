@@ -104,6 +104,42 @@ export default class HTMLConstructor {
     return svg;
   }
 
+  public createFreeSvg(
+    url: string,
+    type: string,
+    classList?: string[],
+    id?: string,
+    attributes?: [string, string][],
+    boxWidth?: number,
+    boxHeight?: number,
+    color?: string
+  ): SVGSVGElement {
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const XLINK_NS = 'http://www.w3.org/1999/xlink';
+
+    const svg: SVGSVGElement = document.createElementNS(SVG_NS, 'svg');
+    svg.style.fill = `${color}`;
+    svg.setAttributeNS(null, 'width', `${boxWidth}`);
+    svg.setAttributeNS(null, 'height', `${boxHeight}`);
+    const use = document.createElementNS(SVG_NS, 'use');
+    use.setAttributeNS(XLINK_NS, 'xlink:href', `${url}#${type}`);
+    svg.appendChild(use);
+    if (classList) {
+      classList.forEach((elem) => {
+        svg.classList.add(elem);
+      });
+    }
+    if (id) {
+      svg.id = id;
+    }
+    if (attributes) {
+      attributes.forEach((elem: [string, string]): void => {
+        svg.setAttribute(elem[0], elem[1]);
+      });
+    }
+    return svg;
+  }
+
   changeSvg(elem: SVGUseElement, type: string) {
     elem.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `./assets/bootstrap-icons.svg#${type}`);
   }

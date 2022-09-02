@@ -130,3 +130,9 @@ export interface Team {
 export function TypeOfWordIsPaginatedResult(word: WordsResponseSchema | PaginatedResult): word is PaginatedResult {
   return '_id' in word;
 }
+
+type RGB = `rgb(${number}, ${number}, ${number})`;
+type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
+type HEX = `#${string}`;
+
+export type Color = RGB | RGBA | HEX;

@@ -4,7 +4,7 @@ import { AggregatedWords, PaginatedResult } from '../../types/types';
 import SoundHelper from '../components/sound-helper';
 import Loading from '../../view/components/loading';
 import Credentials from '../auth/credentials';
-import DomHelper from '../../utilities/DOM-helpers';
+import Utils from '../../utilities/utils';
 import AuthService from '../auth/auth-service';
 
 export default class DictionaryService {
@@ -33,9 +33,7 @@ export default class DictionaryService {
     const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
       Credentials.getUserId(),
       `{"userWord.difficulty":"${typeOfWords}"}`,
-      3600,
-      0,
-      0
+      3600
     );
     return aggregatedWords.paginatedResults;
   }
@@ -116,7 +114,7 @@ export default class DictionaryService {
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
     const wordId: string = id.slice(startPositionOfWordId);
     const userId: string = Credentials.getUserId();
-    const card = DomHelper.findAncestor(target as HTMLElement, 'card');
+    const card = Utils.findAncestor(target as HTMLElement, 'card');
     await api.usersWords.deleteUserWord(userId, wordId);
     card.remove();
     // console.log(`delete word ${wordId}`);
@@ -142,7 +140,7 @@ export default class DictionaryService {
   }
 
   hideDictionaryItems(): void {
-    this.dictionaryMenuItem = document.getElementById('menuDictionary') as HTMLElement;
+    this.dictionaryMenuItem = document.getElementById('menu-dictionary') as HTMLElement;
     if (AuthService.checkUser()) {
       if (this.dictionaryMenuItem) {
         this.dictionaryMenuItem.style.display = '';

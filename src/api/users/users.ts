@@ -123,6 +123,7 @@ export default class Users extends HttpClient {
 
     if (!response.ok) {
       // status 403 -> Access token is missing, expired or invalid
+      // status 401 -> RefreshToken token is expired
       return response;
     }
 

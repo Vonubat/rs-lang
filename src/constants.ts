@@ -53,7 +53,7 @@ export default class Constants {
     },
 
     MINIGAMES: {
-      NAME: 'Minigames',
+      NAME: 'Games',
       ICON: 'controller',
     },
 

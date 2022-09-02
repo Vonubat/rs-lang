@@ -4,6 +4,7 @@ import {
   AuthResponseSchema,
   PageConfigResponce,
   PaginatedResult,
+  TokensSchema,
   UserResponseSchema,
   WordsResponseSchema,
 } from '../../types/types';
@@ -73,15 +74,19 @@ export default class AuthService {
     return false;
   }
 
-  checkTokenExpiring(): void {
+  async checkTokenExpiring(): Promise<void> {
     if (AuthService.checkUser()) {
       const userId: string = Credentials.getUserId();
       const currentTime: number = Date.now();
       const tokenCreationTime: number = Credentials.getTimeStamp();
-      const delta: number = tokenCreationTime - currentTime;
+      const delta: number = currentTime - tokenCreationTime;
 
       if (delta > Constants.TOKEN_LIFE_TIME) {
-        api.users.getNewUserTokens(userId);
+        const response: Response | TokensSchema = await api.users.getNewUserTokens(userId);
+        if (response instanceof Response) {
+          window.location.hash = '#';
+          this.logOut();
+        }
       }
     }
   }
@@ -108,12 +113,14 @@ export default class AuthService {
       Credentials.delCredentials();
 
       if (Route.checkUrl('dictionary')) {
-        document.getElementById('menuTextbook')?.dispatchEvent(new Event('click', { bubbles: true }));
+        window.location.hash = 'textbook';
+      }
+
+      if (Route.checkUrl('textbook')) {
+        this.updateCardsState();
       }
 
       this.changeBtnState();
-      this.updateCardsState();
-
       return true;
     }
     return false;
@@ -216,6 +223,4 @@ export default class AuthService {
     document.addEventListener('DOMContentLoaded', this.changeBtnState.bind(this));
     document.addEventListener('DOMContentLoaded', services.dictionaryService.hideDictionaryItems.bind(this));
   }
-
-  dictionaryHide() {}
 }
