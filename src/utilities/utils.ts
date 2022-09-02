@@ -22,12 +22,12 @@ export default class Utils {
   }
 
   // get random chance and change the number
-  static getChance(num: number): number {
+  static getChance(num: number, totalCount: number): number {
     const chance: number = Math.random();
     if (Math.random() > 0.5) {
       return num;
     }
-    return Math.floor(num * chance);
+    return Math.floor(totalCount * chance);
   }
 
   // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array

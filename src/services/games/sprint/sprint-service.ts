@@ -1,8 +1,11 @@
 import { WordsResponseSchema, PaginatedResult, TypeOfWordIsPaginatedResult } from '../../../types/types';
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
+import SoundHelper from '../../components/sound-helper';
 
 export default class SprintService {
+  soundHelper: SoundHelper;
+
   words: WordsResponseSchema[] | PaginatedResult[];
 
   currentWord: number;
@@ -12,6 +15,12 @@ export default class SprintService {
   multiplicatorValue: number;
 
   steps: boolean[];
+
+  mistakes: number;
+
+  correctAnswers: number;
+
+  allWordsCounter: number;
 
   right!: HTMLButtonElement;
 
@@ -29,12 +38,24 @@ export default class SprintService {
 
   stepsElements!: HTMLSpanElement[];
 
+  prediction!: boolean;
+
+  wordId!: string;
+
+  word!: string;
+
+  wordTranslate!: string;
+
   constructor() {
+    this.soundHelper = new SoundHelper();
     this.words = [];
+    this.steps = [];
     this.currentWord = 0;
     this.pointsValue = 0;
     this.multiplicatorValue = 10;
-    this.steps = [];
+    this.mistakes = 0;
+    this.correctAnswers = 0;
+    this.allWordsCounter = 0;
   }
 
   launchSprint(words: WordsResponseSchema[] | PaginatedResult[]) {
@@ -42,7 +63,7 @@ export default class SprintService {
     page.innerHTML = '';
 
     this.words = words;
-    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(words[this.currentWord]);
+    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWord]);
 
     page.append(view.gamesView.sprintGame.generateGameContainer(wordId, newWord, newWordTranslate));
     this.setItems();
@@ -56,12 +77,18 @@ export default class SprintService {
     newWord: string;
     newWordTranslate: string;
   } {
-    const chance: number = Utils.getChance(19);
+    const chance: number = Utils.getChance(this.currentWord, 19);
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     const newWord: string = word.word;
     const newWordTranslate: string = this.words[chance].wordTranslate;
 
+    this.prediction = false;
+    this.wordId = wordId;
+    this.word = newWord;
+    this.wordTranslate = newWordTranslate;
+
     if (chance === this.currentWord) {
+      this.prediction = true;
       return {
         wordId,
         newWord,
@@ -77,10 +104,10 @@ export default class SprintService {
   }
 
   controlCurrentWord(): void {
-    if (this.currentWord < 20) {
+    if (this.currentWord < 19) {
       this.currentWord += 1;
     } else {
-      this.currentWord += 0;
+      this.currentWord = 0;
       this.words = Utils.shuffleWords(this.words);
     }
   }
@@ -103,7 +130,7 @@ export default class SprintService {
       this.multiplicatorValue += 10;
     }
 
-    this.multiplicatorElement.innerText = `+ ${this.multiplicatorValue} point`;
+    this.multiplicatorElement.innerText = `+ ${this.multiplicatorValue} points`;
   }
 
   setSteps(): void {
@@ -112,22 +139,33 @@ export default class SprintService {
     this.step3.style.backgroundColor = `#565e64`;
 
     for (let i = 0; i < this.steps.length; i += 1) {
-      console.log(this.steps.length);
       this.stepsElements[i].style.backgroundColor = '#dc3545';
     }
   }
 
-  checkAnswer(event: Event) {
+  checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
-    if (id.includes('right')) {
+    if ((id.includes('right') && this.prediction === true) || (id.includes('wrong') && this.prediction === false)) {
+      this.soundHelper.playGameSound('../../assets/sounds/ok.wav');
       this.addPoints();
       this.setMultiplicator('+');
       this.setSteps();
+      this.correctAnswers += 1;
     } else {
+      this.soundHelper.playGameSound('../../assets/sounds/error.wav');
       this.setMultiplicator('-');
       this.setSteps();
+      this.mistakes += 1;
     }
+    this.allWordsCounter = this.correctAnswers + this.mistakes;
     this.controlCurrentWord();
+    this.setNextWord();
+  }
+
+  setNextWord(): void {
+    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWord]);
+    view.gamesView.sprintGame.createWord(wordId, newWord);
+    view.gamesView.sprintGame.createWordTranslate(wordId, newWordTranslate);
   }
 
   setItems(): void {

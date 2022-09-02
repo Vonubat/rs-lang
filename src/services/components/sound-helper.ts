@@ -8,6 +8,14 @@ export default class SoundHelper {
 
   audio!: HTMLAudioElement;
 
+  playGameSound(path: string): void {
+    if (this.audio) {
+      this.pause();
+    }
+    this.audio = new Audio(path);
+    this.audio.play();
+  }
+
   play(elem: SVGSVGElement): void {
     const audioPath = `${Constants.BASE_URL}/${elem.dataset.audio}`;
     const audioMeaningPath = `${Constants.BASE_URL}/${elem.dataset.audioMeaning}`;
@@ -22,7 +30,7 @@ export default class SoundHelper {
 
   playQueue(elem: SVGSVGElement): void {
     if (this.audio) {
-      this.audio.pause();
+      this.pause();
     }
     this.audio = new Audio(this.audioArray[this.i]);
     this.audio.play();
