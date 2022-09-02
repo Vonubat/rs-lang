@@ -47,7 +47,7 @@ export default class GamesView {
     return this.gamesLevelsInstance;
   }
 
-  drawSprintStartLocation(game: 'sprint' | 'audio-challenge'): HTMLElement {
+  drawStartLocation(game: 'sprint' | 'audio-challenge'): HTMLElement {
     this.startLocation = this.startGameView.drawStartLocation(this.games, game);
 
     return this.startLocation;

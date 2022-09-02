@@ -19,7 +19,7 @@ export default class Timer {
     return canvas;
   }
 
-  createTimerConfig(element: HTMLElement, duration: number, cb: Function) {
+  createTimerConfig(element: HTMLElement, duration: number, cb?: (string: string) => string) {
     const newTimer = new CanvasCircularCountdown(
       element,
       {
@@ -28,11 +28,12 @@ export default class Timer {
         progressBarWidth: 20,
         progressBarOffset: 0,
         elapsedTime: 0,
-        circleBackgroundColor: '#f5f5f5',
+        circleBackgroundColor: 'transparent',
         emptyProgressBarBackgroundColor: '#b9c1c7',
-        filledProgressBarBackgroundColor: '#17a2b8',
-        captionColor: '#6c757d',
-        captionFont: '22px serif',
+        filledProgressBarBackgroundColor: 'yellow',
+        captionColor: 'black',
+        captionFont:
+          '22px system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
         showCaption: true,
       },
       (
@@ -40,7 +41,7 @@ export default class Timer {
         time: { elapsed: number },
         instance: { style: (arg0: { captionText: string }) => void }
       ): void => {
-        instance.style({ captionText: `${Math.floor(time.elapsed / 1000)}` });
+        instance.style({ captionText: `${Math.ceil((duration - time.elapsed) / 1000)}` });
         if (time.elapsed > duration) {
           /*  let a: number;
           if (id === 'sprint-start') {
@@ -49,7 +50,9 @@ export default class Timer {
           if (id === 'audio-challenge') {
             a = 1;
           } */
-          cb('test');
+          if (cb) {
+            cb('test');
+          }
         }
       }
     ).start();

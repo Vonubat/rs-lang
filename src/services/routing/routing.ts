@@ -1,6 +1,6 @@
 import { View } from '../../view/view';
 import NotFound from '../../view/components/not_found';
-import DomHelper from '../../utilities/DOM-helpers';
+import Utils from '../../utilities/utils';
 
 export class Route {
   /* private urlTitle = 'RS Lang';
@@ -102,7 +102,7 @@ export class Route {
       case 'dictionary':
         this.view.drawDictionary();
         break;
-      case 'minigames':
+      case 'games':
         this.view.drawGamesCards();
         break;
       case 'statistics':
@@ -138,7 +138,7 @@ export class Route {
 
   private pageBG(): void {
     const main: HTMLElement = document.getElementById('main') as HTMLElement;
-    DomHelper.resetBackground(main);
+    Utils.resetBackground(main);
   }
 }
 

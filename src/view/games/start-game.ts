@@ -1,11 +1,11 @@
 import { services } from '../../services/services';
-import DomHelper from '../../utilities/DOM-helpers';
+import Utils from '../../utilities/utils';
 
 export default class StartGameView {
   drawStartLocation(elem: HTMLElement, game: 'sprint' | 'audio-challenge'): HTMLElement {
     const element: HTMLElement = elem;
     const timer: HTMLElement = services.timer.createTimerElement(game, 'start');
-    services.timer.createTimerConfig(timer, 3000, DomHelper.capitalizeFirstLetter);
+    services.timer.createTimerConfig(timer, 3000, Utils.capitalizeFirstLetter);
 
     element.innerHTML = '';
 

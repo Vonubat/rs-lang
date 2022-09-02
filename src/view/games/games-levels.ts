@@ -1,11 +1,9 @@
 import Constants from '../../constants';
 import { Color } from '../../types/types';
-import DomHelper from '../../utilities/DOM-helpers';
+import Utils from '../../utilities/utils';
 import HTMLConstructor from '../components/constructor';
 
 export default class GamesLevels extends HTMLConstructor {
-  miniCardsWrapper!: HTMLElement;
-
   createWrapper(game: 'sprint' | 'audio-challenge'): HTMLElement {
     const classList: string[] = [
       'd-flex',
@@ -15,19 +13,13 @@ export default class GamesLevels extends HTMLConstructor {
       'text-center',
       `wrapper-levels`,
     ];
-    const cardsWrapper: HTMLElement = this.createHtmlElement('div', classList, `wrapper-levels-${game}`, undefined);
+    const cardsWrapper: HTMLElement = this.createHtmlElement('div', classList, `wrapper-levels-${game}`);
     return cardsWrapper;
   }
 
   createName(game: 'sprint' | 'audio-challenge'): HTMLElement {
     const classList: string[] = [];
-    const name: HTMLElement = this.createHtmlElement(
-      'h2',
-      classList,
-      undefined,
-      undefined,
-      `${DomHelper.capitalizeFirstLetter(game)}`
-    );
+    const name: HTMLElement = this.createHtmlElement('h2', classList, `${Utils.capitalizeFirstLetter(game)}`);
     return name;
   }
 
@@ -50,7 +42,7 @@ export default class GamesLevels extends HTMLConstructor {
       'bg-gradient',
       `levels-container`,
     ];
-    const levelsContainer: HTMLElement = this.createHtmlElement('div', classList, undefined, undefined);
+    const levelsContainer: HTMLElement = this.createHtmlElement('div', classList);
     return levelsContainer;
   }
 
