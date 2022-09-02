@@ -58,8 +58,8 @@ export default class GamesView {
       this.currentGame = this.startGameView.drawStartLocation(
         this.games,
         game,
-        words,
-        services.sprintService.launchSprint
+        services.sprintService.launchSprint.bind(services.sprintService),
+        words
       );
     }
 

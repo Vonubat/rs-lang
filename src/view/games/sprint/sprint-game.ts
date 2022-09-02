@@ -1,15 +1,18 @@
 import { services } from '../../../services/services';
-import { PaginatedResult, TypeOfWordIsPaginatedResult, WordsResponseSchema } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
 export default class SprintGame extends HTMLConstructor {
+  newWord!: HTMLElement;
+
+  newTranslate!: HTMLElement;
+
   createPointsWrapper(): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-column',
       'justify-content-center',
       'align-items-center',
-      `wrapper-points`,
+      `points-wrapper`,
     ];
     const pointsWrapper: HTMLElement = this.createHtmlElement('div', classList, `wrapper-points-sprint`);
     return pointsWrapper;
@@ -17,7 +20,7 @@ export default class SprintGame extends HTMLConstructor {
 
   createPoints(): HTMLElement {
     const classList: string[] = [`points-sprint`];
-    const points: HTMLElement = this.createHtmlElement('h2', classList, `points-sprint`, undefined, `10`);
+    const points: HTMLElement = this.createHtmlElement('h2', classList, `points-sprint`, undefined, `0`);
     return points;
   }
 
@@ -42,7 +45,7 @@ export default class SprintGame extends HTMLConstructor {
       `steps-wrapper`,
     ]);
     for (let i = 1; i <= 3; i += 1) {
-      const step: HTMLElement = this.createHtmlElement('span', ['badge', `bg-secondary`], `step-${i}`);
+      const step: HTMLElement = this.createHtmlElement('span', ['badge'], `step-${i}`, undefined, ' ');
       stepsWrapper.append(step);
     }
     return stepsWrapper;
@@ -74,30 +77,40 @@ export default class SprintGame extends HTMLConstructor {
     return cardContainer;
   }
 
-  createWord(word: WordsResponseSchema | PaginatedResult): HTMLElement {
-    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
-    const classList: string[] = [];
-    const newWord: HTMLElement = this.createHtmlElement(
-      'h4',
-      classList,
-      `sprint-wordId-${wordId}`,
-      undefined,
-      `${word.word}`
-    );
-    return newWord;
+  createWord(wordId: string, word: string): HTMLElement {
+    if (!this.newWord) {
+      const classList: string[] = [];
+      const newWord: HTMLElement = this.createHtmlElement(
+        'h4',
+        classList,
+        `sprint-word-${wordId}`,
+        undefined,
+        `${word}`
+      );
+      this.newWord = newWord;
+      return this.newWord;
+    }
+    this.newWord.innerHTML = word;
+    this.newWord.id = `sprint-word-${wordId}`;
+    return this.newWord;
   }
 
-  createWordTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
-    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
-    const classList: string[] = ['text-muted'];
-    const wordTranslate: HTMLElement = this.createHtmlElement(
-      'h4',
-      classList,
-      `sprint-translate-${wordId}`,
-      undefined,
-      `${word.wordTranslate}`
-    );
-    return wordTranslate;
+  createWordTranslate(wordId: string, wordTranslate: string): HTMLElement {
+    if (!this.newTranslate) {
+      const classList: string[] = ['text-muted'];
+      const newTranslate: HTMLElement = this.createHtmlElement(
+        'h4',
+        classList,
+        `sprint-wordTranslate-${wordId}`,
+        undefined,
+        `${wordTranslate}`
+      );
+      this.newTranslate = newTranslate;
+      return this.newTranslate;
+    }
+    this.newTranslate.innerHTML = wordTranslate;
+    this.newTranslate.id = `sprint-translate-${wordId}`;
+    return this.newTranslate;
   }
 
   createBtnsWrapper(): HTMLElement {
@@ -137,16 +150,16 @@ export default class SprintGame extends HTMLConstructor {
     return btnWrong;
   }
 
-  generateCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  generateCard(wordId: string, word: string, wordTranslate: string): HTMLElement {
     const cardContainer: HTMLElement = this.createCardContainer();
-    const newWord: HTMLElement = this.createWord(word);
-    const wordTranslate: HTMLElement = this.createWordTranslate(word);
+    const newWord: HTMLElement = this.createWord(wordId, word);
+    const newTranslate: HTMLElement = this.createWordTranslate(wordId, wordTranslate);
     const btnsWrapper: HTMLElement = this.createBtnsWrapper();
     const btnRight: HTMLElement = this.createBtnRight();
     const btnWrong: HTMLElement = this.createBtnWrong();
 
     btnsWrapper.append(btnRight, btnWrong);
-    cardContainer.append(newWord, wordTranslate, btnsWrapper);
+    cardContainer.append(newWord, newTranslate, btnsWrapper);
     return cardContainer;
   }
 
@@ -171,10 +184,10 @@ export default class SprintGame extends HTMLConstructor {
     return gameContainer;
   }
 
-  generateGameContainer(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  generateGameContainer(wordId: string, word: string, wordTranslate: string): HTMLElement {
     const gameContainer: HTMLElement = this.createGameContainer();
     const pointsWrapper: HTMLElement = this.generatePointsWrapper();
-    const card: HTMLElement = this.generateCard(word);
+    const card: HTMLElement = this.generateCard(wordId, word, wordTranslate);
     const timer: HTMLElement = this.createTimer();
 
     gameContainer.append(pointsWrapper, card, timer);

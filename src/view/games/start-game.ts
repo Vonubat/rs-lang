@@ -5,8 +5,8 @@ export default class StartGameView {
   drawStartLocation(
     elem: HTMLElement,
     game: 'sprint' | 'audio-challenge',
-    words: WordsResponseSchema[] | PaginatedResult[],
-    cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void
+    cb?: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
+    words?: WordsResponseSchema[] | PaginatedResult[]
   ): HTMLElement {
     const element: HTMLElement = elem;
     const timer: HTMLElement = services.timer.createTimerElement(game, 'start');

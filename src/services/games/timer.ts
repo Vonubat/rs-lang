@@ -50,7 +50,7 @@ export default class Timer {
         instance.style({ captionText: `${Math.ceil((duration - time.elapsed) / 1000)}` });
         if (time.elapsed > duration) {
           if (words && cb) {
-            cb.call(cb, words);
+            cb(words);
           }
         }
       }

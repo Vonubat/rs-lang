@@ -1,18 +1,148 @@
-import { WordsResponseSchema, PaginatedResult } from '../../../types/types';
+import { WordsResponseSchema, PaginatedResult, TypeOfWordIsPaginatedResult } from '../../../types/types';
+import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
 
 export default class SprintService {
   words: WordsResponseSchema[] | PaginatedResult[];
 
+  currentWord: number;
+
+  pointsValue: number;
+
+  multiplicatorValue: number;
+
+  steps: boolean[];
+
+  right!: HTMLButtonElement;
+
+  wrong!: HTMLButtonElement;
+
+  pointsElement!: HTMLElement;
+
+  step1!: HTMLSpanElement;
+
+  step2!: HTMLSpanElement;
+
+  step3!: HTMLSpanElement;
+
+  multiplicatorElement!: HTMLElement;
+
+  stepsElements!: HTMLSpanElement[];
+
   constructor() {
     this.words = [];
+    this.currentWord = 0;
+    this.pointsValue = 0;
+    this.multiplicatorValue = 10;
+    this.steps = [];
   }
 
   launchSprint(words: WordsResponseSchema[] | PaginatedResult[]) {
-    this.words = words;
-    console.log(this.words);
-    const page = view.gamesView.games;
+    const page: HTMLElement = view.gamesView.games;
     page.innerHTML = '';
-    page.append(view.gamesView.sprintGame.generateGameContainer(words[0]));
+
+    this.words = words;
+    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(words[this.currentWord]);
+
+    page.append(view.gamesView.sprintGame.generateGameContainer(wordId, newWord, newWordTranslate));
+    this.setItems();
+    this.listen();
+  }
+
+  chooseTranslate(
+    word: WordsResponseSchema | PaginatedResult
+  ): {
+    wordId: string;
+    newWord: string;
+    newWordTranslate: string;
+  } {
+    const chance: number = Utils.getChance(19);
+    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+    const newWord: string = word.word;
+    const newWordTranslate: string = this.words[chance].wordTranslate;
+
+    if (chance === this.currentWord) {
+      return {
+        wordId,
+        newWord,
+        newWordTranslate,
+      };
+    }
+
+    return {
+      wordId,
+      newWord,
+      newWordTranslate,
+    };
+  }
+
+  controlCurrentWord(): void {
+    if (this.currentWord < 20) {
+      this.currentWord += 1;
+    } else {
+      this.currentWord += 0;
+      this.words = Utils.shuffleWords(this.words);
+    }
+  }
+
+  addPoints(): void {
+    this.pointsValue += this.multiplicatorValue;
+    this.pointsElement.innerText = `${this.pointsValue}`;
+  }
+
+  setMultiplicator(action: '+' | '-'): void {
+    if (action === '+') {
+      this.steps.push(true);
+    } else {
+      this.steps.length = 0;
+      this.multiplicatorValue = 10;
+    }
+
+    if (this.steps.length > 3) {
+      this.steps.length = 0;
+      this.multiplicatorValue += 10;
+    }
+
+    this.multiplicatorElement.innerText = `+ ${this.multiplicatorValue} point`;
+  }
+
+  setSteps(): void {
+    this.step1.style.backgroundColor = `#565e64`;
+    this.step2.style.backgroundColor = `#565e64`;
+    this.step3.style.backgroundColor = `#565e64`;
+
+    for (let i = 0; i < this.steps.length; i += 1) {
+      console.log(this.steps.length);
+      this.stepsElements[i].style.backgroundColor = '#dc3545';
+    }
+  }
+
+  checkAnswer(event: Event) {
+    const { id } = event.target as HTMLButtonElement;
+    if (id.includes('right')) {
+      this.addPoints();
+      this.setMultiplicator('+');
+      this.setSteps();
+    } else {
+      this.setMultiplicator('-');
+      this.setSteps();
+    }
+    this.controlCurrentWord();
+  }
+
+  setItems(): void {
+    this.right = document.getElementById('btn-right') as HTMLButtonElement;
+    this.wrong = document.getElementById('btn-wrong') as HTMLButtonElement;
+    this.pointsElement = document.getElementById('points-sprint') as HTMLElement;
+    this.multiplicatorElement = document.getElementById('multiplicator-sprint') as HTMLElement;
+    this.step1 = document.getElementById('step-1') as HTMLSpanElement;
+    this.step2 = document.getElementById('step-2') as HTMLSpanElement;
+    this.step3 = document.getElementById('step-3') as HTMLSpanElement;
+    this.stepsElements = [this.step1, this.step2, this.step3];
+  }
+
+  listen(): void {
+    this.right.addEventListener('click', this.checkAnswer.bind(this));
+    this.wrong.addEventListener('click', this.checkAnswer.bind(this));
   }
 }
