@@ -1,4 +1,6 @@
+import { PaginatedResult, WordsResponseSchema } from '../../types/types';
 import { view } from '../../view/view';
+import { services } from '../services';
 
 export default class GamesService {
   gamesSprintCard!: HTMLDivElement;
@@ -25,13 +27,14 @@ export default class GamesService {
     this.listenGamesLevels();
   }
 
-  drawStartPageGame(event: Event): void {
+  async launchGame(event: Event): Promise<void> {
     const { id } = event.currentTarget as HTMLElement;
     const game: 'sprint' | 'audio-challenge' = id.includes('sprint') ? 'sprint' : 'audio-challenge';
-    const level: HTMLElement = event.target as HTMLElement;
-    if (level.classList.contains('level')) {
-      this.level = Number(level.innerText);
-      view.gamesView.drawStartLocation(game);
+    const trigger: HTMLElement = event.target as HTMLElement;
+    if (trigger.classList.contains('level')) {
+      this.level = Number(trigger.innerText) - 1;
+      const words: WordsResponseSchema[] | PaginatedResult[] = await services.gamesData.prepareData(id, this.level);
+      view.gamesView.drawGame(game, words);
     }
   }
 
@@ -49,6 +52,6 @@ export default class GamesService {
 
   listenGamesLevels(): void {
     this.backBtnToGames.addEventListener('click', this.drawPage.bind(this));
-    this.levelsWrapper.addEventListener('click', this.drawStartPageGame.bind(this));
+    this.levelsWrapper.addEventListener('click', this.launchGame.bind(this));
   }
 }

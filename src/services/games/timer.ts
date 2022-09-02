@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { WordsResponseSchema, PaginatedResult } from '../../types/types';
 import { view } from '../../view/view';
 
 const CanvasCircularCountdown = require('canvas-circular-countdown').default;
@@ -19,7 +20,12 @@ export default class Timer {
     return canvas;
   }
 
-  createTimerConfig(element: HTMLElement, duration: number, cb?: (string: string) => string) {
+  createTimerConfig(
+    element: HTMLElement,
+    duration: number,
+    cb?: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
+    words?: WordsResponseSchema[] | PaginatedResult[]
+  ) {
     const newTimer = new CanvasCircularCountdown(
       element,
       {
@@ -43,15 +49,8 @@ export default class Timer {
       ): void => {
         instance.style({ captionText: `${Math.ceil((duration - time.elapsed) / 1000)}` });
         if (time.elapsed > duration) {
-          /*  let a: number;
-          if (id === 'sprint-start') {
-            a = 1;
-          }
-          if (id === 'audio-challenge') {
-            a = 1;
-          } */
-          if (cb) {
-            cb('test');
+          if (words && cb) {
+            cb.call(cb, words);
           }
         }
       }

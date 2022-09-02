@@ -1,6 +1,5 @@
 import { services } from '../../../services/services';
 import { PaginatedResult, TypeOfWordIsPaginatedResult, WordsResponseSchema } from '../../../types/types';
-import Utils from '../../../utilities/utils';
 import HTMLConstructor from '../../components/constructor';
 
 export default class SprintGame extends HTMLConstructor {
@@ -108,11 +107,7 @@ export default class SprintGame extends HTMLConstructor {
       'justify-content-center',
       'align-items-center',
       'flex-wrap',
-      'rounded',
-      'shadow',
-      'bg-light',
-      'bg-gradient',
-      `card-container`,
+      `btn-wrapper`,
     ];
     const btnsWrapper: HTMLElement = this.createHtmlElement('div', classList, undefined, undefined);
     return btnsWrapper;
@@ -157,7 +152,7 @@ export default class SprintGame extends HTMLConstructor {
 
   createTimer(): HTMLElement {
     const timer: HTMLElement = services.timer.createTimerElement('sprint', 'game');
-    services.timer.createTimerConfig(timer, 60000, Utils.capitalizeFirstLetter);
+    services.timer.createTimerConfig(timer, 60000);
 
     return timer;
   }
@@ -169,10 +164,6 @@ export default class SprintGame extends HTMLConstructor {
       'justify-content-center',
       'align-items-center',
       'flex-wrap',
-      'rounded',
-      'shadow',
-      'bg-light',
-      'bg-gradient',
       'text-center',
       `game-container`,
     ];
