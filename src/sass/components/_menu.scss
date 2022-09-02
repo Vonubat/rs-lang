@@ -18,3 +18,7 @@
 .offcanvas-md {
   transition: all 0.3s;
 }
+
+.offcanvas-md.show .sidebar {
+  transform: translateY(80px);
+}

@@ -1,5 +1,6 @@
 import AuthService from './auth/auth-service';
-import PageConfig from './textbook/page-config';
+import PageConfig from './components/page-config';
+import DictionaryService from './dictionary/dictionary-service';
 import TextbookService from './textbook/textbook-service';
 
 export class Services {
@@ -9,10 +10,13 @@ export class Services {
 
   pageConfig: PageConfig;
 
+  dictionaryService: DictionaryService;
+
   constructor() {
     this.textbookService = new TextbookService();
     this.pageConfig = new PageConfig();
     this.authService = new AuthService();
+    this.dictionaryService = new DictionaryService();
   }
 }
 

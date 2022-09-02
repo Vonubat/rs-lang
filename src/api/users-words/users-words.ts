@@ -41,7 +41,7 @@ export default class UsersWords extends HttpClient {
     userId: string,
     wordId: string,
     body: UsersWordsRequestSchema
-  ): Promise<UsersWordsResponseSchema | Response> {
+  ): Promise<UsersWordsResponseSchema> {
     this.checkId(userId);
     this.checkId(wordId);
 
@@ -49,9 +49,12 @@ export default class UsersWords extends HttpClient {
     const response: Response = await this.post(url, JSON.stringify(body));
 
     if (!response.ok) {
-      // status 400 -> Bad request
-      // status 401 -> Access token is missing or invalid
-      return response;
+      if (response.status === 400) {
+        throw new Error('Bad request');
+      }
+      if (response.status === 401) {
+        throw new Error(`Access token is missing or invalid`);
+      }
     }
 
     const content: UsersWordsResponseSchema = await response.json();
@@ -76,8 +79,6 @@ export default class UsersWords extends HttpClient {
     const response: Response = await this.get(url);
 
     if (!response.ok) {
-      // status 401 -> Access token is missing or invalid
-      // status 404 -> User's word not found
       return response;
     }
 
@@ -101,7 +102,7 @@ export default class UsersWords extends HttpClient {
     userId: string,
     wordId: string,
     body: UsersWordsRequestSchema
-  ): Promise<UsersWordsResponseSchema | Response> {
+  ): Promise<UsersWordsResponseSchema> {
     this.checkId(userId);
     this.checkId(wordId);
 
@@ -109,9 +110,12 @@ export default class UsersWords extends HttpClient {
     const response: Response = await this.put(url, JSON.stringify(body));
 
     if (!response.ok) {
-      // status 400 -> Bad request
-      // status 401 -> Access token is missing or invalid
-      return response;
+      if (response.status === 400) {
+        throw new Error('Bad request');
+      }
+      if (response.status === 401) {
+        throw new Error(`Access token is missing or invalid`);
+      }
     }
 
     const content: UsersWordsResponseSchema = await response.json();

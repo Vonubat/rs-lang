@@ -11,11 +11,13 @@ export default class Footer {
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
     this.footer = this.htmlConstructor.createHtmlElement('footer', ['footer', 'text-bg-dark']);
+    const link = this.htmlConstructor.a('https://rs.school/js/');
     const logo = this.htmlConstructor.svg('logo-rs', ['footer__logo']);
+    link.append(logo);
     this.team = this.htmlConstructor.div(['footer__team']);
     this.fillTeam();
-    const copyright = this.htmlConstructor.createHtmlElement('p', ['copyright'], '', [], '© 2022');
-    this.footer.append(logo, this.team, copyright);
+    const copyright = this.htmlConstructor.createHtmlElement('span', ['copyright'], '', [], '© 2022');
+    this.footer.append(link, this.team, copyright);
   }
 
   fillTeam(): void {

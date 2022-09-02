@@ -1,70 +1,113 @@
 import { View } from '../../view/view';
+import NotFound from '../../view/components/not_found';
 
-export class Rout {
-  private routes = [
-    ['menuMain', '/'],
-    ['menuTextbook', '/textbook'],
-    ['menuDictionary', '/dictionary'],
-    ['menuMinigames', '/games'],
-    ['menuStatistics', '/statistic'],
-  ];
+export class Route {
+  /* private urlTitle = 'RS Lang';
+
+  private routes = {
+    404: {
+      template: '',
+      title: `404 | ${this.urlTitle}`,
+      description: '',
+    },
+    '/': {
+      template: '',
+      title: `Main | ${this.urlTitle}`,
+      description: '',
+    },
+    '/textbook': {
+      template: '',
+      title: `Textbook | ${this.urlTitle}`,
+      description: '',
+    },
+    '/dictionary': {
+      template: '',
+      title: `Dictionary | ${this.urlTitle}`,
+      description: '',
+    },
+    '/minigames': {
+      template: '',
+      title: `Games | ${this.urlTitle}`,
+      description: '',
+    },
+    '/statistics': {
+      template: '',
+      title: `Statistics | ${this.urlTitle}`,
+      description: '',
+    },
+  }; */
 
   view: View;
 
-  private textbook = '/textbook';
-
-  private dictionary = '/dictionary';
-
-  private games = '/games';
-
-  private statistic = '/statistic';
-
-  private oldId = 'menuMain';
+  notFound: NotFound;
 
   constructor() {
     this.view = new View();
+    this.notFound = new NotFound();
   }
 
-  routing(event: Event): void {
-    const target = event.target as HTMLElement;
-    if (target.classList.contains('nav-link')) {
-      const { id } = target;
-      if (id !== this.oldId) {
-        this.onNavigate(id);
-        this.onActiveNav(id);
-        this.pageName(id);
-      }
+  /* routing(): void {
+    window.onpopstate = this.handleLocation;
+    (window as any).route = this.route;
+    this.handleLocation();
+  } */
+
+  routingHash(): void {
+    window.addEventListener('hashchange', this.handleLocation);
+    this.handleLocation();
+    /* window.onpopstate = this.handleLocation;
+    (window as any).route = this.route;
+    this.handleLocation(); */
+  }
+
+  /* private route = (event: Event) => {
+    event = event || window.event;
+    event.preventDefault();
+    window.history.pushState({}, '', (event.target as HTMLAnchorElement).href);
+    this.handleLocation();
+  }; */
+
+  private handleLocation = () => {
+    this.onNavigate();
+    const path = window.location.hash;
+    const id = `menu-${path === '' ? 'main' : path.slice(1)}`;
+    if (document.getElementById(id)) {
+      this.onActiveNav(id);
+      this.pageName(id);
+    } else {
+      this.onActiveNav('Page not found');
+      this.pageName('.....Page not found');
     }
-  }
+  };
 
-  private onNavigate = (id: string): void => {
+  private onNavigate = (): void => {
     const rootDiv = document.getElementById('main') as HTMLElement;
     rootDiv.innerHTML = '';
-    switch (id) {
-      case 'menuMain':
-        window.history.pushState({}, '/', `${window.location.origin}/`);
-        rootDiv?.append(this.view.mainView.view());
+    // let path = window.location.pathname;
+    let path = window.location.hash.replace('#', '');
+    if (path.length === 0) {
+      path = '/';
+    }
+    switch (path) {
+      case '/':
+        rootDiv.append(this.view.mainView.view());
         break;
-      case 'menuTextbook':
-        window.history.pushState({}, '/textbook', `${window.location.origin}/textbook`);
+      case 'textbook':
         this.view.drawTextbook();
         break;
-      case 'menuDictionary':
-        window.history.pushState({}, '/dictionary', `${window.location.origin}/dictionary`);
+      case 'dictionary':
+        this.view.drawDictionary();
+        break;
+      case 'minigames':
         // TO DO
         break;
-      case 'menuMinigames':
-        window.history.pushState({}, '/games', `${window.location.origin}/games`);
-        // TO DO
-        break;
-      case 'menuStatistics':
-        window.history.pushState({}, '/statistic', `${window.location.origin}/statistic`);
+      case 'statistics':
         // TO DO
         break;
       default:
+        rootDiv.append(this.notFound.notFound());
         break;
     }
-    this.oldId = id;
   };
 
   private onActiveNav = (id: string): void => {
@@ -75,19 +118,19 @@ export class Rout {
     });
   };
 
+  static checkUrl(address: string): boolean {
+    const url: boolean = window.location.href.includes(`${address}`);
+    if (url) {
+      return true;
+    }
+    return false;
+  }
+
   private pageName = (id: string): void => {
-    const name = id.slice(4);
+    const name = id.slice(5).toUpperCase();
     const menuTitle = document.querySelector('.header-title') as HTMLElement;
     menuTitle.innerText = name;
   };
-
-  /* private burger() {
-    const burgerButton = document.querySelector('.burger') as HTMLElement;
-    const menu = document.getElementById('navmenu') as HTMLElement;
-    burgerButton.addEventListener('click', () => {
-      menu.classList.toggle('hide');
-    }) 
-  } */
 }
 
-export const routing: Rout = new Rout();
+export const routing: Route = new Route();

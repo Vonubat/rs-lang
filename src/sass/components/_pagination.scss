@@ -79,13 +79,7 @@
   }
 }
 
-#group-number-7-top,
-#group-number-7-bottom {
-  background-color: $danger;
-  &:hover {
-    background-color: var(--bs-dropdown-link-hover-bg);
-  }
-  &:active {
-    background-color: $primary;
-  }
+#dictionary-textbook-item-7-top::after,
+#dictionary-textbook-item-7-bottom::after {
+  content: ' (Dictionary)';
 }

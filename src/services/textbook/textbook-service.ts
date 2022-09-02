@@ -1,9 +1,17 @@
 import { api } from '../../api/api';
 import { view } from '../../view/view';
-import { PageConfigResponce, WordsResponseSchema } from '../../types/types';
-import PageConfig from './page-config';
-import SoundHelper from './sound-helper';
+import {
+  AggregatedWords,
+  PageConfigResponce,
+  PaginatedResult,
+  UsersWordsResponseSchema,
+  WordsResponseSchema,
+} from '../../types/types';
+import PageConfig from '../components/page-config';
+import SoundHelper from '../components/sound-helper';
 import Loading from '../../view/components/loading';
+import AuthService from '../auth/auth-service';
+import Credentials from '../auth/credentials';
 
 export default class TextbookService {
   pageConfig: PageConfig;
@@ -30,21 +38,39 @@ export default class TextbookService {
 
   soundIcons!: NodeListOf<HTMLElement>;
 
+  difficultBtns!: NodeListOf<HTMLElement>;
+
+  learnedBtns!: NodeListOf<HTMLElement>;
+
   constructor() {
     this.pageConfig = new PageConfig();
     this.soundHelper = new SoundHelper();
     this.loading = new Loading();
   }
 
-  async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[]> {
-    const words: WordsResponseSchema[] = await api.words.getWords(pageConfig.groupNumber, pageConfig.pageNumber);
+  async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[] | PaginatedResult[]> {
+    let words: WordsResponseSchema[] | PaginatedResult[];
+
+    if (AuthService.checkUser()) {
+      const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
+        Credentials.getUserId(),
+        '',
+        undefined,
+        pageConfig.groupNumber,
+        pageConfig.pageNumber
+      );
+      words = aggregatedWords.paginatedResults;
+    } else {
+      words = await api.words.getWords(pageConfig.groupNumber, pageConfig.pageNumber);
+    }
+
     return words;
   }
 
   async drawPage(): Promise<void> {
     this.loading.createSpinners();
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.drawPage(words, pageConfig);
     this.setPaginationItems();
@@ -67,6 +93,8 @@ export default class TextbookService {
 
   setCardsItems(): void {
     this.soundIcons = view.textbookView.textbook.querySelectorAll('.sound-icon');
+    this.difficultBtns = view.textbookView.textbook.querySelectorAll('.word-difficult-btn');
+    this.learnedBtns = view.textbookView.textbook.querySelectorAll('.word-learned-btn');
   }
 
   async decreasePageNumber(): Promise<void> {
@@ -74,7 +102,7 @@ export default class TextbookService {
     this.pageConfig.shiftPageNumber('-');
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -88,7 +116,7 @@ export default class TextbookService {
     this.pageConfig.shiftPageNumber('+');
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -102,7 +130,7 @@ export default class TextbookService {
     this.pageConfig.shiftGroupNumber('-');
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -116,7 +144,7 @@ export default class TextbookService {
     this.pageConfig.shiftGroupNumber('+');
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -131,7 +159,7 @@ export default class TextbookService {
     this.pageConfig.setPageNumber(value);
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -146,7 +174,7 @@ export default class TextbookService {
     this.pageConfig.setGroupNumber(value);
 
     const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
-    const words: WordsResponseSchema[] = await this.getWords(pageConfig);
+    const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -197,7 +225,55 @@ export default class TextbookService {
     return true;
   }
 
+  async addDiffcultWord(event: Event): Promise<UsersWordsResponseSchema> {
+    this.loading.createSpinners();
+    const { id } = event.target as HTMLButtonElement;
+    const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
+    const wordId: string = id.slice(startPositionOfWordId);
+    const userId: string = Credentials.getUserId();
+    let userWord;
+    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
+
+    if (response instanceof Response) {
+      // console.log(`create hard word ${wordId}`);
+      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
+    } else {
+      // console.log(`update hard word ${wordId}`);
+      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
+    }
+
+    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'red');
+    this.loading.delSpinners();
+    return userWord;
+  }
+
+  async addLearnedWord(event: Event): Promise<UsersWordsResponseSchema> {
+    this.loading.createSpinners();
+    const { id } = event.target as HTMLButtonElement;
+    const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
+    const wordId: string = id.slice(startPositionOfWordId);
+    const userId: string = Credentials.getUserId();
+    let userWord;
+    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
+
+    if (response instanceof Response) {
+      // console.log(`create learned word ${wordId}`);
+      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
+    } else {
+      // console.log(`update learned word ${wordId}`);
+      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
+    }
+
+    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'green');
+    this.loading.delSpinners();
+    return userWord;
+  }
+
   listenCards(): void {
     this.soundIcons.forEach((item: Element): void => item.addEventListener('click', this.playSound.bind(this)));
+    this.difficultBtns.forEach((item: Element): void =>
+      item.addEventListener('click', this.addDiffcultWord.bind(this))
+    );
+    this.learnedBtns.forEach((item: Element): void => item.addEventListener('click', this.addLearnedWord.bind(this)));
   }
 }

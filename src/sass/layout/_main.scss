@@ -4,6 +4,10 @@
     @media (max-width: 767px) {
         min-height: calc(100vh - 140px);
     }
+
+    @media (max-width: 530px) {
+        min-height: calc(100vh - 197px);
+      }
 }
 
 .preview, .ourAdvantages, .ourPosibilities, .ourTeam {

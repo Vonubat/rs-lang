@@ -85,5 +85,6 @@ export default class Credentials {
     localStorage.removeItem('userId');
     localStorage.removeItem('userName');
     localStorage.removeItem('email');
+    localStorage.removeItem('timestamp');
   }
 }

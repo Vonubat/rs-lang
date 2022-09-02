@@ -44,7 +44,8 @@ export default class MainView {
     const previewContainer = this.HTMLConstructor.div(['container-fluid', 'justify-content-around', 'd-flex']);
     const previewCard = this.card('preview', 'RS Lang', 'If you can dream it, you can do it', this.previewText);
     const cardBody = previewCard.querySelector('.card-body') as HTMLElement;
-    const button = this.HTMLConstructor.createHtmlElement('button', ['btn', 'btn-primary']);
+    const button = this.HTMLConstructor.a('#textbook', ['btn', 'btn-primary']);
+    button.removeAttribute('target');
     button.innerText = "Let's start";
     cardBody.appendChild(button);
     previewContainer.appendChild(previewCard);

@@ -41,22 +41,29 @@ export default class Constants {
       NAME: 'Main',
       ICON: 'house',
     },
+
     TEXTBOOK: {
       NAME: 'Textbook',
       ICON: 'book',
+    },
+
+    DICTIONARY: {
+      NAME: 'Dictionary',
+      ICON: 'bookmark-check',
     },
 
     MINIGAMES: {
       NAME: 'Minigames',
       ICON: 'controller',
     },
+
     STATISTICS: {
       NAME: 'Statistics',
       ICON: 'graph-up',
     },
   };
 
-  static readonly BOOTSTRAP_COLORS = [
+  static readonly BOOTSTRAP_TEXT_COLORS = [
     'text-primary',
     'text-secondary',
     'text-success',
