@@ -43,4 +43,15 @@ export default class PageConfig {
   public setGroupNumber(value: number): void {
     localStorage.setItem('groupNumber', String(value));
   }
+
+  public setTotalCount(value: number): void {
+    localStorage.setItem('totalCount', String(value));
+  }
+
+  public getTotalCount(): number {
+    if (localStorage.getItem('totalCount')) {
+      return Number(localStorage.getItem('totalCount'));
+    }
+    return 19;
+  }
 }

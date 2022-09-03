@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { WordsResponseSchema, PaginatedResult } from '../../types/types';
+import { PaginatedResult, WordsResponseSchema } from '../../types/types';
 import { view } from '../../view/view';
 
 const CanvasCircularCountdown = require('canvas-circular-countdown').default;

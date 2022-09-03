@@ -7,11 +7,14 @@ import {
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
 import AuthService from '../../auth/auth-service';
+import PageConfig from '../../components/page-config';
 import SoundHelper from '../../components/sound-helper';
 import { services } from '../../services';
 
 export default class SprintService {
   soundHelper: SoundHelper;
+
+  pageConfig: PageConfig;
 
   words: WordsResponseSchema[] | PaginatedResult[];
 
@@ -69,8 +72,11 @@ export default class SprintService {
 
   closeBtn!: HTMLButtonElement;
 
+  totalCount!: number;
+
   constructor() {
     this.soundHelper = new SoundHelper();
+    this.pageConfig = new PageConfig();
     this.words = [];
     this.steps = [];
     this.currentWordCounter = 0;
@@ -90,6 +96,7 @@ export default class SprintService {
     page.innerHTML = '';
 
     this.words = words;
+    this.totalCount = this.pageConfig.getTotalCount();
     const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
 
     page.append(
@@ -98,7 +105,7 @@ export default class SprintService {
         newWord,
         newWordTranslate,
         this.finishSprint.bind(services.sprintService),
-        this.words
+        words
       )
     );
     this.setItems();
@@ -154,7 +161,7 @@ export default class SprintService {
     newWord: string;
     newWordTranslate: string;
   } {
-    const chance: number = Utils.getChance(this.currentWordCounter, 19);
+    const chance: number = Utils.getChance(this.currentWordCounter, this.totalCount);
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     const newWord: string = word.word;
     const newWordTranslate: string = this.words[chance].wordTranslate;
@@ -181,7 +188,7 @@ export default class SprintService {
   }
 
   controlCurrentWord(): void {
-    if (this.currentWordCounter < 19) {
+    if (this.currentWordCounter < this.totalCount) {
       this.currentWordCounter += 1;
     } else {
       this.currentWordCounter = 0;

@@ -28,14 +28,22 @@ export default class GamesService {
   }
 
   async launchGame(event: Event): Promise<void> {
+    view.loading.createSpinners();
     const { id } = event.currentTarget as HTMLElement;
     const game: 'sprint' | 'audio-challenge' = id.includes('sprint') ? 'sprint' : 'audio-challenge';
     const trigger: HTMLElement = event.target as HTMLElement;
+
+    let words: WordsResponseSchema[] | PaginatedResult[];
+
     if (trigger.classList.contains('level')) {
       this.level = Number(trigger.innerText) - 1;
-      const words: WordsResponseSchema[] | PaginatedResult[] = await services.gamesData.prepareData(id, this.level);
-      view.gamesView.drawGame(game, words);
+      words = await services.gamesData.prepareData(id, this.level);
+    } else {
+      words = await services.gamesData.prepareData(id);
     }
+
+    view.gamesView.drawGame(game, words);
+    view.loading.delSpinners();
   }
 
   setItems(): void {

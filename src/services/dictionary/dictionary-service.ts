@@ -6,6 +6,7 @@ import Loading from '../../view/components/loading';
 import Credentials from '../auth/credentials';
 import Utils from '../../utilities/utils';
 import AuthService from '../auth/auth-service';
+import { services } from '../services';
 
 export default class DictionaryService {
   soundHelper: SoundHelper;
@@ -23,6 +24,10 @@ export default class DictionaryService {
   cardsCount!: number;
 
   dictionaryMenuItem!: HTMLElement;
+
+  sprintGame!: HTMLDivElement;
+
+  audioChallengeGame!: HTMLDivElement;
 
   constructor() {
     this.soundHelper = new SoundHelper();
@@ -80,6 +85,8 @@ export default class DictionaryService {
       '.section-difficult-words'
     ) as HTMLButtonElement;
     this.learnedWordsBtn = view.dictionaryView.dictionary.querySelector('.section-learned-words') as HTMLButtonElement;
+    this.sprintGame = document.getElementById('card-dictionary-sprint') as HTMLDivElement;
+    this.audioChallengeGame = document.getElementById('card-dictionary-audio-challenge') as HTMLDivElement;
   }
 
   playSound(event: Event): boolean {
@@ -137,6 +144,8 @@ export default class DictionaryService {
   listenSections(): void {
     this.difficultWordsBtn.addEventListener('click', this.updatePage.bind(this));
     this.learnedWordsBtn.addEventListener('click', this.updatePage.bind(this));
+    this.sprintGame.addEventListener('click', services.gamesService.launchGame.bind(this));
+    this.audioChallengeGame.addEventListener('click', services.gamesService.launchGame.bind(this));
   }
 
   hideDictionaryItems(): void {

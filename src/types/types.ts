@@ -131,6 +131,10 @@ export function TypeOfWordIsPaginatedResult(word: WordsResponseSchema | Paginate
   return '_id' in word;
 }
 
+export function TypeOfWordsIsAggregatedWords(words: WordsResponseSchema[] | AggregatedWords): words is AggregatedWords {
+  return 'paginatedResults' in words;
+}
+
 type RGB = `rgb(${number}, ${number}, ${number})`;
 type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
 type HEX = `#${string}`;
