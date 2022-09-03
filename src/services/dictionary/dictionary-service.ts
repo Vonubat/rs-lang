@@ -23,6 +23,8 @@ export default class DictionaryService {
 
   audioChallengeGame!: HTMLDivElement;
 
+  gamesContainer!: HTMLDivElement;
+
   async getWords(typeOfWords: 'learned' | 'hard'): Promise<PaginatedResult[]> {
     const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
       Credentials.getUserId(),
@@ -41,6 +43,7 @@ export default class DictionaryService {
     this.listenCards();
     this.setSectionsItems();
     this.listenSections();
+    this.hideGamesContainer();
     view.loading.delSpinners();
   }
 
@@ -58,8 +61,10 @@ export default class DictionaryService {
     const words: PaginatedResult[] = await this.getWords(typeOfWords);
 
     view.dictionaryView.drawCardsContainer(words);
+    this.gamesContainer.classList.add('disabled');
     this.setCardsItems();
     this.listenCards();
+    this.hideGamesContainer();
     view.loading.delSpinners();
   }
 
@@ -76,6 +81,9 @@ export default class DictionaryService {
     this.learnedWordsBtn = view.dictionaryView.dictionary.querySelector('.section-learned-words') as HTMLButtonElement;
     this.sprintGame = document.getElementById('card-dictionary-sprint') as HTMLDivElement;
     this.audioChallengeGame = document.getElementById('card-dictionary-audio-challenge') as HTMLDivElement;
+    this.gamesContainer = view.dictionaryView.dictionary.querySelector(
+      '.mini-card-wrapper-games-dictionary'
+    ) as HTMLDivElement;
   }
 
   playSound(event: Event): boolean {
@@ -120,6 +128,7 @@ export default class DictionaryService {
     if (this.cardsCount === 0) {
       const emptyCard: HTMLElement = view.dictionaryView.cardsContainer.generateEmptyCardContainer();
       view.dictionaryView.dictionary.append(emptyCard);
+      this.hideGamesContainer();
     }
 
     view.loading.delSpinners();
@@ -145,6 +154,16 @@ export default class DictionaryService {
       }
     } else if (this.dictionaryMenuItem) {
       this.dictionaryMenuItem.style.display = 'none';
+    }
+  }
+
+  hideGamesContainer(): void {
+    console.log(this.cardsCount);
+
+    if (this.cardsCount < 1) {
+      this.gamesContainer.classList.add('disabled');
+    } else {
+      this.gamesContainer.classList.remove('disabled');
     }
   }
 }

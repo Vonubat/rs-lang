@@ -26,13 +26,14 @@ export default class DictionaryView {
   drawPage(words: PaginatedResult[]): void {
     this.dictionary = document.getElementById('main') as HTMLElement;
 
+    this.dictionarySectionsInstance = this.dictionarySections.createSectionsWordsWrapper();
+
     if (!words.length) {
       this.cardsContainerInstance = this.cardsContainer.generateEmptyCardContainer();
     } else {
       this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
     }
 
-    this.dictionarySectionsInstance = this.dictionarySections.createSectionsWordsWrapper();
     this.dictionary.append(
       view.gamesView.drawMiniCards('dictionary'),
       this.dictionarySectionsInstance,
