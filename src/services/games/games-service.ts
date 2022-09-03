@@ -41,7 +41,6 @@ export default class GamesService {
     } else {
       words = await services.gamesData.prepareData(id);
     }
-    console.log(words);
 
     view.gamesView.drawGame(game, words);
     view.loading.delSpinners();

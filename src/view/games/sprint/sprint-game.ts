@@ -169,7 +169,7 @@ export default class SprintGame extends HTMLConstructor {
     words: WordsResponseSchema[] | PaginatedResult[]
   ): HTMLElement {
     const timer: HTMLElement = services.timer.createTimerElement('sprint', 'game');
-    services.timer.createTimerConfig(timer, 10000, cb, words);
+    services.timer.createTimerConfig(timer, 60000, cb, words);
 
     return timer;
   }

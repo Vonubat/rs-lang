@@ -205,6 +205,10 @@ export default class SprintService {
     }
 
     if (this.steps.length > 3) {
+      this.multiplicatorElement.classList.add('blink');
+      setTimeout(() => {
+        this.multiplicatorElement.classList.remove('blink');
+      }, 2000);
       this.steps.length = 0;
       this.multiplicatorValue += 10;
     }

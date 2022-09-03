@@ -33,7 +33,7 @@ export default class GamesData {
         level,
         this.randomPageNumber()
       );
-      services.pageConfig.setTotalCount(aggregatedWords.totalCount[0].count);
+      services.pageConfig.setTotalCount(20);
       words = Utils.shuffleWords(aggregatedWords.paginatedResults);
       return words;
     }
