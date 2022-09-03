@@ -45,7 +45,7 @@ export default class PageConfig {
   }
 
   public setTotalCount(value: number): void {
-    localStorage.setItem('totalCount', String(value));
+    localStorage.setItem('totalCount', String(value - 1));
   }
 
   public getTotalCount(): number {

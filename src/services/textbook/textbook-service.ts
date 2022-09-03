@@ -34,6 +34,10 @@ export default class TextbookService {
 
   learnedBtns!: NodeListOf<HTMLElement>;
 
+  sprintGame!: HTMLDivElement;
+
+  audioChallengeGame!: HTMLDivElement;
+
   async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[] | PaginatedResult[]> {
     let words: WordsResponseSchema[] | PaginatedResult[];
 
@@ -75,6 +79,8 @@ export default class TextbookService {
     this.groupNumberCurrent = view.textbookView.textbook.querySelectorAll('.group-number-current');
     this.pageNumber = view.textbookView.textbook.querySelectorAll('.page-number');
     this.groupNumber = view.textbookView.textbook.querySelectorAll('.group-number');
+    this.sprintGame = document.getElementById('card-textbook-sprint') as HTMLDivElement;
+    this.audioChallengeGame = document.getElementById('card-textbook-audio-challenge') as HTMLDivElement;
   }
 
   setCardsItems(): void {
@@ -169,23 +175,6 @@ export default class TextbookService {
     view.loading.delSpinners();
   }
 
-  listenPagination(): void {
-    this.pageNumberItemsLeft.forEach((item: Element): void =>
-      item.addEventListener('click', this.decreasePageNumber.bind(this))
-    );
-    this.pageNumberItemsRight.forEach((item: Element): void =>
-      item.addEventListener('click', this.increasePageNumber.bind(this))
-    );
-    this.groupNumberItemsLeft.forEach((item: Element): void =>
-      item.addEventListener('click', this.decreaseGroupNumber.bind(this))
-    );
-    this.groupNumberItemsRight.forEach((item: Element): void =>
-      item.addEventListener('click', this.increaseGroupNumber.bind(this))
-    );
-    this.pageNumber.forEach((item: Element): void => item.addEventListener('click', this.setPageNumber.bind(this)));
-    this.groupNumber.forEach((item: Element): void => item.addEventListener('click', this.setGroupNumber.bind(this)));
-  }
-
   playSound(event: Event): boolean {
     let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
     if (elem instanceof SVGUseElement) {
@@ -253,6 +242,25 @@ export default class TextbookService {
     view.textbookView.cardGenerator.updateCardColor(event.target as HTMLElement, 'green');
     view.loading.delSpinners();
     return userWord;
+  }
+
+  listenPagination(): void {
+    this.pageNumberItemsLeft.forEach((item: Element): void =>
+      item.addEventListener('click', this.decreasePageNumber.bind(this))
+    );
+    this.pageNumberItemsRight.forEach((item: Element): void =>
+      item.addEventListener('click', this.increasePageNumber.bind(this))
+    );
+    this.groupNumberItemsLeft.forEach((item: Element): void =>
+      item.addEventListener('click', this.decreaseGroupNumber.bind(this))
+    );
+    this.groupNumberItemsRight.forEach((item: Element): void =>
+      item.addEventListener('click', this.increaseGroupNumber.bind(this))
+    );
+    this.pageNumber.forEach((item: Element): void => item.addEventListener('click', this.setPageNumber.bind(this)));
+    this.groupNumber.forEach((item: Element): void => item.addEventListener('click', this.setGroupNumber.bind(this)));
+    this.sprintGame.addEventListener('click', services.gamesService.launchGame.bind(this));
+    this.audioChallengeGame.addEventListener('click', services.gamesService.launchGame.bind(this));
   }
 
   listenCards(): void {

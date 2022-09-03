@@ -18,8 +18,7 @@ export default class GamesData {
       return words;
     }
 
-    /* if (id.includes('textbook')) {
-    } */
+    words = await this.requestFromTextbookPage();
 
     return words;
   }
@@ -51,6 +50,28 @@ export default class GamesData {
     );
     services.pageConfig.setTotalCount(aggregatedWords.totalCount[0].count);
     const words: WordsResponseSchema[] | PaginatedResult[] = Utils.shuffleWords(aggregatedWords.paginatedResults);
+    return words;
+  }
+
+  async requestFromTextbookPage(): Promise<WordsResponseSchema[] | PaginatedResult[]> {
+    let words: WordsResponseSchema[] | PaginatedResult[];
+    if (AuthService.checkUser()) {
+      const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
+        Credentials.getUserId(),
+        '',
+        20,
+        services.pageConfig.getGroupNumber(),
+        services.pageConfig.getPageNumber()
+      );
+      services.pageConfig.setTotalCount(20);
+      words = Utils.shuffleWords(aggregatedWords.paginatedResults);
+      return words;
+    }
+    const chunkOfWords: WordsResponseSchema[] = await api.words.getWords(
+      services.pageConfig.getGroupNumber(),
+      services.pageConfig.getPageNumber()
+    );
+    words = Utils.shuffleWords(chunkOfWords);
     return words;
   }
 

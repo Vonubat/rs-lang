@@ -50,6 +50,7 @@ export default class GamesView {
   }
 
   drawGamesLevels(game: 'sprint' | 'audio-challenge'): HTMLElement {
+    this.games = document.getElementById('main') as HTMLElement;
     this.games.innerHTML = '';
     this.gamesLevelsInstance = this.gamesLevels.generateGamesLevels(game);
 
@@ -58,6 +59,7 @@ export default class GamesView {
   }
 
   drawGame(game: 'sprint' | 'audio-challenge', words: WordsResponseSchema[] | PaginatedResult[]): HTMLElement {
+    this.games = document.getElementById('main') as HTMLElement;
     if (game === 'sprint') {
       this.currentGame = this.startGameView.drawStartLocation(
         this.games,
