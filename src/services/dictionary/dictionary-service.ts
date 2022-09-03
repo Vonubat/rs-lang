@@ -158,8 +158,6 @@ export default class DictionaryService {
   }
 
   hideGamesContainer(): void {
-    console.log(this.cardsCount);
-
     if (this.cardsCount < 1) {
       this.gamesContainer.classList.add('disabled');
     } else {

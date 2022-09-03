@@ -121,6 +121,12 @@
     gap: 5px;
     font-size: medium;
 
+    .text-bg-warning {
+      &::after {
+        content: ' %';
+      }
+    }
+
     .word-container {
       gap: 5px;
     }

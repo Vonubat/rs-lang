@@ -67,7 +67,7 @@ export default class GamesResults extends HTMLConstructor {
     return pointsElement;
   }
 
-  createAccuracyElement(accuracy: string): HTMLElement {
+  createAccuracyElement(accuracy: number): HTMLElement {
     const accuracyElement: HTMLElement = this.createHtmlElement('div', undefined, `accuracy`, undefined, `Accuracy: `);
     accuracyElement.append(this.createBadge(accuracy, 'text-bg-warning'));
     return accuracyElement;
@@ -173,7 +173,7 @@ export default class GamesResults extends HTMLConstructor {
   generateResults(
     wordsStatistics: WordsStatistics,
     points: number,
-    accuracy: string,
+    accuracy: number,
     inARow: number,
     correctAnswers: number,
     mistakes: number,
