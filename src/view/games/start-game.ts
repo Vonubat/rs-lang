@@ -1,11 +1,16 @@
 import { services } from '../../services/services';
-import Utils from '../../utilities/utils';
+import { WordsResponseSchema, PaginatedResult } from '../../types/types';
 
 export default class StartGameView {
-  drawStartLocation(elem: HTMLElement, game: 'sprint' | 'audio-challenge'): HTMLElement {
+  drawStartLocation(
+    elem: HTMLElement,
+    game: 'sprint' | 'audio-challenge',
+    cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
+    words: WordsResponseSchema[] | PaginatedResult[]
+  ): HTMLElement {
     const element: HTMLElement = elem;
     const timer: HTMLElement = services.timer.createTimerElement(game, 'start');
-    services.timer.createTimerConfig(timer, 3000, Utils.capitalizeFirstLetter);
+    services.timer.createTimerConfig(timer, 3000, cb, words);
 
     element.innerHTML = '';
 

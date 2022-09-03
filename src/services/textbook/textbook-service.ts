@@ -7,18 +7,13 @@ import {
   UsersWordsResponseSchema,
   WordsResponseSchema,
 } from '../../types/types';
-import PageConfig from '../components/page-config';
-import SoundHelper from '../components/sound-helper';
-import Loading from '../../view/components/loading';
 import AuthService from '../auth/auth-service';
 import Credentials from '../auth/credentials';
+import { services } from '../services';
+import Utils from '../../utilities/utils';
 
 export default class TextbookService {
-  pageConfig: PageConfig;
-
-  soundHelper: SoundHelper;
-
-  loading: Loading;
+  stack: { [index: string]: number };
 
   pageNumberItemsLeft!: NodeListOf<HTMLElement>;
 
@@ -32,20 +27,26 @@ export default class TextbookService {
 
   groupNumberCurrent!: NodeListOf<HTMLElement>;
 
-  pageNumber!: NodeListOf<HTMLElement>;
+  pageNumber!: NodeListOf<HTMLAnchorElement>;
 
   groupNumber!: NodeListOf<HTMLElement>;
 
-  soundIcons!: NodeListOf<HTMLElement>;
+  soundIcons!: NodeListOf<SVGSVGElement>;
 
   difficultBtns!: NodeListOf<HTMLElement>;
 
   learnedBtns!: NodeListOf<HTMLElement>;
 
+  sprintGame!: HTMLDivElement;
+
+  audioChallengeGame!: HTMLDivElement;
+
+  cards!: NodeListOf<HTMLDivElement>;
+
+  gamesContainer!: HTMLDivElement;
+
   constructor() {
-    this.pageConfig = new PageConfig();
-    this.soundHelper = new SoundHelper();
-    this.loading = new Loading();
+    this.stack = {};
   }
 
   async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[] | PaginatedResult[]> {
@@ -68,8 +69,8 @@ export default class TextbookService {
   }
 
   async drawPage(): Promise<void> {
-    this.loading.createSpinners();
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    view.loading.createSpinners();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.drawPage(words, pageConfig);
@@ -77,7 +78,8 @@ export default class TextbookService {
     this.setCardsItems();
     this.listenPagination();
     this.listenCards();
-    this.loading.delSpinners();
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
   }
 
   setPaginationItems(): void {
@@ -89,98 +91,209 @@ export default class TextbookService {
     this.groupNumberCurrent = view.textbookView.textbook.querySelectorAll('.group-number-current');
     this.pageNumber = view.textbookView.textbook.querySelectorAll('.page-number');
     this.groupNumber = view.textbookView.textbook.querySelectorAll('.group-number');
+    this.sprintGame = document.getElementById('card-textbook-sprint') as HTMLDivElement;
+    this.audioChallengeGame = document.getElementById('card-textbook-audio-challenge') as HTMLDivElement;
+    this.gamesContainer = view.textbookView.textbook.querySelector(
+      '.mini-card-wrapper-games-textbook'
+    ) as HTMLDivElement;
   }
 
   setCardsItems(): void {
     this.soundIcons = view.textbookView.textbook.querySelectorAll('.sound-icon');
     this.difficultBtns = view.textbookView.textbook.querySelectorAll('.word-difficult-btn');
     this.learnedBtns = view.textbookView.textbook.querySelectorAll('.word-learned-btn');
+    this.cards = view.textbookView.textbook.querySelectorAll('.card');
   }
 
   async decreasePageNumber(): Promise<void> {
-    this.loading.createSpinners();
-    this.pageConfig.shiftPageNumber('-');
+    view.loading.createSpinners();
+    services.pageConfig.shiftPageNumber('-');
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
   }
 
   async increasePageNumber(): Promise<void> {
-    this.loading.createSpinners();
-    this.pageConfig.shiftPageNumber('+');
+    view.loading.createSpinners();
+    services.pageConfig.shiftPageNumber('+');
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
   }
 
   async decreaseGroupNumber(): Promise<void> {
-    this.loading.createSpinners();
-    this.pageConfig.shiftGroupNumber('-');
+    view.loading.createSpinners();
+    services.pageConfig.shiftGroupNumber('-');
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
   }
 
   async increaseGroupNumber(): Promise<void> {
-    this.loading.createSpinners();
-    this.pageConfig.shiftGroupNumber('+');
+    view.loading.createSpinners();
+    services.pageConfig.shiftGroupNumber('+');
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
   }
 
   async setPageNumber(event: Event): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const value: number = Number((event.target as HTMLElement).innerText) - 1;
-    this.pageConfig.setPageNumber(value);
+    services.pageConfig.setPageNumber(value);
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
   }
 
   async setGroupNumber(event: Event): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const value: number = Number((event.target as HTMLElement).innerText) - 1;
-    this.pageConfig.setGroupNumber(value);
+    services.pageConfig.setGroupNumber(value);
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
+  }
+
+  playSound(event: Event): boolean {
+    let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
+    if (elem instanceof SVGUseElement) {
+      elem = elem.parentNode as SVGSVGElement;
+    }
+
+    const currentAttr: string = (elem.firstChild as SVGUseElement).getAttributeNS(
+      'http://www.w3.org/1999/xlink',
+      'href'
+    ) as string;
+
+    if (currentAttr.includes('stop-fill')) {
+      services.soundHelper.pause();
+      view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
+      return false;
+    }
+
+    this.soundIcons.forEach((item) => {
+      view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
+    });
+
+    services.soundHelper.playQueue(elem as SVGSVGElement);
+    return true;
+  }
+
+  async addDiffcultWord(event: Event): Promise<UsersWordsResponseSchema> {
+    view.loading.createSpinners();
+    const { id } = event.target as HTMLButtonElement;
+    const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
+    const wordId: string = id.slice(startPositionOfWordId);
+    const userId: string = Credentials.getUserId();
+    let userWord;
+    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
+
+    if (response instanceof Response) {
+      // console.log(`create hard word ${wordId}`);
+      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
+    } else {
+      // console.log(`update hard word ${wordId}`);
+      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
+    }
+
+    Utils.findAncestor(event.target as HTMLElement, 'card').classList.add('hard-word');
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
+    return userWord;
+  }
+
+  async addLearnedWord(event: Event): Promise<UsersWordsResponseSchema> {
+    view.loading.createSpinners();
+    const { id } = event.target as HTMLButtonElement;
+    const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
+    const wordId: string = id.slice(startPositionOfWordId);
+    const userId: string = Credentials.getUserId();
+    let userWord;
+    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
+
+    if (response instanceof Response) {
+      // console.log(`create learned word ${wordId}`);
+      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
+    } else {
+      // console.log(`update learned word ${wordId}`);
+      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
+    }
+
+    Utils.findAncestor(event.target as HTMLElement, 'card').classList.add('learned-word');
+    this.checkMaxStackOfWords();
+    view.loading.delSpinners();
+    return userWord;
+  }
+
+  checkMaxStackOfWords(): void {
+    const currentPage: number = services.pageConfig.getPageNumber();
+    this.stack[currentPage] = 0;
+    this.cards.forEach((item: HTMLDivElement) => {
+      if (item.classList.contains('learned-word') || item.classList.contains('hard-word')) {
+        this.stack[currentPage] += 1;
+      }
+    });
+
+    if (this.stack[currentPage] === 20) {
+      Utils.resetBackground(view.textbookView.textbook, '#565e64');
+      this.gamesContainer.classList.add('disabled');
+      for (let i = 0; i < this.pageNumber.length; i += 1) {
+        if (this.stack[i] === 20) {
+          Utils.resetBackground(this.pageNumber[i], '#565e64');
+        }
+      }
+    } else {
+      this.gamesContainer.classList.remove('disabled');
+      view.textbookView.color.switchColor(view.textbookView.textbook, services.pageConfig.getPageConfigResponse());
+      for (let i = 0; i < this.pageNumber.length; i += 1) {
+        if (this.stack[i] !== 20) {
+          Utils.resetBackground(this.pageNumber[i]);
+        }
+      }
+    }
   }
 
   listenPagination(): void {
@@ -198,75 +311,8 @@ export default class TextbookService {
     );
     this.pageNumber.forEach((item: Element): void => item.addEventListener('click', this.setPageNumber.bind(this)));
     this.groupNumber.forEach((item: Element): void => item.addEventListener('click', this.setGroupNumber.bind(this)));
-  }
-
-  playSound(event: Event): boolean {
-    let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
-    if (elem instanceof SVGUseElement) {
-      elem = elem.parentNode as SVGSVGElement;
-    }
-
-    const currentAttr: string = (elem.firstChild as SVGUseElement).getAttributeNS(
-      'http://www.w3.org/1999/xlink',
-      'href'
-    ) as string;
-
-    if (currentAttr.includes('stop-fill')) {
-      this.soundHelper.pause();
-      view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
-      return false;
-    }
-
-    this.soundIcons.forEach((item) => {
-      view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
-    });
-
-    this.soundHelper.play(elem as SVGSVGElement);
-    return true;
-  }
-
-  async addDiffcultWord(event: Event): Promise<UsersWordsResponseSchema> {
-    this.loading.createSpinners();
-    const { id } = event.target as HTMLButtonElement;
-    const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
-    const wordId: string = id.slice(startPositionOfWordId);
-    const userId: string = Credentials.getUserId();
-    let userWord;
-    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
-
-    if (response instanceof Response) {
-      // console.log(`create hard word ${wordId}`);
-      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
-    } else {
-      // console.log(`update hard word ${wordId}`);
-      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
-    }
-
-    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'red');
-    this.loading.delSpinners();
-    return userWord;
-  }
-
-  async addLearnedWord(event: Event): Promise<UsersWordsResponseSchema> {
-    this.loading.createSpinners();
-    const { id } = event.target as HTMLButtonElement;
-    const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
-    const wordId: string = id.slice(startPositionOfWordId);
-    const userId: string = Credentials.getUserId();
-    let userWord;
-    const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
-
-    if (response instanceof Response) {
-      // console.log(`create learned word ${wordId}`);
-      userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
-    } else {
-      // console.log(`update learned word ${wordId}`);
-      userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
-    }
-
-    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'green');
-    this.loading.delSpinners();
-    return userWord;
+    this.sprintGame.addEventListener('click', services.gamesService.launchGame.bind(this));
+    this.audioChallengeGame.addEventListener('click', services.gamesService.launchGame.bind(this));
   }
 
   listenCards(): void {

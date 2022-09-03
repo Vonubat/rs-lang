@@ -4,20 +4,16 @@ import HTMLConstructor from '../components/constructor';
 
 export default class DictionaryCardGenerator extends HTMLConstructor {
   createCard(word: PaginatedResult): HTMLElement {
-    const card: HTMLElement = this.createHtmlElement(
-      'div',
-      ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'],
-      `card-${word._id}`
-    );
+    const classList: string[] = ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2', 'dictionary-card'];
 
     if (word.userWord?.difficulty === 'hard') {
-      card.style.borderColor = 'red';
-      card.style.borderWidth = '3px';
+      classList.push('hard-word');
     }
     if (word.userWord?.difficulty === 'learned') {
-      card.style.borderColor = 'green';
-      card.style.borderWidth = '3px';
+      classList.push('learned-word');
     }
+
+    const card: HTMLElement = this.createHtmlElement('div', classList, `card-${word._id}`);
 
     return card;
   }
@@ -174,7 +170,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
         ['data-bs-toggle', 'custom-tooltip'],
         ['title', 'Correct attempts'],
       ],
-      '0'
+      `${word.userWord?.optional?.correctAttempts || 0}`
     );
     const incorrectAttempts: HTMLElement = this.createHtmlElement(
       'span',
@@ -184,7 +180,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
         ['data-bs-toggle', 'custom-tooltip'],
         ['title', 'Incorrect attempts'],
       ],
-      '0'
+      `${word.userWord?.optional?.incorrectAttempts || 0}`
     );
     badgesWrapper.append(correctAttempts, incorrectAttempts);
     return badgesWrapper;
@@ -194,7 +190,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     const card: HTMLElement = this.createHtmlElement(
       'div',
       ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'],
-      `card-sorry}`
+      `card-sorry`
     );
     const img: HTMLElement = this.createHtmlElement('img', ['img-fluid', 'rounded', 'image'], undefined, [
       ['alt', `image-sorry`],

@@ -73,11 +73,11 @@ export interface PaginatedResult {
   textMeaningTranslate: string;
   wordTranslate: string;
   userWord?: UserWord;
-  optional?: Optional;
 }
 
 export interface UserWord {
   difficulty: string;
+  optional?: Optional;
 }
 
 interface TotalCount {
@@ -85,7 +85,7 @@ interface TotalCount {
 }
 
 interface Optional {
-  [index: string]: string;
+  [index: string]: string | number;
 }
 
 export interface Statistics {
@@ -131,8 +131,26 @@ export function TypeOfWordIsPaginatedResult(word: WordsResponseSchema | Paginate
   return '_id' in word;
 }
 
+export function TypeOfWordsIsAggregatedWords(words: WordsResponseSchema[] | AggregatedWords): words is AggregatedWords {
+  return 'paginatedResults' in words;
+}
+
 type RGB = `rgb(${number}, ${number}, ${number})`;
 type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
 type HEX = `#${string}`;
 
 export type Color = RGB | RGBA | HEX;
+
+export interface WordsStatistics {
+  [key: string]: WordsStatistic;
+}
+
+export interface WordsStatistic {
+  word: string;
+  wordId: string;
+  wordTranslate: string;
+  audio: string;
+  correctAttempts: number;
+  incorrectAttempts: number;
+  difficulty?: 'hard' | 'learned' | 'none';
+}
