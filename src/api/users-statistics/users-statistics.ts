@@ -10,16 +10,19 @@ export default class UsersStatistics extends HttpClient {
    * @returns {Promise<Statistics>} return statistics.
    */
 
-  public async getStatistics(userId: string): Promise<Statistics | Response> {
+  public async getStatistics(userId: string): Promise<Statistics> {
     this.checkId(userId);
 
     const url: URL = new URL(`${Constants.BASE_URL}/users/${userId}/statistics`);
     const response: Response = await this.get(url);
 
     if (!response.ok) {
-      // status 401 -> Access token is missing or invalid
-      // status 404 -> Statistics not found
-      return response;
+      if (response.status === 400) {
+        throw new Error('Bad request');
+      }
+      if (response.status === 401) {
+        throw new Error('Access token is missing or invalid');
+      }
     }
 
     const content: Statistics = await response.json();

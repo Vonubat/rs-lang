@@ -84,7 +84,7 @@ interface TotalCount {
   count: number;
 }
 
-interface Optional {
+export interface Optional {
   [index: string]: DailyStatistics | number;
 }
 

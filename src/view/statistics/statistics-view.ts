@@ -2,7 +2,7 @@ import d3 from 'd3';
 import Constants from '../../constants';
 import HTMLConstructor from '../components/constructor';
 import { services } from '../../services/services';
-import { DailyStatistics } from '../../types/types';
+import { DailyStatistics, Optional } from '../../types/types';
 
 export default class Statistics {
   private mainId: string = Constants.MAIN_ID;
@@ -13,15 +13,16 @@ export default class Statistics {
 
   private words: HTMLDivElement;
 
-  private accuracy: HTMLDivElement;
+  private statsPerDay: HTMLDivElement;
 
-  private statisticsData: any;
+  private statisticsData: Optional;
 
   constructor() {
     this.statistics = this.htmlConstructor.div(['statistics']);
     this.words = this.htmlConstructor.div(['statistics__words']);
-    this.accuracy = this.htmlConstructor.div(['statistics__accuracy']);
-    this.statistics.append(this.words, this.accuracy);
+    this.words.id = 'statistics-words-id';
+    this.statsPerDay = this.htmlConstructor.div(['statistics__stats-per-day']);
+    this.statistics.append(this.words, this.statsPerDay);
     services.statisticsService.setView(this);
   }
 
@@ -36,10 +37,19 @@ export default class Statistics {
   async drawDiagramm() {
     const statistics = await services.statisticsService.getStatisticsData();
     if (statistics) {
-      const learnedWords = statistics.learnedWords;
-      const optional = statistics.optional;
-      const { learnedWordsPerDay: Array<DailyStatistics> } = optional.learnedWordsPerDay;
-
+      const { learnedWords } = statistics;
+      const learnedWordsPerDay: DailyStatistics | undefined = statistics?.optional?.learnedWordsPerDay;
+      if (learnedWordsPerDay) {
+        const svg = d3.select('#statistics-words-id').append('svg').attr('width', 800).attr('height', 400);
+        const lineFunc = d3
+          .line()
+          .x(function (d) {
+            return d.x;
+          })
+          .y(function (d) {
+            return d.y;
+          });
+      }
     }
   }
 }
