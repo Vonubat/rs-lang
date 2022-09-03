@@ -2,6 +2,7 @@ import { services } from '../../services/services';
 import { WordsResponseSchema, PaginatedResult } from '../../types/types';
 import GamesCards from './games-cards';
 import GamesLevels from './games-levels';
+import GamesResults from './games-results';
 import SprintGame from './sprint/sprint-game';
 import StartGameView from './start-game';
 
@@ -13,6 +14,8 @@ export default class GamesView {
   gamesLevels: GamesLevels;
 
   sprintGame: SprintGame;
+
+  gamesResults: GamesResults;
 
   games!: HTMLElement;
 
@@ -28,6 +31,7 @@ export default class GamesView {
     this.gamesCards = new GamesCards();
     this.gamesLevels = new GamesLevels();
     this.startGameView = new StartGameView();
+    this.gamesResults = new GamesResults();
     this.sprintGame = new SprintGame();
   }
 

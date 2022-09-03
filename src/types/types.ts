@@ -73,11 +73,11 @@ export interface PaginatedResult {
   textMeaningTranslate: string;
   wordTranslate: string;
   userWord?: UserWord;
-  optional?: Optional;
 }
 
 export interface UserWord {
   difficulty: string;
+  optional?: Optional;
 }
 
 interface TotalCount {
@@ -136,3 +136,17 @@ type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
 type HEX = `#${string}`;
 
 export type Color = RGB | RGBA | HEX;
+
+export interface WordsStatistics {
+  [key: string]: WordsStatistic;
+}
+
+export interface WordsStatistic {
+  word: string;
+  wordId: string;
+  wordTranslate: string;
+  audio: string;
+  correctAttempts: number;
+  incorrectAttempts: number;
+  difficulty?: string | null;
+}

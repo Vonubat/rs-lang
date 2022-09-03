@@ -1,6 +1,12 @@
-import { WordsResponseSchema, PaginatedResult, TypeOfWordIsPaginatedResult } from '../../../types/types';
+import {
+  WordsResponseSchema,
+  PaginatedResult,
+  TypeOfWordIsPaginatedResult,
+  WordsStatistics,
+} from '../../../types/types';
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
+import AuthService from '../../auth/auth-service';
 import SoundHelper from '../../components/sound-helper';
 
 export default class SprintService {
@@ -8,7 +14,7 @@ export default class SprintService {
 
   words: WordsResponseSchema[] | PaginatedResult[];
 
-  currentWord: number;
+  currentWordCounter: number;
 
   pointsValue: number;
 
@@ -21,6 +27,8 @@ export default class SprintService {
   correctAnswers: number;
 
   allWordsCounter: number;
+
+  wordsStatistics: WordsStatistics;
 
   right!: HTMLButtonElement;
 
@@ -44,18 +52,19 @@ export default class SprintService {
 
   word!: string;
 
-  wordTranslate!: string;
+  correctWordTranslate!: string;
 
   constructor() {
     this.soundHelper = new SoundHelper();
     this.words = [];
     this.steps = [];
-    this.currentWord = 0;
+    this.currentWordCounter = 0;
     this.pointsValue = 0;
     this.multiplicatorValue = 10;
     this.mistakes = 0;
     this.correctAnswers = 0;
     this.allWordsCounter = 0;
+    this.wordsStatistics = {};
   }
 
   launchSprint(words: WordsResponseSchema[] | PaginatedResult[]) {
@@ -63,7 +72,7 @@ export default class SprintService {
     page.innerHTML = '';
 
     this.words = words;
-    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWord]);
+    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
 
     page.append(view.gamesView.sprintGame.generateGameContainer(wordId, newWord, newWordTranslate));
     this.setItems();
@@ -77,7 +86,7 @@ export default class SprintService {
     newWord: string;
     newWordTranslate: string;
   } {
-    const chance: number = Utils.getChance(this.currentWord, 19);
+    const chance: number = Utils.getChance(this.currentWordCounter, 19);
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     const newWord: string = word.word;
     const newWordTranslate: string = this.words[chance].wordTranslate;
@@ -85,9 +94,9 @@ export default class SprintService {
     this.prediction = false;
     this.wordId = wordId;
     this.word = newWord;
-    this.wordTranslate = newWordTranslate;
+    this.correctWordTranslate = this.words[this.currentWordCounter].wordTranslate;
 
-    if (chance === this.currentWord) {
+    if (chance === this.currentWordCounter) {
       this.prediction = true;
       return {
         wordId,
@@ -104,10 +113,10 @@ export default class SprintService {
   }
 
   controlCurrentWord(): void {
-    if (this.currentWord < 19) {
-      this.currentWord += 1;
+    if (this.currentWordCounter < 19) {
+      this.currentWordCounter += 1;
     } else {
-      this.currentWord = 0;
+      this.currentWordCounter = 0;
       this.words = Utils.shuffleWords(this.words);
     }
   }
@@ -143,29 +152,70 @@ export default class SprintService {
     }
   }
 
+  setNextWord(): void {
+    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
+    view.gamesView.sprintGame.createWord(wordId, newWord);
+    view.gamesView.sprintGame.createWordTranslate(wordId, newWordTranslate);
+  }
+
+  setStatistic(action: '+' | '-'): void {
+    if (!AuthService.checkUser()) {
+      Object.defineProperty(this.wordsStatistics, this.word, {
+        value: {
+          word: this.word,
+          wordId: this.wordId,
+          wordTranslate: this.correctWordTranslate,
+          audio: this.words[this.currentWordCounter].audio,
+          correctAttempts: 0,
+          incorrectAttempts: 0,
+        },
+      });
+    }
+
+    if (!this.wordsStatistics[this.word]) {
+      Object.defineProperty(this.wordsStatistics, this.word, {
+        value: {
+          word: this.word,
+          wordId: this.wordId,
+          wordTranslate: this.correctWordTranslate,
+          audio: this.words[this.currentWordCounter].audio,
+          correctAttempts:
+            (this.words[this.currentWordCounter] as PaginatedResult).userWord?.optional?.correctAttempts || 0,
+          incorrectAttempts:
+            (this.words[this.currentWordCounter] as PaginatedResult).userWord?.optional?.incorrectAttempts || 0,
+          difficulty: (this.words[this.currentWordCounter] as PaginatedResult).userWord?.difficulty || null,
+        },
+      });
+    }
+
+    if (action === '+') {
+      this.wordsStatistics[this.word].correctAttempts += 1;
+      this.correctAnswers += 1;
+    } else {
+      this.wordsStatistics[this.word].incorrectAttempts += 1;
+      this.mistakes += 1;
+    }
+    console.log(this.wordsStatistics);
+    this.allWordsCounter = this.correctAnswers + this.mistakes;
+  }
+
   checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
     if ((id.includes('right') && this.prediction === true) || (id.includes('wrong') && this.prediction === false)) {
       this.soundHelper.playGameSound('../../assets/sounds/ok.wav');
       this.addPoints();
       this.setMultiplicator('+');
+      this.setStatistic('+');
       this.setSteps();
-      this.correctAnswers += 1;
     } else {
       this.soundHelper.playGameSound('../../assets/sounds/error.wav');
-      this.setMultiplicator('-');
       this.setSteps();
-      this.mistakes += 1;
+      this.setMultiplicator('-');
+      this.setStatistic('-');
+      this.setSteps();
     }
-    this.allWordsCounter = this.correctAnswers + this.mistakes;
     this.controlCurrentWord();
     this.setNextWord();
-  }
-
-  setNextWord(): void {
-    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWord]);
-    view.gamesView.sprintGame.createWord(wordId, newWord);
-    view.gamesView.sprintGame.createWordTranslate(wordId, newWordTranslate);
   }
 
   setItems(): void {
