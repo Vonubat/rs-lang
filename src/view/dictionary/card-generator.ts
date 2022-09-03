@@ -4,20 +4,16 @@ import HTMLConstructor from '../components/constructor';
 
 export default class DictionaryCardGenerator extends HTMLConstructor {
   createCard(word: PaginatedResult): HTMLElement {
-    const card: HTMLElement = this.createHtmlElement(
-      'div',
-      ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'],
-      `card-${word._id}`
-    );
+    const classList: string[] = ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'];
 
     if (word.userWord?.difficulty === 'hard') {
-      card.style.borderColor = 'red';
-      card.style.borderWidth = '3px';
+      classList.push('hard-word');
     }
     if (word.userWord?.difficulty === 'learned') {
-      card.style.borderColor = 'green';
-      card.style.borderWidth = '3px';
+      classList.push('learned-word');
     }
+
+    const card: HTMLElement = this.createHtmlElement('div', classList, `card-${word._id}`);
 
     return card;
   }

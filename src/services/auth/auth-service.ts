@@ -198,6 +198,7 @@ export default class AuthService {
     view.textbookView.drawCardsContainer(words, pageConfig);
     services.textbookService.setCardsItems();
     services.textbookService.listenCards();
+    services.textbookService.checkMaxStackOfWords();
   }
 
   setModalWindowsItems(): void {

@@ -1,36 +1,23 @@
 import Constants from '../../constants';
 import { PaginatedResult, TypeOfWordIsPaginatedResult, WordsResponseSchema } from '../../types/types';
-import Utils from '../../utilities/utils';
 import HTMLConstructor from '../components/constructor';
 
 export default class TextbookCardGenerator extends HTMLConstructor {
   createCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+    const classList: string[] = ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'];
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
-
-    const card: HTMLElement = this.createHtmlElement(
-      'div',
-      ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'],
-      `card-${wordId}`
-    );
 
     if (TypeOfWordIsPaginatedResult(word)) {
       if (word.userWord?.difficulty === 'hard') {
-        card.style.borderColor = 'red';
-        card.style.borderWidth = '3px';
+        classList.push('hard-word');
       }
       if (word.userWord?.difficulty === 'learned') {
-        card.style.borderColor = 'green';
-        card.style.borderWidth = '3px';
+        classList.push('learned-word');
       }
     }
 
-    return card;
-  }
+    const card: HTMLElement = this.createHtmlElement('div', classList, `card-${wordId}`);
 
-  updateCardColor(element: HTMLElement, color: 'red' | 'green'): HTMLElement {
-    const card: HTMLElement = Utils.findAncestor(element, 'card');
-    card.style.borderColor = `${color}`;
-    card.style.borderWidth = '3px';
     return card;
   }
 

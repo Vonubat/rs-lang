@@ -10,8 +10,11 @@ import {
 import AuthService from '../auth/auth-service';
 import Credentials from '../auth/credentials';
 import { services } from '../services';
+import Utils from '../../utilities/utils';
 
 export default class TextbookService {
+  stack: { [index: string]: number };
+
   pageNumberItemsLeft!: NodeListOf<HTMLElement>;
 
   pageNumberItemsRight!: NodeListOf<HTMLElement>;
@@ -24,7 +27,7 @@ export default class TextbookService {
 
   groupNumberCurrent!: NodeListOf<HTMLElement>;
 
-  pageNumber!: NodeListOf<HTMLElement>;
+  pageNumber!: NodeListOf<HTMLAnchorElement>;
 
   groupNumber!: NodeListOf<HTMLElement>;
 
@@ -37,6 +40,14 @@ export default class TextbookService {
   sprintGame!: HTMLDivElement;
 
   audioChallengeGame!: HTMLDivElement;
+
+  cards!: NodeListOf<HTMLDivElement>;
+
+  gamesContainer!: HTMLDivElement;
+
+  constructor() {
+    this.stack = {};
+  }
 
   async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[] | PaginatedResult[]> {
     let words: WordsResponseSchema[] | PaginatedResult[];
@@ -67,6 +78,7 @@ export default class TextbookService {
     this.setCardsItems();
     this.listenPagination();
     this.listenCards();
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
   }
 
@@ -81,12 +93,16 @@ export default class TextbookService {
     this.groupNumber = view.textbookView.textbook.querySelectorAll('.group-number');
     this.sprintGame = document.getElementById('card-textbook-sprint') as HTMLDivElement;
     this.audioChallengeGame = document.getElementById('card-textbook-audio-challenge') as HTMLDivElement;
+    this.gamesContainer = view.textbookView.textbook.querySelector(
+      '.mini-card-wrapper-games-textbook'
+    ) as HTMLDivElement;
   }
 
   setCardsItems(): void {
     this.soundIcons = view.textbookView.textbook.querySelectorAll('.sound-icon');
     this.difficultBtns = view.textbookView.textbook.querySelectorAll('.word-difficult-btn');
     this.learnedBtns = view.textbookView.textbook.querySelectorAll('.word-learned-btn');
+    this.cards = view.textbookView.textbook.querySelectorAll('.card');
   }
 
   async decreasePageNumber(): Promise<void> {
@@ -100,6 +116,7 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
   }
 
@@ -114,6 +131,7 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
   }
 
@@ -128,6 +146,7 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
   }
 
@@ -142,6 +161,7 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
   }
 
@@ -157,6 +177,7 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
   }
 
@@ -172,6 +193,7 @@ export default class TextbookService {
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
   }
 
@@ -217,7 +239,8 @@ export default class TextbookService {
       userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
     }
 
-    view.textbookView.cardGenerator.updateCardColor(event.target as HTMLElement, 'red');
+    Utils.findAncestor(event.target as HTMLElement, 'card').classList.add('hard-word');
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
     return userWord;
   }
@@ -239,9 +262,38 @@ export default class TextbookService {
       userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
     }
 
-    view.textbookView.cardGenerator.updateCardColor(event.target as HTMLElement, 'green');
+    Utils.findAncestor(event.target as HTMLElement, 'card').classList.add('learned-word');
+    this.checkMaxStackOfWords();
     view.loading.delSpinners();
     return userWord;
+  }
+
+  checkMaxStackOfWords(): void {
+    const currentPage: number = services.pageConfig.getPageNumber();
+    this.stack[currentPage] = 0;
+    this.cards.forEach((item: HTMLDivElement) => {
+      if (item.classList.contains('learned-word') || item.classList.contains('hard-word')) {
+        this.stack[currentPage] += 1;
+      }
+    });
+
+    if (this.stack[currentPage] === 20) {
+      Utils.resetBackground(view.textbookView.textbook, '#565e64');
+      this.gamesContainer.classList.add('disabled');
+      for (let i = 0; i < this.pageNumber.length; i += 1) {
+        if (this.stack[i] === 20) {
+          Utils.resetBackground(this.pageNumber[i], '#565e64');
+        }
+      }
+    } else {
+      this.gamesContainer.classList.remove('disabled');
+      view.textbookView.color.switchColor(view.textbookView.textbook, services.pageConfig.getPageConfigResponse());
+      for (let i = 0; i < this.pageNumber.length; i += 1) {
+        if (this.stack[i] !== 20) {
+          Utils.resetBackground(this.pageNumber[i]);
+        }
+      }
+    }
   }
 
   listenPagination(): void {
