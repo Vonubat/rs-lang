@@ -86,6 +86,8 @@
   gap: 30px;
 
   .points-wrapper {
+    color: whitesmoke;
+
     .steps-wrapper {
       margin-top: 20px;
       gap: 10px;
@@ -111,5 +113,16 @@
 
   .countdown-canvas-sprint-game {
     margin-bottom: 30px;
+  }
+}
+
+#modal-dialog {
+  .modal-body {
+    gap: 5px;
+    font-size: medium;
+
+    .word-container {
+      gap: 5px;
+    }
   }
 }

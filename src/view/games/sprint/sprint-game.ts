@@ -1,4 +1,5 @@
 import { services } from '../../../services/services';
+import { PaginatedResult, WordsResponseSchema } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
 export default class SprintGame extends HTMLConstructor {
@@ -14,7 +15,7 @@ export default class SprintGame extends HTMLConstructor {
       'align-items-center',
       `points-wrapper`,
     ];
-    const pointsWrapper: HTMLElement = this.createHtmlElement('div', classList, `wrapper-points-sprint`);
+    const pointsWrapper: HTMLElement = this.createHtmlElement('div', classList, `points-wrapper-sprint`);
     return pointsWrapper;
   }
 
@@ -163,9 +164,12 @@ export default class SprintGame extends HTMLConstructor {
     return cardContainer;
   }
 
-  createTimer(): HTMLElement {
+  createTimer(
+    cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
+    words: WordsResponseSchema[] | PaginatedResult[]
+  ): HTMLElement {
     const timer: HTMLElement = services.timer.createTimerElement('sprint', 'game');
-    services.timer.createTimerConfig(timer, 60000);
+    services.timer.createTimerConfig(timer, 10000, cb, words);
 
     return timer;
   }
@@ -184,11 +188,17 @@ export default class SprintGame extends HTMLConstructor {
     return gameContainer;
   }
 
-  generateGameContainer(wordId: string, word: string, wordTranslate: string): HTMLElement {
+  generateGameContainer(
+    wordId: string,
+    word: string,
+    wordTranslate: string,
+    cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
+    words: WordsResponseSchema[] | PaginatedResult[]
+  ): HTMLElement {
     const gameContainer: HTMLElement = this.createGameContainer();
     const pointsWrapper: HTMLElement = this.generatePointsWrapper();
     const card: HTMLElement = this.generateCard(wordId, word, wordTranslate);
-    const timer: HTMLElement = this.createTimer();
+    const timer: HTMLElement = this.createTimer(cb, words);
 
     gameContainer.append(pointsWrapper, card, timer);
 

@@ -2,8 +2,17 @@ import { WordsStatistic, WordsStatistics } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 
 export default class GamesResults extends HTMLConstructor {
+  createTriggerModal(): HTMLElement {
+    const classList: string[] = ['btn', 'btn-primary', 'visually-hidden'];
+    const triggerModal: HTMLElement = this.createHtmlElement('buttom', classList, `trigger-modal`, [
+      ['data-bs-toggle', 'modal'],
+      ['data-bs-target', '#modal'],
+    ]);
+    return triggerModal;
+  }
+
   createModal(): HTMLElement {
-    const classList: string[] = ['modal fade', 'fade'];
+    const classList: string[] = ['modal', 'fade'];
     const modal: HTMLElement = this.createHtmlElement('div', classList, `modal`, [
       ['data-bs-backdrop', 'static'],
       ['data-bs-keyboard', 'false'],
@@ -44,63 +53,56 @@ export default class GamesResults extends HTMLConstructor {
   }
 
   createModalBody(): HTMLElement {
-    const classList: string[] = ['modal-body'];
+    const classList: string[] = ['modal-body', 'd-flex', 'flex-column'];
     const btnClose: HTMLElement = this.createHtmlElement('div', classList, `modal-body`);
     return btnClose;
   }
 
-  createAccuracyElement(accuracy: number): HTMLElement {
-    const accuracyElement: HTMLElement = this.createHtmlElement(
-      'span',
-      undefined,
-      `accuracy`,
-      undefined,
-      `Accuracy: ${this.createBadge(accuracy, 'text-bg-warning')}%`
-    );
+  createPointsElement(points: number): HTMLElement {
+    const pointsElement: HTMLElement = this.createHtmlElement('div', undefined, `points`, undefined, `Points: `);
+    pointsElement.append(this.createBadge(points, 'text-bg-info'));
+    return pointsElement;
+  }
+
+  createAccuracyElement(accuracy: string): HTMLElement {
+    const accuracyElement: HTMLElement = this.createHtmlElement('div', undefined, `accuracy`, undefined, `Accuracy: `);
+    accuracyElement.append(this.createBadge(accuracy, 'text-bg-warning'));
     return accuracyElement;
   }
 
   createInARowElement(inARow: number): HTMLElement {
-    const inARowElement: HTMLElement = this.createHtmlElement(
-      'span',
-      undefined,
-      `in-a-row`,
-      undefined,
-      `In a row: ${this.createBadge(inARow, 'text-bg-secondary')}`
-    );
+    const inARowElement: HTMLElement = this.createHtmlElement('div', undefined, `in-a-row`, undefined, `In a row: `);
+    inARowElement.append(this.createBadge(inARow, 'text-bg-secondary'));
     return inARowElement;
   }
 
   createRepeatedWordsElement(repeatedWords: number): HTMLElement {
     const repeatedWordsElement: HTMLElement = this.createHtmlElement(
-      'span',
+      'div',
       undefined,
       `repeated-words`,
       undefined,
-      `Words were repeated: ${this.createBadge(repeatedWords, 'text-bg-primary')}`
+      `Words were repeated: `
     );
+    repeatedWordsElement.append(this.createBadge(repeatedWords, 'text-bg-primary'));
     return repeatedWordsElement;
   }
 
-  createRightAnswersElement(rightAnswers: number): HTMLElement {
-    const rightAnswersElement: HTMLElement = this.createHtmlElement(
-      'span',
+  createCorrectAnswersElement(correctAnswers: number): HTMLElement {
+    const correctAnswersElement: HTMLElement = this.createHtmlElement(
+      'div',
       undefined,
       `right-answers`,
       undefined,
-      `Right Answers: ${this.createBadge(rightAnswers, 'text-bg-success')}`
+      `Correct answers: `
     );
-    return rightAnswersElement;
+    correctAnswersElement.append(this.createBadge(correctAnswers, 'text-bg-success'));
+    return correctAnswersElement;
   }
 
   createMistakesElement(mistakes: number): HTMLElement {
-    const mistakesElement: HTMLElement = this.createHtmlElement(
-      'span',
-      undefined,
-      `mistakes`,
-      undefined,
-      `Mistakes: ${this.createBadge(mistakes, 'text-bg-danger')}`
-    );
+    const mistakesElement: HTMLElement = this.createHtmlElement('div', undefined, `mistakes`, undefined, `Mistakes: `);
+    mistakesElement.append(this.createBadge(mistakes, 'text-bg-danger'));
     return mistakesElement;
   }
 
@@ -120,8 +122,12 @@ export default class GamesResults extends HTMLConstructor {
   }
 
   createWord(wordId: string, word: string, wordTranslate: string, audio: string): HTMLElement {
-    const wordContainer: HTMLElement = this.createHtmlElement('div', ['d-flex'], `${wordId}`);
-    const newWord: HTMLElement = this.createHtmlElement('span', [], undefined, undefined, `${word} — `);
+    const wordContainer: HTMLElement = this.createHtmlElement(
+      'div',
+      ['d-flex', 'word-container', 'align-items-sm-center'],
+      `${wordId}`
+    );
+    const newWord: HTMLElement = this.createHtmlElement('span', [], undefined, undefined, `${word} -`);
     const newWordTranslate: HTMLElement = this.createHtmlElement(
       'span',
       ['text-muted'],
@@ -161,40 +167,43 @@ export default class GamesResults extends HTMLConstructor {
     return correctWordsWrapper;
   }
 
-  generateResult(
+  generateResults(
     wordsStatistics: WordsStatistics,
-    accuracy: number,
+    points: number,
+    accuracy: string,
     inARow: number,
-    rightAnswers: number,
+    correctAnswers: number,
     mistakes: number,
     repeatedWords: number
   ): HTMLElement {
+    const triggerModal: HTMLElement = this.createTriggerModal();
     const modal: HTMLElement = this.createModal();
     const modalDialog: HTMLElement = this.createModalDialog();
     const modalContent: HTMLElement = this.createModalContent();
     const modalHeader: HTMLElement = this.createModalHeader();
-    const modalTitle: HTMLElement = this.createModalTitle();
-    const btnClose: HTMLElement = this.createBtnClose();
     const modalBody: HTMLElement = this.createModalBody();
     modal.append(modalDialog);
     modalDialog.append(modalContent);
     modalContent.append(modalHeader, modalBody);
-    modalHeader.append(modalTitle, btnClose);
-    const accuracyElement = this.createAccuracyElement(accuracy);
-    const inARowElement = this.createInARowElement(inARow);
-    const repeatedWordsElement = this.createRepeatedWordsElement(repeatedWords);
-    const rightAnswersElement = this.createRightAnswersElement(rightAnswers);
-    const mistakesElement = this.createMistakesElement(mistakes);
-    const correctWordsWrapper = this.createCorrectWords(wordsStatistics);
-    const incorrectWordsWrapper = this.createIncorrectWords(wordsStatistics);
+    modalHeader.append(this.createModalTitle(), this.createBtnClose());
+    const pointsElement: HTMLElement = this.createPointsElement(points);
+    const accuracyElement: HTMLElement = this.createAccuracyElement(accuracy);
+    const inARowElement: HTMLElement = this.createInARowElement(inARow);
+    const repeatedWordsElement: HTMLElement = this.createRepeatedWordsElement(repeatedWords);
+    const correctAnswersElement: HTMLElement = this.createCorrectAnswersElement(correctAnswers);
+    const mistakesElement: HTMLElement = this.createMistakesElement(mistakes);
+    const correctWordsWrapper: HTMLElement = this.createCorrectWords(wordsStatistics);
+    const incorrectWordsWrapper: HTMLElement = this.createIncorrectWords(wordsStatistics);
     modalBody.append(
+      pointsElement,
       accuracyElement,
       inARowElement,
       repeatedWordsElement,
-      rightAnswersElement,
+      correctAnswersElement,
       correctWordsWrapper,
       mistakesElement,
-      incorrectWordsWrapper
+      incorrectWordsWrapper,
+      triggerModal
     );
     return modal;
   }

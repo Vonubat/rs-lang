@@ -23,8 +23,8 @@ export default class Timer {
   createTimerConfig(
     element: HTMLElement,
     duration: number,
-    cb?: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
-    words?: WordsResponseSchema[] | PaginatedResult[]
+    cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
+    words: WordsResponseSchema[] | PaginatedResult[]
   ) {
     const newTimer = new CanvasCircularCountdown(
       element,
@@ -37,7 +37,7 @@ export default class Timer {
         circleBackgroundColor: 'transparent',
         emptyProgressBarBackgroundColor: '#b9c1c7',
         filledProgressBarBackgroundColor: 'yellow',
-        captionColor: 'black',
+        captionColor: 'white',
         captionFont:
           '22px system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
         showCaption: true,
@@ -49,9 +49,7 @@ export default class Timer {
       ): void => {
         instance.style({ captionText: `${Math.ceil((duration - time.elapsed) / 1000)}` });
         if (time.elapsed > duration) {
-          if (words && cb) {
-            cb(words);
-          }
+          cb(words);
         }
       }
     ).start();
