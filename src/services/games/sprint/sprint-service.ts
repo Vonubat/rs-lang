@@ -7,15 +7,9 @@ import {
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
 import AuthService from '../../auth/auth-service';
-import PageConfig from '../../components/page-config';
-import SoundHelper from '../../components/sound-helper';
 import { services } from '../../services';
 
 export default class SprintService {
-  soundHelper: SoundHelper;
-
-  pageConfig: PageConfig;
-
   words: WordsResponseSchema[] | PaginatedResult[];
 
   currentWordCounter: number;
@@ -75,8 +69,6 @@ export default class SprintService {
   totalCount!: number;
 
   constructor() {
-    this.soundHelper = new SoundHelper();
-    this.pageConfig = new PageConfig();
     this.words = [];
     this.steps = [];
     this.currentWordCounter = 0;
@@ -96,7 +88,7 @@ export default class SprintService {
     page.innerHTML = '';
 
     this.words = words;
-    this.totalCount = this.pageConfig.getTotalCount();
+    this.totalCount = services.pageConfig.getTotalCount();
     const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
 
     page.append(
@@ -114,7 +106,7 @@ export default class SprintService {
 
   finishSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
     const page: HTMLElement = view.gamesView.games;
-    this.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
+    services.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
 
     page.append(
@@ -289,13 +281,13 @@ export default class SprintService {
   checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
     if ((id.includes('right') && this.prediction === true) || (id.includes('wrong') && this.prediction === false)) {
-      this.soundHelper.playGameSound('../../assets/sounds/ok.wav');
+      services.soundHelper.playGameSound('../../assets/sounds/ok.wav');
       this.addPoints();
       this.setMultiplicator('+');
       this.setWordStatistics('+');
       this.setSteps();
     } else {
-      this.soundHelper.playGameSound('../../assets/sounds/error.wav');
+      services.soundHelper.playGameSound('../../assets/sounds/error.wav');
       this.setSteps();
       this.setMultiplicator('-');
       this.setWordStatistics('-');
@@ -324,7 +316,7 @@ export default class SprintService {
     ) as string;
 
     if (currentAttr.includes('stop-fill')) {
-      this.soundHelper.pause();
+      services.soundHelper.pause();
       view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
       return false;
     }
@@ -333,7 +325,7 @@ export default class SprintService {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
-    this.soundHelper.playWordPronouncing(elem as SVGSVGElement);
+    services.soundHelper.playWordPronouncing(elem as SVGSVGElement);
     return true;
   }
 

@@ -1,18 +1,12 @@
 import { api } from '../../api/api';
 import { view } from '../../view/view';
 import { AggregatedWords, PaginatedResult } from '../../types/types';
-import SoundHelper from '../components/sound-helper';
-import Loading from '../../view/components/loading';
 import Credentials from '../auth/credentials';
 import Utils from '../../utilities/utils';
 import AuthService from '../auth/auth-service';
 import { services } from '../services';
 
 export default class DictionaryService {
-  soundHelper: SoundHelper;
-
-  loading: Loading;
-
   soundIcons!: NodeListOf<HTMLElement>;
 
   removeBtns!: NodeListOf<HTMLElement>;
@@ -29,11 +23,6 @@ export default class DictionaryService {
 
   audioChallengeGame!: HTMLDivElement;
 
-  constructor() {
-    this.soundHelper = new SoundHelper();
-    this.loading = new Loading();
-  }
-
   async getWords(typeOfWords: 'learned' | 'hard'): Promise<PaginatedResult[]> {
     const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
       Credentials.getUserId(),
@@ -44,7 +33,7 @@ export default class DictionaryService {
   }
 
   async drawPage(): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const words: PaginatedResult[] = await this.getWords('hard');
 
     view.dictionaryView.drawPage(words);
@@ -52,11 +41,11 @@ export default class DictionaryService {
     this.listenCards();
     this.setSectionsItems();
     this.listenSections();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   async updatePage(event: Event): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const { id } = event.target as HTMLButtonElement;
     let typeOfWords: 'learned' | 'hard';
 
@@ -71,7 +60,7 @@ export default class DictionaryService {
     view.dictionaryView.drawCardsContainer(words);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   setCardsItems(): void {
@@ -101,7 +90,7 @@ export default class DictionaryService {
     ) as string;
 
     if (currentAttr.includes('stop-fill')) {
-      this.soundHelper.pause();
+      services.soundHelper.pause();
       view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
       return false;
     }
@@ -110,12 +99,12 @@ export default class DictionaryService {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
-    this.soundHelper.playQueue(elem as SVGSVGElement);
+    services.soundHelper.playQueue(elem as SVGSVGElement);
     return true;
   }
 
   async removeWord(event: Event): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const { target } = event;
     const { id } = event.target as HTMLButtonElement;
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
@@ -133,7 +122,7 @@ export default class DictionaryService {
       view.dictionaryView.dictionary.append(emptyCard);
     }
 
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   listenCards(): void {

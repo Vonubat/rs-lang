@@ -3,6 +3,7 @@ import { AggregatedWords, PaginatedResult, WordsResponseSchema } from '../../typ
 import Utils from '../../utilities/utils';
 import AuthService from '../auth/auth-service';
 import Credentials from '../auth/credentials';
+import { services } from '../services';
 
 export default class GamesData {
   async prepareData(id: string, level?: number): Promise<WordsResponseSchema[] | PaginatedResult[]> {
@@ -33,6 +34,7 @@ export default class GamesData {
         level,
         this.randomPageNumber()
       );
+      services.pageConfig.setTotalCount(aggregatedWords.totalCount[0].count);
       words = Utils.shuffleWords(aggregatedWords.paginatedResults);
       return words;
     }
@@ -47,6 +49,7 @@ export default class GamesData {
       '{"$or":[{"userWord.difficulty":"hard"},{"userWord.difficulty":"learned"}]}',
       600
     );
+    services.pageConfig.setTotalCount(aggregatedWords.totalCount[0].count);
     const words: WordsResponseSchema[] | PaginatedResult[] = Utils.shuffleWords(aggregatedWords.paginatedResults);
     return words;
   }

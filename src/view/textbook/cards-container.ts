@@ -1,15 +1,8 @@
 import { PaginatedResult, WordsResponseSchema } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
-import TextbookCardGenerator from './card-generator';
+import { view } from '../view';
 
 export default class TextbookCardsContainer extends HTMLConstructor {
-  cardGenerator: TextbookCardGenerator;
-
-  constructor() {
-    super();
-    this.cardGenerator = new TextbookCardGenerator();
-  }
-
   createCardContainer(): HTMLElement {
     let cardsContainer: HTMLElement | null = document.getElementById('cards-container');
 
@@ -31,7 +24,7 @@ export default class TextbookCardsContainer extends HTMLConstructor {
     cardsContainer.innerHTML = '';
 
     words.forEach((item: WordsResponseSchema | PaginatedResult): void => {
-      cardsContainer.append(this.cardGenerator.generateCard(item));
+      cardsContainer.append(view.textbookView.cardGenerator.generateCard(item));
     });
 
     return cardsContainer;

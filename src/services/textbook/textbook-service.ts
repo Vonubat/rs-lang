@@ -7,19 +7,11 @@ import {
   UsersWordsResponseSchema,
   WordsResponseSchema,
 } from '../../types/types';
-import PageConfig from '../components/page-config';
-import SoundHelper from '../components/sound-helper';
-import Loading from '../../view/components/loading';
 import AuthService from '../auth/auth-service';
 import Credentials from '../auth/credentials';
+import { services } from '../services';
 
 export default class TextbookService {
-  pageConfig: PageConfig;
-
-  soundHelper: SoundHelper;
-
-  loading: Loading;
-
   pageNumberItemsLeft!: NodeListOf<HTMLElement>;
 
   pageNumberItemsRight!: NodeListOf<HTMLElement>;
@@ -42,12 +34,6 @@ export default class TextbookService {
 
   learnedBtns!: NodeListOf<HTMLElement>;
 
-  constructor() {
-    this.pageConfig = new PageConfig();
-    this.soundHelper = new SoundHelper();
-    this.loading = new Loading();
-  }
-
   async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[] | PaginatedResult[]> {
     let words: WordsResponseSchema[] | PaginatedResult[];
 
@@ -68,8 +54,8 @@ export default class TextbookService {
   }
 
   async drawPage(): Promise<void> {
-    this.loading.createSpinners();
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    view.loading.createSpinners();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.drawPage(words, pageConfig);
@@ -77,7 +63,7 @@ export default class TextbookService {
     this.setCardsItems();
     this.listenPagination();
     this.listenCards();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   setPaginationItems(): void {
@@ -98,89 +84,89 @@ export default class TextbookService {
   }
 
   async decreasePageNumber(): Promise<void> {
-    this.loading.createSpinners();
-    this.pageConfig.shiftPageNumber('-');
+    view.loading.createSpinners();
+    services.pageConfig.shiftPageNumber('-');
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   async increasePageNumber(): Promise<void> {
-    this.loading.createSpinners();
-    this.pageConfig.shiftPageNumber('+');
+    view.loading.createSpinners();
+    services.pageConfig.shiftPageNumber('+');
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   async decreaseGroupNumber(): Promise<void> {
-    this.loading.createSpinners();
-    this.pageConfig.shiftGroupNumber('-');
+    view.loading.createSpinners();
+    services.pageConfig.shiftGroupNumber('-');
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   async increaseGroupNumber(): Promise<void> {
-    this.loading.createSpinners();
-    this.pageConfig.shiftGroupNumber('+');
+    view.loading.createSpinners();
+    services.pageConfig.shiftGroupNumber('+');
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   async setPageNumber(event: Event): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const value: number = Number((event.target as HTMLElement).innerText) - 1;
-    this.pageConfig.setPageNumber(value);
+    services.pageConfig.setPageNumber(value);
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.pageNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   async setGroupNumber(event: Event): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const value: number = Number((event.target as HTMLElement).innerText) - 1;
-    this.pageConfig.setGroupNumber(value);
+    services.pageConfig.setGroupNumber(value);
 
-    const pageConfig: PageConfigResponce = this.pageConfig.getPageConfigResponse();
+    const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
 
     view.textbookView.updatePaginationNumberCurrent(this.groupNumberCurrent, pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   listenPagination(): void {
@@ -212,7 +198,7 @@ export default class TextbookService {
     ) as string;
 
     if (currentAttr.includes('stop-fill')) {
-      this.soundHelper.pause();
+      services.soundHelper.pause();
       view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
       return false;
     }
@@ -221,12 +207,12 @@ export default class TextbookService {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
-    this.soundHelper.playQueue(elem as SVGSVGElement);
+    services.soundHelper.playQueue(elem as SVGSVGElement);
     return true;
   }
 
   async addDiffcultWord(event: Event): Promise<UsersWordsResponseSchema> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const { id } = event.target as HTMLButtonElement;
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
     const wordId: string = id.slice(startPositionOfWordId);
@@ -242,13 +228,13 @@ export default class TextbookService {
       userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
     }
 
-    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'red');
-    this.loading.delSpinners();
+    view.textbookView.cardGenerator.updateCardColor(event.target as HTMLElement, 'red');
+    view.loading.delSpinners();
     return userWord;
   }
 
   async addLearnedWord(event: Event): Promise<UsersWordsResponseSchema> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const { id } = event.target as HTMLButtonElement;
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
     const wordId: string = id.slice(startPositionOfWordId);
@@ -264,8 +250,8 @@ export default class TextbookService {
       userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
     }
 
-    view.textbookView.cardsContainer.cardGenerator.updateCardColor(event.target as HTMLElement, 'green');
-    this.loading.delSpinners();
+    view.textbookView.cardGenerator.updateCardColor(event.target as HTMLElement, 'green');
+    view.loading.delSpinners();
     return userWord;
   }
 
