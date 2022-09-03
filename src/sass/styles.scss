@@ -15,17 +15,4 @@
 @import './components/404';
 @import './layout/dictionary';
 @import './layout/main';
-
-.app-wrapper {
-  display: flex;
-  flex-direction: row;
-}
-
-.disabled {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-.hiden {
-  overflow: hidden;
-}
+@import './layout/games';

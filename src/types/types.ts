@@ -131,6 +131,12 @@ export function TypeOfWordIsPaginatedResult(word: WordsResponseSchema | Paginate
   return '_id' in word;
 }
 
+type RGB = `rgb(${number}, ${number}, ${number})`;
+type RGBA = `rgba(${number}, ${number}, ${number}, ${number})`;
+type HEX = `#${string}`;
+
+export type Color = RGB | RGBA | HEX;
+
 export interface DailyStatistics {
   date: Date;
   learnedWords: number;

@@ -1,6 +1,6 @@
 import Constants from '../../constants';
 import { PaginatedResult, TypeOfWordIsPaginatedResult, WordsResponseSchema } from '../../types/types';
-import DomHelper from '../../utilities/DOM-helpers';
+import Utils from '../../utilities/utils';
 import HTMLConstructor from '../components/constructor';
 
 export default class TextbookCardGenerator extends HTMLConstructor {
@@ -28,7 +28,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
   }
 
   updateCardColor(element: HTMLElement, color: 'red' | 'green'): HTMLElement {
-    const card: HTMLElement = DomHelper.findAncestor(element, 'card');
+    const card: HTMLElement = Utils.findAncestor(element, 'card');
     card.style.borderColor = `${color}`;
     card.style.borderWidth = '3px';
     return card;

@@ -1,5 +1,6 @@
 import { View } from '../../view/view';
 import NotFound from '../../view/components/not_found';
+import Utils from '../../utilities/utils';
 
 export class Route {
   /* private urlTitle = 'RS Lang';
@@ -53,7 +54,10 @@ export class Route {
   } */
 
   routingHash(): void {
-    window.addEventListener('hashchange', this.handleLocation);
+    window.addEventListener('hashchange', (): void => {
+      this.handleLocation();
+      this.pageBG();
+    });
     this.handleLocation();
     /* window.onpopstate = this.handleLocation;
     (window as any).route = this.route;
@@ -98,8 +102,8 @@ export class Route {
       case 'dictionary':
         this.view.drawDictionary();
         break;
-      case 'minigames':
-        // TO DO
+      case 'games':
+        this.view.drawGamesCards();
         break;
       case 'statistics':
         // TO DO
@@ -120,8 +124,8 @@ export class Route {
   };
 
   static checkUrl(address: string): boolean {
-    const url: boolean = window.location.href.includes(`${address}`);
-    if (url) {
+    const url: string = window.location.hash.slice(1);
+    if (url === address) {
       return true;
     }
     return false;
@@ -132,6 +136,11 @@ export class Route {
     const menuTitle = document.querySelector('.header-title') as HTMLElement;
     menuTitle.innerText = name;
   };
+
+  private pageBG(): void {
+    const main: HTMLElement = document.getElementById('main') as HTMLElement;
+    Utils.resetBackground(main);
+  }
 }
 
 export const routing: Route = new Route();

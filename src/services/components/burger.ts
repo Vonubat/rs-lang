@@ -24,7 +24,7 @@ export class Burger extends HTMLConstructor {
       burger.classList.toggle('active');
       headerWrapper.classList.toggle('disabled');
       main.classList.toggle('disabled');
-      body.classList.toggle('hiden');
+      body.classList.toggle('hidden');
     });
 
     nav.addEventListener('click', (event) => {
@@ -34,7 +34,7 @@ export class Burger extends HTMLConstructor {
         burger.classList.remove('active');
         headerWrapper.classList.remove('disabled');
         main.classList.remove('disabled');
-        body.classList.remove('hiden');
+        body.classList.remove('hidden');
       }
     });
   }
