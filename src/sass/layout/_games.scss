@@ -80,3 +80,49 @@
   margin-top: -50px;
   margin-right: -50px;
 }
+
+.game-container {
+  padding-top: 30px;
+  gap: 30px;
+
+  .points-wrapper {
+    color: whitesmoke;
+
+    .steps-wrapper {
+      margin-top: 20px;
+      gap: 10px;
+
+      .badge {
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        background-color: #565e64;
+      }
+    }
+  }
+
+  .card-container {
+    padding: 40px;
+    text-transform: capitalize;
+
+    .btn-wrapper {
+      margin-top: 30px;
+      gap: 40px;
+    }
+  }
+
+  .countdown-canvas-sprint-game {
+    margin-bottom: 30px;
+  }
+}
+
+#modal-dialog {
+  .modal-body {
+    gap: 5px;
+    font-size: medium;
+
+    .word-container {
+      gap: 5px;
+    }
+  }
+}

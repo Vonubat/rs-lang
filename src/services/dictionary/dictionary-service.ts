@@ -1,17 +1,12 @@
 import { api } from '../../api/api';
 import { view } from '../../view/view';
 import { AggregatedWords, PaginatedResult } from '../../types/types';
-import SoundHelper from '../components/sound-helper';
-import Loading from '../../view/components/loading';
 import Credentials from '../auth/credentials';
 import Utils from '../../utilities/utils';
 import AuthService from '../auth/auth-service';
+import { services } from '../services';
 
 export default class DictionaryService {
-  soundHelper: SoundHelper;
-
-  loading: Loading;
-
   soundIcons!: NodeListOf<HTMLElement>;
 
   removeBtns!: NodeListOf<HTMLElement>;
@@ -24,10 +19,11 @@ export default class DictionaryService {
 
   dictionaryMenuItem!: HTMLElement;
 
-  constructor() {
-    this.soundHelper = new SoundHelper();
-    this.loading = new Loading();
-  }
+  sprintGame!: HTMLDivElement;
+
+  audioChallengeGame!: HTMLDivElement;
+
+  gamesContainer!: HTMLDivElement;
 
   async getWords(typeOfWords: 'learned' | 'hard'): Promise<PaginatedResult[]> {
     const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
@@ -39,7 +35,7 @@ export default class DictionaryService {
   }
 
   async drawPage(): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const words: PaginatedResult[] = await this.getWords('hard');
 
     view.dictionaryView.drawPage(words);
@@ -47,11 +43,12 @@ export default class DictionaryService {
     this.listenCards();
     this.setSectionsItems();
     this.listenSections();
-    this.loading.delSpinners();
+    this.hideGamesContainer();
+    view.loading.delSpinners();
   }
 
   async updatePage(event: Event): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const { id } = event.target as HTMLButtonElement;
     let typeOfWords: 'learned' | 'hard';
 
@@ -64,13 +61,15 @@ export default class DictionaryService {
     const words: PaginatedResult[] = await this.getWords(typeOfWords);
 
     view.dictionaryView.drawCardsContainer(words);
+    this.gamesContainer.classList.add('disabled');
     this.setCardsItems();
     this.listenCards();
-    this.loading.delSpinners();
+    this.hideGamesContainer();
+    view.loading.delSpinners();
   }
 
   setCardsItems(): void {
-    this.cardsCount = view.dictionaryView.dictionary.querySelectorAll('.card').length;
+    this.cardsCount = view.dictionaryView.dictionary.querySelectorAll('.dictionary-card').length;
     this.soundIcons = view.dictionaryView.dictionary.querySelectorAll('.sound-icon');
     this.removeBtns = view.dictionaryView.dictionary.querySelectorAll('.remove-word-btn');
   }
@@ -80,6 +79,11 @@ export default class DictionaryService {
       '.section-difficult-words'
     ) as HTMLButtonElement;
     this.learnedWordsBtn = view.dictionaryView.dictionary.querySelector('.section-learned-words') as HTMLButtonElement;
+    this.sprintGame = document.getElementById('card-dictionary-sprint') as HTMLDivElement;
+    this.audioChallengeGame = document.getElementById('card-dictionary-audio-challenge') as HTMLDivElement;
+    this.gamesContainer = view.dictionaryView.dictionary.querySelector(
+      '.mini-card-wrapper-games-dictionary'
+    ) as HTMLDivElement;
   }
 
   playSound(event: Event): boolean {
@@ -94,7 +98,7 @@ export default class DictionaryService {
     ) as string;
 
     if (currentAttr.includes('stop-fill')) {
-      this.soundHelper.pause();
+      services.soundHelper.pause();
       view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
       return false;
     }
@@ -103,12 +107,12 @@ export default class DictionaryService {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
-    this.soundHelper.play(elem as SVGSVGElement);
+    services.soundHelper.playQueue(elem as SVGSVGElement);
     return true;
   }
 
   async removeWord(event: Event): Promise<void> {
-    this.loading.createSpinners();
+    view.loading.createSpinners();
     const { target } = event;
     const { id } = event.target as HTMLButtonElement;
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
@@ -124,9 +128,10 @@ export default class DictionaryService {
     if (this.cardsCount === 0) {
       const emptyCard: HTMLElement = view.dictionaryView.cardsContainer.generateEmptyCardContainer();
       view.dictionaryView.dictionary.append(emptyCard);
+      this.hideGamesContainer();
     }
 
-    this.loading.delSpinners();
+    view.loading.delSpinners();
   }
 
   listenCards(): void {
@@ -137,6 +142,8 @@ export default class DictionaryService {
   listenSections(): void {
     this.difficultWordsBtn.addEventListener('click', this.updatePage.bind(this));
     this.learnedWordsBtn.addEventListener('click', this.updatePage.bind(this));
+    this.sprintGame.addEventListener('click', services.gamesService.launchGame.bind(this));
+    this.audioChallengeGame.addEventListener('click', services.gamesService.launchGame.bind(this));
   }
 
   hideDictionaryItems(): void {
@@ -147,6 +154,16 @@ export default class DictionaryService {
       }
     } else if (this.dictionaryMenuItem) {
       this.dictionaryMenuItem.style.display = 'none';
+    }
+  }
+
+  hideGamesContainer(): void {
+    console.log(this.cardsCount);
+
+    if (this.cardsCount < 1) {
+      this.gamesContainer.classList.add('disabled');
+    } else {
+      this.gamesContainer.classList.remove('disabled');
     }
   }
 }

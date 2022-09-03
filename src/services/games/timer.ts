@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { PaginatedResult, WordsResponseSchema } from '../../types/types';
 import { view } from '../../view/view';
 
 const CanvasCircularCountdown = require('canvas-circular-countdown').default;
@@ -19,7 +20,12 @@ export default class Timer {
     return canvas;
   }
 
-  createTimerConfig(element: HTMLElement, duration: number, cb?: (string: string) => string) {
+  createTimerConfig(
+    element: HTMLElement,
+    duration: number,
+    cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
+    words: WordsResponseSchema[] | PaginatedResult[]
+  ) {
     const newTimer = new CanvasCircularCountdown(
       element,
       {
@@ -31,7 +37,7 @@ export default class Timer {
         circleBackgroundColor: 'transparent',
         emptyProgressBarBackgroundColor: '#b9c1c7',
         filledProgressBarBackgroundColor: 'yellow',
-        captionColor: 'black',
+        captionColor: 'white',
         captionFont:
           '22px system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
         showCaption: true,
@@ -43,16 +49,7 @@ export default class Timer {
       ): void => {
         instance.style({ captionText: `${Math.ceil((duration - time.elapsed) / 1000)}` });
         if (time.elapsed > duration) {
-          /*  let a: number;
-          if (id === 'sprint-start') {
-            a = 1;
-          }
-          if (id === 'audio-challenge') {
-            a = 1;
-          } */
-          if (cb) {
-            cb('test');
-          }
+          cb(words);
         }
       }
     ).start();

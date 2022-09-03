@@ -1,5 +1,6 @@
 import { PageConfigResponce, PaginatedResult, WordsResponseSchema } from '../../types/types';
 import { view } from '../view';
+import TextbookCardGenerator from './card-generator';
 import TextbookCardsContainer from './cards-container';
 import Pagination from './pagination';
 import TextbookColor from './textbook-color';
@@ -7,7 +8,11 @@ import TextbookColor from './textbook-color';
 export default class TextbookView {
   cardsContainer: TextbookCardsContainer;
 
+  cardGenerator: TextbookCardGenerator;
+
   pagination: Pagination;
+
+  color: TextbookColor;
 
   textbook!: HTMLElement;
 
@@ -17,10 +22,9 @@ export default class TextbookView {
 
   paginationBottomInstance!: HTMLElement;
 
-  color!: TextbookColor;
-
   constructor() {
     this.cardsContainer = new TextbookCardsContainer();
+    this.cardGenerator = new TextbookCardGenerator();
     this.pagination = new Pagination();
     this.color = new TextbookColor();
   }
