@@ -7,6 +7,7 @@ import MainView from './main/main-view';
 import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 import DictionaryView from './dictionary/dictionary-view';
+import Statistics from './statistics/statistics-view';
 
 export class View {
   htmlConstructor: HTMLConstructor;
@@ -25,6 +26,8 @@ export class View {
 
   dictionaryView: DictionaryView;
 
+  statistics: Statistics;
+
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
     this.menu = new Menu();
@@ -34,6 +37,7 @@ export class View {
     this.textbookView = new TextbookView();
     this.dictionaryView = new DictionaryView();
     this.loading = new Loading();
+    this.statistics = new Statistics();
   }
 
   drawHeader(): DocumentFragment {
@@ -52,6 +56,11 @@ export class View {
 
   async drawDictionary(): Promise<void> {
     await services.dictionaryService.drawPage();
+  }
+
+  async drawStatistics() {
+    // throw new Error('Method not implemented.');
+    await this.statistics.drawPage();
   }
 
   drawMainPage(): void {

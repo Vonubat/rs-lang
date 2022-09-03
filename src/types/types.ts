@@ -85,7 +85,7 @@ interface TotalCount {
 }
 
 interface Optional {
-  [index: string]: string;
+  [index: string]: DailyStatistics;
 }
 
 export interface Statistics {
@@ -129,4 +129,9 @@ export interface Team {
 
 export function TypeOfWordIsPaginatedResult(word: WordsResponseSchema | PaginatedResult): word is PaginatedResult {
   return '_id' in word;
+}
+
+export interface DailyStatistics {
+  date: Date;
+  learnedWords: number;
 }

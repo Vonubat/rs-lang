@@ -103,6 +103,7 @@ export class Route {
         break;
       case 'statistics':
         // TO DO
+        this.view.drawStatistics();
         break;
       default:
         rootDiv.append(this.notFound.notFound());
