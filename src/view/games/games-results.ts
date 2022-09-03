@@ -48,7 +48,10 @@ export default class GamesResults extends HTMLConstructor {
 
   createBtnClose(): HTMLElement {
     const classList: string[] = ['btn-close'];
-    const btnClose: HTMLElement = this.createHtmlElement('button', classList, `btn-close`, [['type', 'button']]);
+    const btnClose: HTMLElement = this.createHtmlElement('button', classList, `btn-close`, [
+      ['type', 'button'],
+      ['data-bs-dismiss', 'modal'],
+    ]);
     return btnClose;
   }
 

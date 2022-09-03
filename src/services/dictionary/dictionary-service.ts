@@ -103,7 +103,7 @@ export default class DictionaryService {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
-    this.soundHelper.play(elem as SVGSVGElement);
+    this.soundHelper.playQueue(elem as SVGSVGElement);
     return true;
   }
 

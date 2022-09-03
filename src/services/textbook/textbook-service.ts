@@ -36,7 +36,7 @@ export default class TextbookService {
 
   groupNumber!: NodeListOf<HTMLElement>;
 
-  soundIcons!: NodeListOf<HTMLElement>;
+  soundIcons!: NodeListOf<SVGSVGElement>;
 
   difficultBtns!: NodeListOf<HTMLElement>;
 
@@ -221,7 +221,7 @@ export default class TextbookService {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
-    this.soundHelper.play(elem as SVGSVGElement);
+    this.soundHelper.playQueue(elem as SVGSVGElement);
     return true;
   }
 

@@ -65,6 +65,10 @@ export default class SprintService {
 
   triggerModal!: HTMLButtonElement;
 
+  soundIcons!: NodeListOf<SVGSVGElement>;
+
+  closeBtn!: HTMLButtonElement;
+
   constructor() {
     this.soundHelper = new SoundHelper();
     this.words = [];
@@ -98,15 +102,13 @@ export default class SprintService {
       )
     );
     this.setItems();
-    this.listen();
+    this.listenGame();
   }
 
   finishSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
     const page: HTMLElement = view.gamesView.games;
     this.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
-    this.words = words;
-    this.accuracy = `${this.checkForNonValidValues((this.correctAnswers / this.allWordsCounter) * 100).toFixed(1)} %`;
-    this.inARow = this.checkForNonValidValues(Math.max(...this.inARowHistory));
+    this.prepareFinalData(words);
 
     page.append(
       view.gamesView.gamesResults.generateResults(
@@ -120,7 +122,29 @@ export default class SprintService {
       )
     );
     this.setItems();
+    this.listenFinal();
     this.triggerModal.dispatchEvent(new Event('click'));
+  }
+
+  closeGame(): void {
+    this.eraseData();
+    window.location.href = '#';
+    window.location.href = '#games';
+  }
+
+  eraseData(): void {
+    this.words = [];
+    this.steps = [];
+    this.currentWordCounter = 0;
+    this.pointsValue = 0;
+    this.multiplicatorValue = 10;
+    this.mistakes = 0;
+    this.correctAnswers = 0;
+    this.allWordsCounter = 0;
+    this.wordsStatistics = {};
+    this.inARow = 0;
+    this.inARowCurrent = 0;
+    this.inARowHistory = [];
   }
 
   chooseTranslate(
@@ -205,7 +229,7 @@ export default class SprintService {
     view.gamesView.sprintGame.createWordTranslate(wordId, newWordTranslate);
   }
 
-  setStatistic(action: '+' | '-'): void {
+  setWordStatistics(action: '+' | '-'): void {
     this.createWordStatisticsObject();
     if (action === '+') {
       this.wordsStatistics[this.word].correctAttempts += 1;
@@ -261,13 +285,13 @@ export default class SprintService {
       this.soundHelper.playGameSound('../../assets/sounds/ok.wav');
       this.addPoints();
       this.setMultiplicator('+');
-      this.setStatistic('+');
+      this.setWordStatistics('+');
       this.setSteps();
     } else {
       this.soundHelper.playGameSound('../../assets/sounds/error.wav');
       this.setSteps();
       this.setMultiplicator('-');
-      this.setStatistic('-');
+      this.setWordStatistics('-');
       this.setSteps();
     }
     this.controlCurrentWord();
@@ -281,6 +305,37 @@ export default class SprintService {
     return value;
   }
 
+  playSound(event: Event): boolean {
+    let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
+    if (elem instanceof SVGUseElement) {
+      elem = elem.parentNode as SVGSVGElement;
+    }
+
+    const currentAttr: string = (elem.firstChild as SVGUseElement).getAttributeNS(
+      'http://www.w3.org/1999/xlink',
+      'href'
+    ) as string;
+
+    if (currentAttr.includes('stop-fill')) {
+      this.soundHelper.pause();
+      view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
+      return false;
+    }
+
+    this.soundIcons.forEach((item) => {
+      view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
+    });
+
+    this.soundHelper.playWordPronouncing(elem as SVGSVGElement);
+    return true;
+  }
+
+  prepareFinalData(words: WordsResponseSchema[] | PaginatedResult[]): void {
+    this.words = words;
+    this.accuracy = `${this.checkForNonValidValues((this.correctAnswers / this.allWordsCounter) * 100).toFixed(1)} %`;
+    this.inARow = this.checkForNonValidValues(Math.max(...this.inARowHistory));
+  }
+
   setItems(): void {
     this.right = document.getElementById('btn-right') as HTMLButtonElement;
     this.wrong = document.getElementById('btn-wrong') as HTMLButtonElement;
@@ -291,10 +346,17 @@ export default class SprintService {
     this.step3 = document.getElementById('step-3') as HTMLSpanElement;
     this.stepsElements = [this.step1, this.step2, this.step3];
     this.triggerModal = document.getElementById('trigger-modal') as HTMLButtonElement;
+    this.soundIcons = document.querySelectorAll('.sound-icon');
+    this.closeBtn = document.getElementById('btn-close') as HTMLButtonElement;
   }
 
-  listen(): void {
+  listenGame(): void {
     this.right.addEventListener('click', this.checkAnswer.bind(this));
     this.wrong.addEventListener('click', this.checkAnswer.bind(this));
+  }
+
+  listenFinal(): void {
+    this.soundIcons.forEach((item: SVGSVGElement) => item.addEventListener('click', this.playSound.bind(this)));
+    this.closeBtn.addEventListener('click', this.closeGame.bind(this));
   }
 }

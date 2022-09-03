@@ -8,6 +8,19 @@ export default class SoundHelper {
 
   audio!: HTMLAudioElement;
 
+  playWordPronouncing(elem: SVGSVGElement): void {
+    if (this.audio) {
+      this.pause();
+    }
+
+    view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'stop-fill');
+    this.audio = new Audio(`${Constants.BASE_URL}/${elem.dataset.audio}`);
+    this.audio.play();
+    this.audio.addEventListener('ended', (): void => {
+      view.htmlConstructor.changeSvg(elem.firstChild as SVGUseElement, 'volume-up-fill');
+    });
+  }
+
   playGameSound(path: string): void {
     if (this.audio) {
       this.pause();
@@ -16,7 +29,7 @@ export default class SoundHelper {
     this.audio.play();
   }
 
-  play(elem: SVGSVGElement): void {
+  playQueue(elem: SVGSVGElement): void {
     const audioPath = `${Constants.BASE_URL}/${elem.dataset.audio}`;
     const audioMeaningPath = `${Constants.BASE_URL}/${elem.dataset.audioMeaning}`;
     const audioExamplePath = `${Constants.BASE_URL}/${elem.dataset.audioExample}`;
@@ -25,10 +38,10 @@ export default class SoundHelper {
 
     this.audioArray = [audioPath, audioMeaningPath, audioExamplePath];
     this.i = 0;
-    this.playQueue(elem);
+    this.playCallBack(elem);
   }
 
-  playQueue(elem: SVGSVGElement): void {
+  playCallBack(elem: SVGSVGElement): void {
     if (this.audio) {
       this.pause();
     }
@@ -37,7 +50,7 @@ export default class SoundHelper {
 
     this.audio.addEventListener('ended', (): void => {
       this.i += 1;
-      this.playQueue(elem);
+      this.playCallBack(elem);
     });
 
     this.audio.addEventListener('ended', (): void => {
