@@ -150,8 +150,8 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     return card;
   }
 
-  createControls(word: WordsResponseSchema | PaginatedResult): HTMLElement {
-    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+  createControls(word: PaginatedResult): HTMLElement {
+    const wordId: string = word._id;
     const controlsWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
       'justify-content-center',
@@ -179,8 +179,8 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     return controlsWrapper;
   }
 
-  createBadges(word: WordsResponseSchema | PaginatedResult): HTMLElement {
-    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
+  createBadges(word: PaginatedResult): HTMLElement {
+    const wordId: string = word._id;
     const badgesWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
       'justify-content-center',
@@ -196,7 +196,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
         ['data-bs-toggle', 'custom-tooltip'],
         ['title', 'Correct attempts'],
       ],
-      '0'
+      `${word.userWord?.optional?.correctAttempts || 0}`
     );
     const incorrectAttempts: HTMLElement = this.createHtmlElement(
       'span',
@@ -206,7 +206,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
         ['data-bs-toggle', 'custom-tooltip'],
         ['title', 'Incorrect attempts'],
       ],
-      '0'
+      `${word.userWord?.optional?.incorrectAttempts || 0}`
     );
     badgesWrapper.append(correctAttempts, incorrectAttempts);
     return badgesWrapper;

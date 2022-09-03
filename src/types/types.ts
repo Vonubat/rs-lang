@@ -85,7 +85,7 @@ interface TotalCount {
 }
 
 interface Optional {
-  [index: string]: string;
+  [index: string]: string | number;
 }
 
 export interface Statistics {
@@ -152,5 +152,5 @@ export interface WordsStatistic {
   audio: string;
   correctAttempts: number;
   incorrectAttempts: number;
-  difficulty?: string | null;
+  difficulty?: 'hard' | 'learned' | 'none';
 }

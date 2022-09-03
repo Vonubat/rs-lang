@@ -1,12 +1,17 @@
+/* eslint-disable no-param-reassign */
+import { api } from '../../../api/api';
 import {
   WordsResponseSchema,
   PaginatedResult,
   TypeOfWordIsPaginatedResult,
   WordsStatistics,
+  WordsStatistic,
+  UsersWordsResponseSchema,
 } from '../../../types/types';
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
 import AuthService from '../../auth/auth-service';
+import Credentials from '../../auth/credentials';
 import { services } from '../../services';
 
 export default class SprintService {
@@ -108,6 +113,7 @@ export default class SprintService {
     const page: HTMLElement = view.gamesView.games;
     services.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
+    this.processWordStatistics();
 
     page.append(
       view.gamesView.gamesResults.generateResults(
@@ -232,6 +238,80 @@ export default class SprintService {
     view.gamesView.sprintGame.createWordTranslate(wordId, newWordTranslate);
   }
 
+  async processWordStatistics(): Promise<void> {
+    if (AuthService.checkUser()) {
+      const result: WordsStatistic[] = Object.values(this.wordsStatistics);
+      const userId: string = Credentials.getUserId();
+
+      result.forEach(
+        async (word: WordsStatistic): Promise<void> => {
+          this.wordLogicEngine(word);
+
+          const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(
+            userId,
+            word.wordId
+          );
+
+          if (response instanceof Response) {
+            // console.log(`create learned word ${wordId}`);
+            await api.usersWords.createUserWord(userId, word.wordId, {
+              difficulty: word.difficulty as string,
+              optional: {
+                correctAttempts: word.correctAttempts,
+                incorrectAttempts: word.incorrectAttempts,
+              },
+            });
+          } else {
+            // console.log(`update learned word ${wordId}`);
+            await api.usersWords.updateUserWord(userId, word.wordId, {
+              difficulty: word.difficulty as string,
+              optional: {
+                correctAttempts: word.correctAttempts,
+                incorrectAttempts: word.incorrectAttempts,
+              },
+            });
+          }
+        }
+      );
+    }
+  }
+
+  wordLogicEngine(word: WordsStatistic) {
+    if (word.difficulty === 'learned') {
+      const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts > 5;
+      if (minAttempts) {
+        const ratio: boolean = word.correctAttempts / word.incorrectAttempts > 0.5;
+        if (ratio) {
+          word.difficulty = 'learned';
+        } else {
+          word.difficulty = 'hard';
+        }
+      }
+    }
+    if (word.difficulty === 'none') {
+      const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts > 5;
+      if (minAttempts) {
+        const ratio: boolean = word.correctAttempts / word.incorrectAttempts > 0.7;
+        if (ratio) {
+          word.difficulty = 'learned';
+        } else {
+          word.difficulty = 'hard';
+        }
+      }
+    }
+    if (word.difficulty === 'hard') {
+      const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts > 5;
+      if (minAttempts) {
+        const ratio: boolean = word.correctAttempts / word.incorrectAttempts > 0.9;
+        if (ratio) {
+          word.difficulty = 'learned';
+        } else {
+          word.difficulty = 'hard';
+        }
+      }
+    }
+  }
+
   setWordStatistics(action: '+' | '-'): void {
     this.createWordStatisticsObject();
     if (action === '+') {
@@ -273,7 +353,7 @@ export default class SprintService {
             (this.words[this.currentWordCounter] as PaginatedResult).userWord?.optional?.correctAttempts || 0,
           incorrectAttempts:
             (this.words[this.currentWordCounter] as PaginatedResult).userWord?.optional?.incorrectAttempts || 0,
-          difficulty: (this.words[this.currentWordCounter] as PaginatedResult).userWord?.difficulty || null,
+          difficulty: (this.words[this.currentWordCounter] as PaginatedResult).userWord?.difficulty || 'none',
         },
         enumerable: true,
         configurable: true,

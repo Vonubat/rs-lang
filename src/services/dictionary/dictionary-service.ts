@@ -64,7 +64,7 @@ export default class DictionaryService {
   }
 
   setCardsItems(): void {
-    this.cardsCount = view.dictionaryView.dictionary.querySelectorAll('.card').length;
+    this.cardsCount = view.dictionaryView.dictionary.querySelectorAll('.dictionary-card').length;
     this.soundIcons = view.dictionaryView.dictionary.querySelectorAll('.sound-icon');
     this.removeBtns = view.dictionaryView.dictionary.querySelectorAll('.remove-word-btn');
   }
