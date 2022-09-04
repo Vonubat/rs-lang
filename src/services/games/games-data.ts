@@ -58,7 +58,7 @@ export default class GamesData {
     if (AuthService.checkUser()) {
       const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
         Credentials.getUserId(),
-        '',
+        '{"$or":[{"userWord.difficulty":"hard"},{"userWord.difficulty":"none"},{"userWord":null}]}',
         20,
         services.pageConfig.getGroupNumber(),
         services.pageConfig.getPageNumber()

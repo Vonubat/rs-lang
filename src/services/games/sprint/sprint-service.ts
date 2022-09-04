@@ -384,37 +384,33 @@ export default class SprintService {
   }
 
   wordStatisticsLogicEngine(word: WordsStatistic) {
-    if (word.difficulty === 'learned') {
-      const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts > 5;
-      if (minAttempts) {
-        const ratio: boolean = word.correctAttempts / word.incorrectAttempts > 0.5;
-        if (ratio) {
-          word.difficulty = 'learned';
-        } else {
-          word.difficulty = 'hard';
-        }
-      }
+    const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts >= 3;
+    let ratio: number = word.correctAttempts / word.incorrectAttempts;
+    if (ratio === 0) {
+      ratio = word.correctAttempts === 0 ? 0 : 1;
     }
     if (word.difficulty === 'none') {
-      const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts > 5;
       if (minAttempts) {
-        const ratio: boolean = word.correctAttempts / word.incorrectAttempts > 0.7;
-        if (ratio) {
+        if (ratio > 0.5) {
+          word.difficulty = 'learned';
+        } else {
+          word.difficulty = 'hard';
+        }
+      }
+      return;
+    }
+    if (word.difficulty === 'hard') {
+      if (minAttempts) {
+        if (ratio > 0.7) {
           word.difficulty = 'learned';
         } else {
           word.difficulty = 'hard';
         }
       }
     }
-    if (word.difficulty === 'hard') {
-      const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts > 5;
-      if (minAttempts) {
-        const ratio: boolean = word.correctAttempts / word.incorrectAttempts > 0.9;
-        if (ratio) {
-          word.difficulty = 'learned';
-        } else {
-          word.difficulty = 'hard';
-        }
+    if (word.difficulty === 'learned') {
+      if (word.incorrectAttempts > 0) {
+        word.difficulty = 'none';
       }
     }
   }
