@@ -65,6 +65,8 @@ export default class AudioChallengeService {
 
   soundIconMain!: SVGSVGElement;
 
+  btnControl!: HTMLButtonElement;
+
   constructor() {
     this.words = [];
     this.currentWordCounter = 0;
@@ -90,6 +92,7 @@ export default class AudioChallengeService {
     page.append(view.gamesView.audioChallengeView.generateGameContainer(wordsForIteration, this.totalCount));
     this.setItems();
     this.listenGame();
+    this.listenControlBtn();
     this.soundIconMain.dispatchEvent(new Event('click'));
   }
 
@@ -166,11 +169,15 @@ export default class AudioChallengeService {
     return Utils.shuffleWords(Object.entries(result)) as [string, WordsResponseSchema | PaginatedResult][];
   }
 
-  controlCurrentWord(): void {
+  controlCurrentWord(): boolean {
     this.currentWordCounter += 1;
-    if (this.currentWordCounter < this.totalCount) {
+
+    if (this.currentWordCounter > this.totalCount) {
       this.finishAudioChallenge(this.words);
+      return true;
     }
+
+    return false;
   }
 
   addPoints(): void {
@@ -437,18 +444,39 @@ export default class AudioChallengeService {
 
   checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
+    const target: HTMLButtonElement = event.target as HTMLButtonElement;
+
     if (id.includes('keyWord')) {
       services.soundHelper.playGameSound('../../assets/sounds/ok.wav');
+      target.style.backgroundColor = '#198754';
       this.addPoints();
       this.setMultiplicator('+');
       this.setWordStatistics('+');
     } else {
       services.soundHelper.playGameSound('../../assets/sounds/error.wav');
+      target.style.backgroundColor = '#dc3545';
       this.setMultiplicator('-');
       this.setWordStatistics('-');
     }
-    this.controlCurrentWord();
+    view.gamesView.audioChallengeView.updateBtnControl('next');
+    this.btnsWord.forEach((item: HTMLButtonElement) => item.classList.add('disabled'));
+  }
+
+  checkBtnControl(event: Event): void {
+    const { innerText } = event.target as HTMLButtonElement;
+    this.btnsWord.forEach((item: HTMLButtonElement) => item.classList.remove('disabled'));
+
+    const thisIsTheEnd: boolean = this.controlCurrentWord();
+    if (thisIsTheEnd) {
+      return;
+    }
+
     this.setNextWord();
+
+    view.gamesView.audioChallengeView.incrementWordsCounter(this.totalCount);
+    if (innerText === 'Next word') {
+      view.gamesView.audioChallengeView.updateBtnControl('skip');
+    }
   }
 
   checkForNonValidValues(value: number): number {
@@ -493,15 +521,20 @@ export default class AudioChallengeService {
     this.btnsWord = document.querySelectorAll('.btn-word') as NodeListOf<HTMLButtonElement>;
     this.pointsElement = document.getElementById('points-audio-challenge') as HTMLElement;
     this.multiplicatorElement = document.getElementById('multiplicator-audio-challenge') as HTMLElement;
+    this.btnControl = document.getElementById('btn-control') as HTMLButtonElement;
+    this.soundIconMain = document.querySelector('#sound-icon-main') as SVGSVGElement;
     this.triggerModal = document.getElementById('trigger-modal') as HTMLButtonElement;
     this.soundIcons = document.querySelectorAll('.sound-icon') as NodeListOf<SVGSVGElement>;
-    this.soundIconMain = document.querySelector('#sound-icon-main') as SVGSVGElement;
     this.closeBtn = document.getElementById('btn-close') as HTMLButtonElement;
   }
 
   listenGame(): void {
     this.btnsWord.forEach((item: HTMLButtonElement) => item.addEventListener('click', this.checkAnswer.bind(this)));
     this.soundIconMain.addEventListener('click', this.playSound.bind(this));
+  }
+
+  listenControlBtn(): void {
+    this.btnControl.addEventListener('click', this.checkBtnControl.bind(this));
   }
 
   listenFinal(): void {

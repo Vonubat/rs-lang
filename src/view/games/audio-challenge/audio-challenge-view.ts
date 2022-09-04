@@ -2,6 +2,8 @@ import { WordsResponseSchema, PaginatedResult } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
 export default class AudioChallengeView extends HTMLConstructor {
+  btnControl!: HTMLElement;
+
   createPointsWrapper(): HTMLElement {
     const classList: string[] = [
       'd-flex',
@@ -72,7 +74,7 @@ export default class AudioChallengeView extends HTMLConstructor {
   }
 
   createBtnWord(word: [string, WordsResponseSchema | PaginatedResult], index: number): HTMLElement {
-    const classList: string[] = ['btn', 'btn-danger', `btn-word`];
+    const classList: string[] = ['btn', 'btn-light', `btn-word`];
     const btnWord: HTMLElement = this.createHtmlElement(
       'button',
       classList,
@@ -125,6 +127,19 @@ export default class AudioChallengeView extends HTMLConstructor {
     progressBar.style.width = `${parseInt(progressBar.style.width, 10) + increment}%`;
   }
 
+  createBtnControl(): HTMLElement {
+    const classList: string[] = ['btn', 'btn-primary', `btn-control`];
+    const btnControl: HTMLElement = this.createHtmlElement(
+      'button',
+      classList,
+      `btn-control`,
+      [['type', 'button']],
+      `I don't know`
+    );
+    this.btnControl = btnControl;
+    return btnControl;
+  }
+
   createGameContainer(): HTMLElement {
     const classList: string[] = [
       'd-flex',
@@ -146,15 +161,24 @@ export default class AudioChallengeView extends HTMLConstructor {
     const gameContainer: HTMLElement = this.createGameContainer();
     const pointsWrapper: HTMLElement = this.generatePointsWrapper();
     const card: HTMLElement = this.generateCard(wordsForIteration);
+    const btnControl: HTMLElement = this.createBtnControl();
     const wordsCounter: HTMLElement = this.createWordsCounter(totalCount);
 
-    gameContainer.append(pointsWrapper, card, wordsCounter);
+    gameContainer.append(pointsWrapper, card, btnControl, wordsCounter);
     gameContainer.classList.add('game-container-audio-challenge');
 
     return gameContainer;
   }
 
-  updateGameContainer(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]) {
+  updateBtnControl(action: 'next' | 'skip'): void {
+    if (action === 'next') {
+      this.btnControl.innerText = 'Next word';
+    } else {
+      this.btnControl.innerText = `I don't know`;
+    }
+  }
+
+  updateGameContainer(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): void {
     const oldCard: HTMLElement = document.querySelector('.card-container') as HTMLElement;
     const pointsWrapper: HTMLElement = document.querySelector('.points-wrapper') as HTMLElement;
     const newCard: HTMLElement = this.generateCard(wordsForIteration);
