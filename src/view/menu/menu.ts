@@ -20,7 +20,7 @@ export default class Menu {
       'px-sm-2',
       'px-0',
       'text-bg-dark',
-      'offcanvas-md',
+      'sidebarmenu',
     ]);
     this.sidebarWrapper.id = 'navmenu';
     this.sidebar = this.htmlConstructor.createHtmlElement('nav', [
