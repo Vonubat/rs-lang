@@ -1,10 +1,7 @@
+import { WordsResponseSchema, PaginatedResult } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
 export default class AudioChallengeView extends HTMLConstructor {
-  newWord!: HTMLElement;
-
-  newTranslate!: HTMLElement;
-
   createPointsWrapper(): HTMLElement {
     const classList: string[] = [
       'd-flex',
@@ -13,13 +10,13 @@ export default class AudioChallengeView extends HTMLConstructor {
       'align-items-center',
       `points-wrapper`,
     ];
-    const pointsWrapper: HTMLElement = this.createHtmlElement('div', classList, `points-wrapper-sprint`);
+    const pointsWrapper: HTMLElement = this.createHtmlElement('div', classList, `points-wrapper-audio-challenge`);
     return pointsWrapper;
   }
 
   createPoints(): HTMLElement {
-    const classList: string[] = [`points-sprint`];
-    const points: HTMLElement = this.createHtmlElement('h2', classList, `points-sprint`, undefined, `0`);
+    const classList: string[] = [`points-audio-challenge`];
+    const points: HTMLElement = this.createHtmlElement('h2', classList, `points-audio-challenge`, undefined, `0`);
     return points;
   }
 
@@ -28,34 +25,18 @@ export default class AudioChallengeView extends HTMLConstructor {
     const multiplicator: HTMLElement = this.createHtmlElement(
       'h4',
       classList,
-      `multiplicator-sprint`,
+      `multiplicator-audio-challenge`,
       undefined,
       `+ 10 points`
     );
     return multiplicator;
   }
 
-  createSteps(): HTMLElement {
-    const stepsWrapper: HTMLElement = this.createHtmlElement('div', [
-      'd-flex',
-      'flex-row',
-      'justify-content-center',
-      'align-items-center',
-      `steps-wrapper`,
-    ]);
-    for (let i = 1; i <= 3; i += 1) {
-      const step: HTMLElement = this.createHtmlElement('span', ['badge'], `step-${i}`, undefined, ' ');
-      stepsWrapper.append(step);
-    }
-    return stepsWrapper;
-  }
-
   generatePointsWrapper(): HTMLElement {
     const pointsWrapper: HTMLElement = this.createPointsWrapper();
     const points: HTMLElement = this.createPoints();
     const multiplicator: HTMLElement = this.createMultiplicator();
-    const steps: HTMLElement = this.createSteps();
-    pointsWrapper.append(points, multiplicator, steps);
+    pointsWrapper.append(points, multiplicator);
     return pointsWrapper;
   }
 
@@ -66,53 +47,13 @@ export default class AudioChallengeView extends HTMLConstructor {
       'justify-content-center',
       'align-items-center',
       'flex-wrap',
-      'rounded',
-      'shadow',
-      'bg-light',
-      'bg-gradient',
       `card-container`,
     ];
     const cardContainer: HTMLElement = this.createHtmlElement('div', classList);
     return cardContainer;
   }
 
-  createWord(wordId: string, word: string): HTMLElement {
-    if (!this.newWord) {
-      const classList: string[] = [];
-      const newWord: HTMLElement = this.createHtmlElement(
-        'h4',
-        classList,
-        `sprint-word-${wordId}`,
-        undefined,
-        `${word}`
-      );
-      this.newWord = newWord;
-      return this.newWord;
-    }
-    this.newWord.innerHTML = word;
-    this.newWord.id = `sprint-word-${wordId}`;
-    return this.newWord;
-  }
-
-  createWordTranslate(wordId: string, wordTranslate: string): HTMLElement {
-    if (!this.newTranslate) {
-      const classList: string[] = ['text-muted'];
-      const newTranslate: HTMLElement = this.createHtmlElement(
-        'h4',
-        classList,
-        `sprint-wordTranslate-${wordId}`,
-        undefined,
-        `${wordTranslate}`
-      );
-      this.newTranslate = newTranslate;
-      return this.newTranslate;
-    }
-    this.newTranslate.innerHTML = wordTranslate;
-    this.newTranslate.id = `sprint-translate-${wordId}`;
-    return this.newTranslate;
-  }
-
-  createBtnsWrapper(): HTMLElement {
+  createBtnsWrapper(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-row',
@@ -121,71 +62,67 @@ export default class AudioChallengeView extends HTMLConstructor {
       'flex-wrap',
       `btn-wrapper`,
     ];
-    const btnsWrapper: HTMLElement = this.createHtmlElement('div', classList, undefined, undefined);
+    const btnsWrapper: HTMLElement = this.createHtmlElement('div', classList);
+    wordsForIteration.forEach((word: [string, WordsResponseSchema | PaginatedResult], index): void => {
+      const btn: HTMLElement = this.createBtnWord(word, index);
+      btnsWrapper.append(btn);
+    });
+
     return btnsWrapper;
   }
 
-  createBtnRight(): HTMLElement {
-    const classList: string[] = ['btn', 'btn-danger', `btn-right`];
-    const btnRight: HTMLElement = this.createHtmlElement(
+  createBtnWord(word: [string, WordsResponseSchema | PaginatedResult], index: number): HTMLElement {
+    const classList: string[] = ['btn', 'btn-danger', `btn-word`];
+    const btnWord: HTMLElement = this.createHtmlElement(
       'button',
       classList,
-      `btn-right`,
+      `btn-${index + 1}-${word[0]}`,
       [['type', 'button']],
-      `RIGHT`
+      `${index + 1} ${word[1].word}`
     );
-    return btnRight;
+    return btnWord;
   }
 
-  createBtnWrong(): HTMLElement {
-    const classList: string[] = ['btn', 'btn-secondary', `btn-right`];
-    const btnWrong: HTMLElement = this.createHtmlElement(
-      'button',
-      classList,
-      `btn-wrong`,
-      [['type', 'button']],
-      `WRONG`
-    );
-    return btnWrong;
+  createIcon(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): SVGSVGElement {
+    let audio = '';
+
+    wordsForIteration.forEach((word) => {
+      if (word[0] === 'keyWord') {
+        audio = word[1].audio;
+      }
+    });
+
+    return this.svg('volume-up-fill', ['sound-icon'], `sound-icon-main`, [['data-audio', `${audio}`]]);
   }
 
-  generateCard(wordId: string, word: string, wordTranslate: string): HTMLElement {
+  generateCard(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
     const cardContainer: HTMLElement = this.createCardContainer();
-    const newWord: HTMLElement = this.createWord(wordId, word);
-    const newTranslate: HTMLElement = this.createWordTranslate(wordId, wordTranslate);
-    const btnsWrapper: HTMLElement = this.createBtnsWrapper();
-    const btnRight: HTMLElement = this.createBtnRight();
-    const btnWrong: HTMLElement = this.createBtnWrong();
+    const icon: SVGSVGElement = this.createIcon(wordsForIteration);
+    const btnsWrapper: HTMLElement = this.createBtnsWrapper(wordsForIteration);
 
-    btnsWrapper.append(btnRight, btnWrong);
-    cardContainer.append(newWord, newTranslate, btnsWrapper);
+    cardContainer.append(icon, btnsWrapper);
+
     return cardContainer;
   }
 
   createWordsCounter(totalCount: number): HTMLElement {
-    const progress: HTMLElement = this.createHtmlElement('div', ['progress']);
+    const progress: HTMLElement = this.createHtmlElement('div', ['progress', 'w-50']);
     const progressBar: HTMLElement = this.createHtmlElement(
       'div',
       ['progress-bar', 'progress-bar-striped', 'progress-bar-animated'],
       'words-counter',
-      [
-        ['role', 'progressbar'],
-        ['aria-valuenow', '0'],
-        ['aria-valuemin', '0'],
-        ['aria-valuemax', '20'],
-      ],
-      `Words: 0 / ${totalCount}`
+      [['role', 'progressbar']]
     );
-
+    const increment: number = 100 / totalCount;
+    progressBar.style.width = `${increment}%`;
     progress.append(progressBar);
     return progress;
   }
 
-  updateWordsCounter(totalCount: number, currentWordNumber: number): HTMLElement {
-    const wordsCounter: HTMLDivElement = document.getElementById('words-counter') as HTMLDivElement;
-    wordsCounter.innerHTML = `Words: ${currentWordNumber} / ${totalCount}`;
-    wordsCounter.setAttribute('aria-valuenow', `${currentWordNumber}`);
-    return wordsCounter;
+  incrementWordsCounter(totalCount: number): void {
+    const progressBar: HTMLDivElement = document.getElementById('words-counter') as HTMLDivElement;
+    const increment: number = 100 / totalCount;
+    progressBar.style.width = `${parseInt(progressBar.style.width, 10) + increment}%`;
   }
 
   createGameContainer(): HTMLElement {
@@ -202,15 +139,26 @@ export default class AudioChallengeView extends HTMLConstructor {
     return gameContainer;
   }
 
-  generateGameContainer(wordId: string, word: string, wordTranslate: string, totalCount: number): HTMLElement {
+  generateGameContainer(
+    wordsForIteration: [string, WordsResponseSchema | PaginatedResult][],
+    totalCount: number
+  ): HTMLElement {
     const gameContainer: HTMLElement = this.createGameContainer();
     const pointsWrapper: HTMLElement = this.generatePointsWrapper();
-    const card: HTMLElement = this.generateCard(wordId, word, wordTranslate);
+    const card: HTMLElement = this.generateCard(wordsForIteration);
     const wordsCounter: HTMLElement = this.createWordsCounter(totalCount);
 
     gameContainer.append(pointsWrapper, card, wordsCounter);
     gameContainer.classList.add('game-container-audio-challenge');
 
     return gameContainer;
+  }
+
+  updateGameContainer(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]) {
+    const oldCard: HTMLElement = document.querySelector('.card-container') as HTMLElement;
+    const pointsWrapper: HTMLElement = document.querySelector('.points-wrapper') as HTMLElement;
+    const newCard: HTMLElement = this.generateCard(wordsForIteration);
+    oldCard.remove();
+    pointsWrapper.after(newCard);
   }
 }

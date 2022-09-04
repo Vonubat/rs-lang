@@ -138,15 +138,33 @@
 
   .card-container {
     padding: 40px;
-    text-transform: capitalize;
+
+    .sound-icon {
+      height: 70px;
+      width: 70px;
+      padding: 20px;
+      border-radius: 50%;
+      background-color: rgba($color: #565e64, $alpha: 0.3);
+      cursor: pointer;
+      transition: 0.3s;
+      &:hover {
+        background-color: rgba($color: #565e64, $alpha: 0.2);
+      }
+    }
 
     .btn-wrapper {
       margin-top: 30px;
       gap: 40px;
+      font-weight: bold;
+
+      .btn-word {
+        text-transform: uppercase;
+      }
     }
   }
 
-  .countdown-canvas-sprint-game {
+  .progress {
+    height: 50px;
     margin-bottom: 30px;
   }
 }

@@ -48,14 +48,15 @@ export default class GamesService {
 
   async launchGame(event: Event): Promise<void> {
     const { id } = event.currentTarget as HTMLElement;
+    const trigger: HTMLElement = event.target as HTMLElement;
+    const triggerId: string = trigger.id;
 
-    if (id.includes('levels-container')) {
+    if (triggerId.includes('levels-container')) {
       return;
     }
 
     view.loading.createSpinners();
     const game: 'sprint' | 'audio-challenge' = id.includes('sprint') ? 'sprint' : 'audio-challenge';
-    const trigger: HTMLElement = event.target as HTMLElement;
 
     let words: WordsResponseSchema[] | PaginatedResult[];
 

@@ -192,7 +192,7 @@ export default class SprintService {
       this.currentWordCounter += 1;
     } else {
       this.currentWordCounter = 0;
-      this.words = Utils.shuffleWords(this.words);
+      this.words = Utils.shuffleWords(this.words) as WordsResponseSchema[] | PaginatedResult[];
     }
   }
 
@@ -481,7 +481,6 @@ export default class SprintService {
       this.setSteps();
     } else {
       services.soundHelper.playGameSound('../../assets/sounds/error.wav');
-      this.setSteps();
       this.setMultiplicator('-');
       this.setWordStatistics('-');
       this.setSteps();

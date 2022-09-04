@@ -3,7 +3,6 @@ import { api } from '../../../api/api';
 import {
   WordsResponseSchema,
   PaginatedResult,
-  TypeOfWordIsPaginatedResult,
   WordsStatistics,
   WordsStatistic,
   UsersWordsResponseSchema,
@@ -24,8 +23,6 @@ export default class AudioChallengeService {
 
   multiplicatorValue: number;
 
-  steps: boolean[];
-
   mistakes: number;
 
   correctAnswers: number;
@@ -40,17 +37,7 @@ export default class AudioChallengeService {
 
   inARowHistory: number[];
 
-  right!: HTMLButtonElement;
-
-  wrong!: HTMLButtonElement;
-
   pointsElement!: HTMLElement;
-
-  step1!: HTMLSpanElement;
-
-  step2!: HTMLSpanElement;
-
-  step3!: HTMLSpanElement;
 
   multiplicatorElement!: HTMLElement;
 
@@ -68,15 +55,18 @@ export default class AudioChallengeService {
 
   triggerModal!: HTMLButtonElement;
 
-  soundIcons!: NodeListOf<SVGSVGElement>;
-
   closeBtn!: HTMLButtonElement;
 
   totalCount!: number;
 
+  btnsWord!: NodeListOf<HTMLButtonElement>;
+
+  soundIcons!: NodeListOf<SVGSVGElement>;
+
+  soundIconMain!: SVGSVGElement;
+
   constructor() {
     this.words = [];
-    this.steps = [];
     this.currentWordCounter = 0;
     this.pointsValue = 0;
     this.multiplicatorValue = 10;
@@ -95,22 +85,15 @@ export default class AudioChallengeService {
 
     this.words = words;
     this.totalCount = services.pageConfig.getTotalCount();
-    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
+    const wordsForIteration: [string, WordsResponseSchema | PaginatedResult][] = this.chooseWordsForIteration();
 
-    page.append(
-      view.gamesView.audioChallengeView.generateGameContainer(
-        wordId,
-        newWord,
-        newWordTranslate,
-        this.finishSprint.bind(services.gamesService.sprintService),
-        words
-      )
-    );
+    page.append(view.gamesView.audioChallengeView.generateGameContainer(wordsForIteration, this.totalCount));
     this.setItems();
     this.listenGame();
+    this.soundIconMain.dispatchEvent(new Event('click'));
   }
 
-  finishSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  finishAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
     const page: HTMLElement = view.gamesView.games;
     services.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
@@ -141,7 +124,6 @@ export default class AudioChallengeService {
 
   eraseData(): void {
     this.words = [];
-    this.steps = [];
     this.currentWordCounter = 0;
     this.pointsValue = 0;
     this.multiplicatorValue = 10;
@@ -154,45 +136,40 @@ export default class AudioChallengeService {
     this.inARowHistory = [];
   }
 
-  chooseTranslate(
-    word: WordsResponseSchema | PaginatedResult
-  ): {
-    wordId: string;
-    newWord: string;
-    newWordTranslate: string;
-  } {
-    const chance: number = Utils.getChance(this.currentWordCounter, this.totalCount);
-    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
-    const newWord: string = word.word;
-    const newWordTranslate: string = this.words[chance].wordTranslate;
+  chooseWordsForIteration(): [string, WordsResponseSchema | PaginatedResult][] {
+    this.word = this.words[this.currentWordCounter].word;
+    const result: {
+      keyWord: WordsResponseSchema | PaginatedResult;
+      [index: string]: WordsResponseSchema | PaginatedResult;
+    } = { keyWord: this.words[this.currentWordCounter] };
 
-    this.prediction = false;
-    this.wordId = wordId;
-    this.word = newWord;
-    this.correctWordTranslate = this.words[this.currentWordCounter].wordTranslate;
+    const uniqueChances: number[] = [];
 
-    if (chance === this.currentWordCounter) {
-      this.prediction = true;
-      return {
-        wordId,
-        newWord,
-        newWordTranslate,
-      };
+    for (let i = 1; i < 4; i += 1) {
+      const chance: number = Utils.getChance(this.currentWordCounter, this.totalCount);
+      if (uniqueChances.some((el: number): boolean => el === chance)) {
+        i -= 1;
+        // eslint-disable-next-line no-continue
+        continue;
+      } else {
+        uniqueChances.push(chance);
+      }
+
+      const key = `fakeWord${i}`;
+      if (this.currentWordCounter === chance) {
+        i -= 1;
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      result[key] = this.words[chance];
     }
-
-    return {
-      wordId,
-      newWord,
-      newWordTranslate,
-    };
+    return Utils.shuffleWords(Object.entries(result)) as [string, WordsResponseSchema | PaginatedResult][];
   }
 
   controlCurrentWord(): void {
+    this.currentWordCounter += 1;
     if (this.currentWordCounter < this.totalCount) {
-      this.currentWordCounter += 1;
-    } else {
-      this.currentWordCounter = 0;
-      this.words = Utils.shuffleWords(this.words);
+      this.finishAudioChallenge(this.words);
     }
   }
 
@@ -205,39 +182,26 @@ export default class AudioChallengeService {
     if (action === '+') {
       this.inARowCurrent += 1;
       this.inARowHistory.push(this.inARowCurrent);
-      this.steps.push(true);
-    } else {
-      this.inARowCurrent = 0;
-      this.steps.length = 0;
-      this.multiplicatorValue = 10;
-    }
-
-    if (this.steps.length > 3) {
       this.multiplicatorElement.classList.add('blink');
       setTimeout(() => {
         this.multiplicatorElement.classList.remove('blink');
       }, 2000);
-      this.steps.length = 0;
       this.multiplicatorValue += 10;
+    } else {
+      this.inARowCurrent = 0;
+      this.multiplicatorValue = 10;
     }
 
     this.multiplicatorElement.innerText = `+ ${this.multiplicatorValue} points`;
   }
 
-  setSteps(): void {
-    this.step1.style.backgroundColor = `#565e64`;
-    this.step2.style.backgroundColor = `#565e64`;
-    this.step3.style.backgroundColor = `#565e64`;
-
-    for (let i = 0; i < this.steps.length; i += 1) {
-      this.stepsElements[i].style.backgroundColor = '#dc3545';
-    }
-  }
-
   setNextWord(): void {
-    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
-    view.gamesView.audioChallengeView.createWord(wordId, newWord);
-    view.gamesView.audioChallengeView.createWordTranslate(wordId, newWordTranslate);
+    const wordsForIteration: [string, WordsResponseSchema | PaginatedResult][] = this.chooseWordsForIteration();
+    view.gamesView.audioChallengeView.updateGameContainer(wordsForIteration);
+
+    this.setItems();
+    this.listenGame();
+    this.soundIconMain.dispatchEvent(new Event('click'));
   }
 
   async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
@@ -473,18 +437,15 @@ export default class AudioChallengeService {
 
   checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
-    if ((id.includes('right') && this.prediction === true) || (id.includes('wrong') && this.prediction === false)) {
+    if (id.includes('keyWord')) {
       services.soundHelper.playGameSound('../../assets/sounds/ok.wav');
       this.addPoints();
       this.setMultiplicator('+');
       this.setWordStatistics('+');
-      this.setSteps();
     } else {
       services.soundHelper.playGameSound('../../assets/sounds/error.wav');
-      this.setSteps();
       this.setMultiplicator('-');
       this.setWordStatistics('-');
-      this.setSteps();
     }
     this.controlCurrentWord();
     this.setNextWord();
@@ -529,22 +490,18 @@ export default class AudioChallengeService {
   }
 
   setItems(): void {
-    this.right = document.getElementById('btn-right') as HTMLButtonElement;
-    this.wrong = document.getElementById('btn-wrong') as HTMLButtonElement;
-    this.pointsElement = document.getElementById('points-sprint') as HTMLElement;
-    this.multiplicatorElement = document.getElementById('multiplicator-sprint') as HTMLElement;
-    this.step1 = document.getElementById('step-1') as HTMLSpanElement;
-    this.step2 = document.getElementById('step-2') as HTMLSpanElement;
-    this.step3 = document.getElementById('step-3') as HTMLSpanElement;
-    this.stepsElements = [this.step1, this.step2, this.step3];
+    this.btnsWord = document.querySelectorAll('.btn-word') as NodeListOf<HTMLButtonElement>;
+    this.pointsElement = document.getElementById('points-audio-challenge') as HTMLElement;
+    this.multiplicatorElement = document.getElementById('multiplicator-audio-challenge') as HTMLElement;
     this.triggerModal = document.getElementById('trigger-modal') as HTMLButtonElement;
-    this.soundIcons = document.querySelectorAll('.sound-icon');
+    this.soundIcons = document.querySelectorAll('.sound-icon') as NodeListOf<SVGSVGElement>;
+    this.soundIconMain = document.querySelector('#sound-icon-main') as SVGSVGElement;
     this.closeBtn = document.getElementById('btn-close') as HTMLButtonElement;
   }
 
   listenGame(): void {
-    this.right.addEventListener('click', this.checkAnswer.bind(this));
-    this.wrong.addEventListener('click', this.checkAnswer.bind(this));
+    this.btnsWord.forEach((item: HTMLButtonElement) => item.addEventListener('click', this.checkAnswer.bind(this)));
+    this.soundIconMain.addEventListener('click', this.playSound.bind(this));
   }
 
   listenFinal(): void {
