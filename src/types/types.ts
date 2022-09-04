@@ -167,6 +167,8 @@ export interface WordsStatistic {
   wordTranslate: string;
   audio: string;
   correctAttempts: number;
+  correctAttemptsSession: number;
   incorrectAttempts: number;
+  incorrectAttemptsSession: number;
   difficulty?: 'hard' | 'learned' | 'none';
 }

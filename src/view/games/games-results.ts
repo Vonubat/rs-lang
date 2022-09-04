@@ -149,7 +149,7 @@ export default class GamesResults extends HTMLConstructor {
 
     const words: WordsStatistic[] = Object.values(wordsStatistics);
     words.forEach((item: WordsStatistic) => {
-      if (item.incorrectAttempts > 0) {
+      if (item.incorrectAttemptsSession > 0) {
         incorrectWordsWrapper.append(this.createWord(item.wordId, item.word, item.wordTranslate, item.audio));
       }
     });
@@ -162,7 +162,7 @@ export default class GamesResults extends HTMLConstructor {
 
     const words: WordsStatistic[] = Object.values(wordsStatistics);
     words.forEach((item: WordsStatistic) => {
-      if (item.correctAttempts > 0) {
+      if (item.correctAttemptsSession > 0) {
         correctWordsWrapper.append(this.createWord(item.wordId, item.word, item.wordTranslate, item.audio));
       }
     });

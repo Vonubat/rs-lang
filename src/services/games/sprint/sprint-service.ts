@@ -384,10 +384,10 @@ export default class SprintService {
   }
 
   wordStatisticsLogicEngine(word: WordsStatistic) {
-    const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts >= 3;
-    let ratio: number = word.correctAttempts / word.incorrectAttempts;
+    const minAttempts: boolean = word.correctAttemptsSession + word.incorrectAttemptsSession >= 3;
+    let ratio: number = word.correctAttemptsSession / word.incorrectAttemptsSession;
     if (ratio === 0) {
-      ratio = word.correctAttempts === 0 ? 0 : 1;
+      ratio = word.correctAttemptsSession === 0 ? 0 : 1;
     }
     if (word.difficulty === 'none') {
       if (minAttempts) {
@@ -409,7 +409,7 @@ export default class SprintService {
       }
     }
     if (word.difficulty === 'learned') {
-      if (word.incorrectAttempts > 0) {
+      if (word.incorrectAttemptsSession > 0) {
         word.difficulty = 'none';
       }
     }
@@ -419,9 +419,11 @@ export default class SprintService {
     this.createWordStatisticsObject();
     if (action === '+') {
       this.wordsStatistics[this.word].correctAttempts += 1;
+      this.wordsStatistics[this.word].correctAttemptsSession += 1;
       this.correctAnswers += 1;
     } else {
       this.wordsStatistics[this.word].incorrectAttempts += 1;
+      this.wordsStatistics[this.word].incorrectAttemptsSession += 1;
       this.mistakes += 1;
     }
     // console.log(this.wordsStatistics);
@@ -437,7 +439,9 @@ export default class SprintService {
           wordTranslate: this.correctWordTranslate,
           audio: this.words[this.currentWordCounter].audio,
           correctAttempts: 0,
+          correctAttemptsSession: 0,
           incorrectAttempts: 0,
+          incorrectAttemptsSession: 0,
         },
         enumerable: true,
         configurable: true,
@@ -454,8 +458,10 @@ export default class SprintService {
           audio: this.words[this.currentWordCounter].audio,
           correctAttempts:
             (this.words[this.currentWordCounter] as PaginatedResult).userWord?.optional?.correctAttempts || 0,
+          correctAttemptsSession: 0,
           incorrectAttempts:
             (this.words[this.currentWordCounter] as PaginatedResult).userWord?.optional?.incorrectAttempts || 0,
+          incorrectAttemptsSession: 0,
           difficulty: (this.words[this.currentWordCounter] as PaginatedResult).userWord?.difficulty || 'none',
         },
         enumerable: true,
