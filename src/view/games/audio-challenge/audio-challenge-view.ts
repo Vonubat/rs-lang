@@ -2,7 +2,7 @@ import { services } from '../../../services/services';
 import { PaginatedResult, WordsResponseSchema } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
-export default class SprintGame extends HTMLConstructor {
+export default class AudioChallengeView extends HTMLConstructor {
   newWord!: HTMLElement;
 
   newTranslate!: HTMLElement;
@@ -168,8 +168,8 @@ export default class SprintGame extends HTMLConstructor {
     cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
     words: WordsResponseSchema[] | PaginatedResult[]
   ): HTMLElement {
-    const timer: HTMLElement = services.timer.createTimerElement('sprint', 'game');
-    services.timer.createTimerConfig(timer, 10000, cb, words);
+    const timer: HTMLElement = services.gamesService.timer.createTimerElement('sprint', 'game');
+    services.gamesService.timer.createTimerConfig(timer, 10000, cb, words);
 
     return timer;
   }

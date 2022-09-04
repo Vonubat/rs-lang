@@ -15,7 +15,7 @@ import AuthService from '../../auth/auth-service';
 import Credentials from '../../auth/credentials';
 import { services } from '../../services';
 
-export default class SprintService {
+export default class AudioChallengeService {
   words: WordsResponseSchema[] | PaginatedResult[];
 
   currentWordCounter: number;
@@ -89,7 +89,7 @@ export default class SprintService {
     this.inARowHistory = [];
   }
 
-  launchSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  launchAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
     const page: HTMLElement = view.gamesView.games;
     page.innerHTML = '';
 
@@ -98,7 +98,7 @@ export default class SprintService {
     const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
 
     page.append(
-      view.gamesView.sprintView.generateGameContainer(
+      view.gamesView.audioChallengeView.generateGameContainer(
         wordId,
         newWord,
         newWordTranslate,
@@ -236,8 +236,8 @@ export default class SprintService {
 
   setNextWord(): void {
     const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
-    view.gamesView.sprintView.createWord(wordId, newWord);
-    view.gamesView.sprintView.createWordTranslate(wordId, newWordTranslate);
+    view.gamesView.audioChallengeView.createWord(wordId, newWord);
+    view.gamesView.audioChallengeView.createWordTranslate(wordId, newWordTranslate);
   }
 
   async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
