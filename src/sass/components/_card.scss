@@ -95,7 +95,7 @@
   }
 
   @media (max-width: 650px) {
-    width: auto;
+    // width: auto;
     flex-direction: column;
   }
 }
@@ -103,6 +103,10 @@
 .card-img-ourteam {
   width: 220px;
   height: auto;
+
+  @media (max-width: 650px) {
+    width: auto;
+  }
 }
 
 .card-body-preview {
