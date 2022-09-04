@@ -1,5 +1,3 @@
-import { services } from '../../../services/services';
-import { PaginatedResult, WordsResponseSchema } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
 export default class AudioChallengeView extends HTMLConstructor {
@@ -164,14 +162,30 @@ export default class AudioChallengeView extends HTMLConstructor {
     return cardContainer;
   }
 
-  createTimer(
-    cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
-    words: WordsResponseSchema[] | PaginatedResult[]
-  ): HTMLElement {
-    const timer: HTMLElement = services.gamesService.timer.createTimerElement('sprint', 'game');
-    services.gamesService.timer.createTimerConfig(timer, 10000, cb, words);
+  createWordsCounter(totalCount: number): HTMLElement {
+    const progress: HTMLElement = this.createHtmlElement('div', ['progress']);
+    const progressBar: HTMLElement = this.createHtmlElement(
+      'div',
+      ['progress-bar', 'progress-bar-striped', 'progress-bar-animated'],
+      'words-counter',
+      [
+        ['role', 'progressbar'],
+        ['aria-valuenow', '0'],
+        ['aria-valuemin', '0'],
+        ['aria-valuemax', '20'],
+      ],
+      `Words: 0 / ${totalCount}`
+    );
 
-    return timer;
+    progress.append(progressBar);
+    return progress;
+  }
+
+  updateWordsCounter(totalCount: number, currentWordNumber: number): HTMLElement {
+    const wordsCounter: HTMLDivElement = document.getElementById('words-counter') as HTMLDivElement;
+    wordsCounter.innerHTML = `Words: ${currentWordNumber} / ${totalCount}`;
+    wordsCounter.setAttribute('aria-valuenow', `${currentWordNumber}`);
+    return wordsCounter;
   }
 
   createGameContainer(): HTMLElement {
@@ -188,19 +202,14 @@ export default class AudioChallengeView extends HTMLConstructor {
     return gameContainer;
   }
 
-  generateGameContainer(
-    wordId: string,
-    word: string,
-    wordTranslate: string,
-    cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
-    words: WordsResponseSchema[] | PaginatedResult[]
-  ): HTMLElement {
+  generateGameContainer(wordId: string, word: string, wordTranslate: string, totalCount: number): HTMLElement {
     const gameContainer: HTMLElement = this.createGameContainer();
     const pointsWrapper: HTMLElement = this.generatePointsWrapper();
     const card: HTMLElement = this.generateCard(wordId, word, wordTranslate);
-    const timer: HTMLElement = this.createTimer(cb, words);
+    const wordsCounter: HTMLElement = this.createWordsCounter(totalCount);
 
-    gameContainer.append(pointsWrapper, card, timer);
+    gameContainer.append(pointsWrapper, card, wordsCounter);
+    gameContainer.classList.add('game-container-audio-challenge');
 
     return gameContainer;
   }

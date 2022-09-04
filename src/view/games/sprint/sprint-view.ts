@@ -201,6 +201,7 @@ export default class SprintView extends HTMLConstructor {
     const timer: HTMLElement = this.createTimer(cb, words);
 
     gameContainer.append(pointsWrapper, card, timer);
+    gameContainer.classList.add('game-container-sprint');
 
     return gameContainer;
   }
