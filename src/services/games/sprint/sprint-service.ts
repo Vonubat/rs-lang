@@ -7,6 +7,7 @@ import {
   WordsStatistics,
   WordsStatistic,
   UsersWordsResponseSchema,
+  Statistics,
 } from '../../../types/types';
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
@@ -63,7 +64,7 @@ export default class SprintService {
 
   correctWordTranslate!: string;
 
-  accuracy!: string;
+  accuracy!: number;
 
   triggerModal!: HTMLButtonElement;
 
@@ -114,6 +115,7 @@ export default class SprintService {
     services.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
     this.processWordStatistics();
+    this.processUserStatistics(this.allWordsCounter, this.inARow, this.accuracy);
 
     page.append(
       view.gamesView.gamesResults.generateResults(
@@ -238,6 +240,111 @@ export default class SprintService {
     view.gamesView.sprintGame.createWordTranslate(wordId, newWordTranslate);
   }
 
+  async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
+    if (AuthService.checkUser()) {
+      const userId: string = Credentials.getUserId();
+      const currentDate: number = Date.now();
+      const response: Statistics | Response = await api.usersStatistics.getStatistics(userId);
+      let body: Statistics | Response;
+
+      if (response instanceof Response) {
+        body = this.createUserStatisticsObject(currentDate, allWordsCounter, inARow, accuracy);
+        await api.usersStatistics.setStatistics(userId, body);
+      } else {
+        body = { optional: response.optional };
+        const lastDailyStat: number = response.optional?.dailyStat as number;
+        const diff: number = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
+        await api.usersStatistics.setStatistics(
+          userId,
+          this.userStatisticsDaily(body as Statistics, currentDate, allWordsCounter, inARow, accuracy, diff)
+        );
+
+        await api.usersStatistics.setStatistics(
+          userId,
+          this.userStatisticsLong(body as Statistics, currentDate, allWordsCounter, inARow, accuracy)
+        );
+      }
+    }
+  }
+
+  createUserStatisticsObject(
+    currentDate: number,
+    allWordsCounter: number,
+    inARow: number,
+    accuracy: number
+  ): Statistics {
+    const body: Statistics = {
+      optional: {
+        dailyStat: currentDate,
+        pointsValueSprint: this.pointsValue,
+        mistakesSprint: this.mistakes,
+        allWordsCounterSprint: allWordsCounter,
+        inARowSprint: inARow,
+        accuracySprint: accuracy,
+        longStat: {
+          [currentDate]: {
+            pointsValueSprint: this.pointsValue,
+            mistakesSprint: this.mistakes,
+            allWordsCounterSprint: allWordsCounter,
+            inARowSprint: inARow,
+            accuracySprint: accuracy,
+          },
+        },
+      },
+    };
+    return body;
+  }
+
+  userStatisticsDaily(
+    body: Statistics,
+    currentDate: number,
+    allWordsCounter: number,
+    inARow: number,
+    accuracy: number,
+    diff: number
+  ): Statistics {
+    if (diff > 1 && body.optional) {
+      body.optional.dailyStat = currentDate;
+      body.optional.pointsValueSprint = this.pointsValue;
+      body.optional.mistakesSprint = this.mistakes;
+      body.optional.allWordsCounterSprint = allWordsCounter;
+      body.optional.inARowSprint = inARow;
+      body.optional.accuracySprint = accuracy;
+    }
+    if (diff < 1 && body.optional) {
+      body.optional.pointsValueSprint = Number(body.optional.pointsValueSprint) + this.pointsValue;
+      body.optional.mistakesSprint = Number(body.optional.mistakesSprint) + this.mistakes;
+      body.optional.allWordsCounterSprint = Number(body.optional.allWordsCounterSprint) + allWordsCounter;
+      body.optional.inARowSprint =
+        Number(body.optional.inARowSprint) > inARow ? Number(body.optional.inARowSprint) : inARow;
+      body.optional.accuracySprint = (Number(body.optional.accuracySprint) + accuracy) / 2;
+    }
+    return body;
+  }
+
+  userStatisticsLong(
+    body: Statistics,
+    currentDate: number,
+    allWordsCounter: number,
+    inARow: number,
+    accuracy: number
+  ): Statistics {
+    Object.defineProperty(body.optional?.longStat, currentDate, {
+      value: {
+        pointsValueSprint: this.pointsValue,
+        mistakesSprint: this.mistakes,
+        allWordsCounterSprint: allWordsCounter,
+        inARowSprint: inARow,
+        accuracySprint: accuracy,
+      },
+      enumerable: true,
+      configurable: true,
+      writable: true,
+    });
+
+    return body;
+  }
+
   async processWordStatistics(): Promise<void> {
     if (AuthService.checkUser()) {
       const result: WordsStatistic[] = Object.values(this.wordsStatistics);
@@ -245,7 +352,7 @@ export default class SprintService {
 
       result.forEach(
         async (word: WordsStatistic): Promise<void> => {
-          this.wordLogicEngine(word);
+          this.wordStatisticsLogicEngine(word);
 
           const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(
             userId,
@@ -276,7 +383,7 @@ export default class SprintService {
     }
   }
 
-  wordLogicEngine(word: WordsStatistic) {
+  wordStatisticsLogicEngine(word: WordsStatistic) {
     if (word.difficulty === 'learned') {
       const minAttempts: boolean = word.correctAttempts + word.incorrectAttempts > 5;
       if (minAttempts) {
@@ -415,7 +522,7 @@ export default class SprintService {
 
   prepareFinalData(words: WordsResponseSchema[] | PaginatedResult[]): void {
     this.words = words;
-    this.accuracy = `${this.checkForNonValidValues((this.correctAnswers / this.allWordsCounter) * 100).toFixed(1)} %`;
+    this.accuracy = Number(this.checkForNonValidValues((this.correctAnswers / this.allWordsCounter) * 100).toFixed(1));
     this.inARow = this.checkForNonValidValues(Math.max(...this.inARowHistory));
   }
 
