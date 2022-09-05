@@ -568,9 +568,8 @@ export default class AudioChallengeService {
   }
 
   controlKeyboard(event: KeyboardEvent): void {
-    event.preventDefault();
     const { code } = event;
-    if (code === 'Space') {
+    if (code === 'Enter') {
       this.btnControl.dispatchEvent(new Event('click'));
     }
     if (code === 'Digit1') {

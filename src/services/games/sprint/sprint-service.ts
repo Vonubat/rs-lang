@@ -574,8 +574,6 @@ export default class SprintService {
   }
 
   controlKeyboard(event: KeyboardEvent): void {
-    event.preventDefault();
-
     const { code } = event;
     if (code === 'ArrowLeft') {
       this.right.dispatchEvent(new Event('click'));
