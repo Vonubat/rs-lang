@@ -1,0 +1,39 @@
+.statistics {
+    padding: 20px;
+}
+
+.statistics__stats-per-day {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.today-words-learned, .today-accuracy, .today-topRow {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.words-learned, .accuracy-today-amount, .topRow-today-amount {
+    font-size: 60px;
+}
+
+.stat-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.today-title {
+    text-align: center;
+    font-size: 35px;
+}
+
+.card-body {
+    // display: flex;
+}
+
+.game-title {
+    padding: 20px 20px;
+}
