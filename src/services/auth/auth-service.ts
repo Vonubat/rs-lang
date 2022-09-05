@@ -156,6 +156,10 @@ export default class AuthService {
       if (Route.checkUrl('textbook')) {
         this.updateCardsState();
       }
+      if (Route.checkUrl('statistics')) {
+        window.location.href = '#';
+        window.location.href = '#statistics';
+      }
       return true;
     } catch {
       return false;
@@ -191,6 +195,10 @@ export default class AuthService {
       this.changeBtnState();
       if (Route.checkUrl('textbook')) {
         this.updateCardsState();
+      }
+      if (Route.checkUrl('statistics')) {
+        window.location.href = '#';
+        window.location.href = '#statistics';
       }
       return true;
     } catch {
