@@ -84,7 +84,7 @@ interface TotalCount {
   count: number;
 }
 
-interface Optional {
+export interface Optional {
   correctAttempts?: number;
   incorrectAttempts?: number;
   dailyStatSprint?: DailyStatSprint;
@@ -194,4 +194,9 @@ export interface WordsStatistic {
   incorrectAttempts: number;
   incorrectAttemptsSession: number;
   difficulty?: 'hard' | 'learned' | 'none';
+}
+
+export interface DailyStatistics {
+  date: Date;
+  learnedWords: number;
 }

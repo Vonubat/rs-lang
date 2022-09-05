@@ -112,6 +112,7 @@ export class Route {
       case 'statistics':
         // TO DO
         this.view.footer.showFooter();
+        this.view.drawStatistics();
         break;
       default:
         rootDiv.append(this.notFound.notFound());

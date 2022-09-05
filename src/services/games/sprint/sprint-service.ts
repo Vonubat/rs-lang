@@ -97,6 +97,9 @@ export default class SprintService {
 
   launchSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
     this.eraseData();
+    if (!Route.checkUrl('games')) {
+      window.location.hash = 'games';
+    }
     const page: HTMLElement = view.gamesView.games;
     page.innerHTML = '';
 
@@ -122,7 +125,7 @@ export default class SprintService {
       return;
     }
     const page: HTMLElement = view.gamesView.games;
-    services.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
+    services.soundHelper.playGameSound('./assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
     this.processWordStatistics();
     this.processUserStatistics(this.allWordsCounter, this.inARow, this.accuracy);
@@ -520,13 +523,13 @@ export default class SprintService {
   checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
     if ((id.includes('right') && this.prediction === true) || (id.includes('wrong') && this.prediction === false)) {
-      services.soundHelper.playGameSound('../../assets/sounds/ok.wav');
+      services.soundHelper.playGameSound('./assets/sounds/ok.wav');
       this.addPoints();
       this.setMultiplicator('+');
       this.setWordStatistics('+');
       this.setSteps();
     } else {
-      services.soundHelper.playGameSound('../../assets/sounds/error.wav');
+      services.soundHelper.playGameSound('./assets/sounds/error.wav');
       this.setMultiplicator('-');
       this.setWordStatistics('-');
       this.setSteps();
@@ -574,8 +577,6 @@ export default class SprintService {
   }
 
   controlKeyboard(event: KeyboardEvent): void {
-    event.preventDefault();
-
     const { code } = event;
     if (code === 'ArrowLeft') {
       this.right.dispatchEvent(new Event('click'));
