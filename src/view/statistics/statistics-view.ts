@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 import Constants from '../../constants';
 import HTMLConstructor from '../components/constructor';
 import { services } from '../../services/services';
-import { Statistics, Optional } from '../../types/types';
+import { Statistics } from '../../types/types';
 
 export default class Statistic {
   private mainId: string = Constants.MAIN_ID;
