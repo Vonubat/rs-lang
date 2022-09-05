@@ -8,6 +8,8 @@ import {
   UsersWordsResponseSchema,
   Statistics,
   TypeOfWordIsPaginatedResult,
+  DailyStatAudioChallenge,
+  AudioChallengeSchema,
 } from '../../../types/types';
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
@@ -156,17 +158,13 @@ export default class AudioChallengeService {
     } = { keyWord: this.words[this.currentWordCounter] };
 
     const uniqueChances: number[] = [];
-
     for (let i = 1; i < 4; i += 1) {
       const chance: number = Utils.getChance(this.currentWordCounter, this.totalCount);
       if (uniqueChances.some((el: number): boolean => el === chance)) {
         i -= 1;
         // eslint-disable-next-line no-continue
         continue;
-      } else {
-        uniqueChances.push(chance);
       }
-
       const key = `fakeWord${i}`;
       if (this.currentWordCounter === chance) {
         i -= 1;
@@ -174,6 +172,7 @@ export default class AudioChallengeService {
         continue;
       }
       result[key] = this.words[chance];
+      uniqueChances.push(chance);
     }
     this.wordsForIteration = Utils.shuffleWords(Object.entries(result)) as [
       string,
@@ -237,11 +236,22 @@ export default class AudioChallengeService {
         await api.usersStatistics.setStatistics(userId, body);
       } else {
         body = { optional: response.optional };
-        const lastDailyStat: number = response.optional?.dailyStat as number;
-        const diff: number = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
+
+        const dailyStatAudioChallenge: DailyStatAudioChallenge | undefined = body.optional?.dailyStatAudioChallenge;
+        let key: string | undefined;
+        let diff: number;
+        let lastDailyStat: number;
+        if (!dailyStatAudioChallenge) {
+          diff = 100; // dirty hack
+        } else {
+          [key] = Object.keys(dailyStatAudioChallenge);
+          lastDailyStat = Number(key);
+          diff = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
+        }
+
         await api.usersStatistics.setStatistics(
           userId,
-          this.userStatisticsDaily(body as Statistics, currentDate, allWordsCounter, inARow, accuracy, diff)
+          this.userStatisticsDaily(body as Statistics, currentDate, allWordsCounter, inARow, accuracy, diff, key)
         );
 
         await api.usersStatistics.setStatistics(
@@ -260,19 +270,22 @@ export default class AudioChallengeService {
   ): Statistics {
     const body: Statistics = {
       optional: {
-        dailyStat: currentDate,
-        pointsValueAudioChallenge: this.pointsValue,
-        mistakesAudioChallenge: this.mistakes,
-        allWordsCounterAudioChallenge: allWordsCounter,
-        inARowAudioChallenge: inARow,
-        accuracyAudioChallenge: accuracy,
-        longStat: {
+        dailyStatAudioChallenge: {
           [currentDate]: {
             pointsValueAudioChallenge: this.pointsValue,
             mistakesAudioChallenge: this.mistakes,
             allWordsCounterAudioChallenge: allWordsCounter,
             inARowAudioChallenge: inARow,
-            accuracyAudioChallenget: accuracy,
+            accuracyAudioChallenge: accuracy,
+          },
+        },
+        longStatAudioChallenge: {
+          [currentDate]: {
+            pointsValueAudioChallenge: this.pointsValue,
+            mistakesAudioChallenge: this.mistakes,
+            allWordsCounterAudioChallenge: allWordsCounter,
+            inARowAudioChallenge: inARow,
+            accuracyAudioChallenge: accuracy,
           },
         },
       },
@@ -286,24 +299,33 @@ export default class AudioChallengeService {
     allWordsCounter: number,
     inARow: number,
     accuracy: number,
-    diff: number
+    diff: number,
+    key?: string
   ): Statistics {
     if (diff > 1 && body.optional) {
-      body.optional.dailyStat = currentDate;
-      body.optional.pointsValueAudioChallenge = this.pointsValue;
-      body.optional.mistakesAudioChallenge = this.mistakes;
-      body.optional.allWordsCounterAudioChallenge = allWordsCounter;
-      body.optional.inARowAudioChallenge = inARow;
-      body.optional.accuracyAudioChallenge = accuracy;
+      body.optional.dailyStatAudioChallenge = {};
+      Object.defineProperty(body.optional?.dailyStatAudioChallenge, currentDate, {
+        value: {
+          pointsValueAudioChallenge: this.pointsValue,
+          mistakesAudioChallenge: this.mistakes,
+          allWordsCounterAudioChallenge: allWordsCounter,
+          inARowAudioChallenge: inARow,
+          accuracyAudioChallenge: accuracy,
+        },
+        enumerable: true,
+        configurable: true,
+        writable: true,
+      });
     }
-    if (diff < 1 && body.optional) {
-      body.optional.pointsValueAudioChallenge = Number(body.optional.pointsValueAudioChallenge) + this.pointsValue;
-      body.optional.mistakesAudioChallenge = Number(body.optional.mistakesAudioChallenge) + this.mistakes;
-      body.optional.allWordsCounterAudioChallenge =
-        Number(body.optional.allWordsCounterAudioChallenge) + allWordsCounter;
-      body.optional.inARowAudioChallenge =
-        Number(body.optional.inARowAudioChallenge) > inARow ? Number(body.optional.inARowAudioChallenge) : inARow;
-      body.optional.accuracyAudioChallenge = (Number(body.optional.accuracyAudioChallenge) + accuracy) / 2;
+
+    if (diff < 1 && body.optional?.dailyStatAudioChallenge && key) {
+      const target: AudioChallengeSchema = body.optional?.dailyStatAudioChallenge[key];
+      target.pointsValueAudioChallenge = Number(target.pointsValueAudioChallenge) + this.pointsValue;
+      target.mistakesAudioChallenge = Number(target.mistakesAudioChallenge) + this.mistakes;
+      target.allWordsCounterAudioChallenge = Number(target.allWordsCounterAudioChallenge) + allWordsCounter;
+      target.inARowAudioChallenge =
+        Number(target.inARowAudioChallenge) > inARow ? Number(target.inARowAudioChallenge) : inARow;
+      target.accuracyAudioChallenge = (Number(target.accuracyAudioChallenge) + accuracy) / 2;
     }
     return body;
   }
@@ -315,7 +337,13 @@ export default class AudioChallengeService {
     inARow: number,
     accuracy: number
   ): Statistics {
-    Object.defineProperty(body.optional?.longStat, currentDate, {
+    if (body.optional) {
+      if (!body.optional.longStatAudioChallenge) {
+        body.optional.longStatAudioChallenge = {};
+      }
+    }
+
+    Object.defineProperty(body.optional?.longStatAudioChallenge, currentDate, {
       value: {
         pointsValueAudioChallenge: this.pointsValue,
         mistakesAudioChallenge: this.mistakes,
@@ -370,24 +398,17 @@ export default class AudioChallengeService {
   }
 
   wordStatisticsLogicEngine(word: WordsStatistic) {
-    let ratio: number = word.correctAttemptsSession / word.incorrectAttemptsSession;
-    if (ratio === 0) {
-      ratio = word.correctAttemptsSession === 0 ? 0 : 1;
-    }
     if (word.difficulty === 'none') {
-      if (ratio > 0) {
+      if (word.correctAttemptsSession > 0) {
         word.difficulty = 'learned';
       } else {
         word.difficulty = 'hard';
       }
-
       return;
     }
     if (word.difficulty === 'hard') {
-      if (ratio > 0) {
+      if (word.correctAttemptsSession > 0) {
         word.difficulty = 'learned';
-      } else {
-        word.difficulty = 'hard';
       }
       return;
     }

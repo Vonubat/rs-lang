@@ -87,31 +87,42 @@ interface TotalCount {
 interface Optional {
   correctAttempts?: number;
   incorrectAttempts?: number;
-  dailyStat?: number;
+  dailyStatSprint?: DailyStatSprint;
+  dailyStatAudioChallenge?: DailyStatAudioChallenge;
+  longStatSprint?: LongStatSprint;
+  longStatAudioChallenge?: LongAudioChallenge;
+}
+
+export interface DailyStatSprint {
+  [index: string]: SprintSchema;
+}
+
+export interface DailyStatAudioChallenge {
+  [index: string]: AudioChallengeSchema;
+}
+
+export interface LongStatSprint {
+  [index: string]: SprintSchema;
+}
+
+export interface LongAudioChallenge {
+  [index: string]: AudioChallengeSchema;
+}
+
+export interface SprintSchema {
   pointsValueSprint?: number;
   mistakesSprint?: number;
   allWordsCounterSprint?: number;
   inARowSprint?: number;
   accuracySprint?: number;
+}
+
+export interface AudioChallengeSchema {
   pointsValueAudioChallenge?: number;
   mistakesAudioChallenge?: number;
   allWordsCounterAudioChallenge?: number;
   inARowAudioChallenge?: number;
   accuracyAudioChallenge?: number;
-  longStat?: {
-    currentDate?: {
-      pointsValueSprint?: number;
-      mistakesSprint?: number;
-      allWordsCounterSprint?: number;
-      inARowSprint?: number;
-      accuracySprint?: number;
-      pointsValueAudioChallenget?: number;
-      mistakesAudioChallenge?: number;
-      allWordsAudioChallenge?: number;
-      inARowAudioChallenge?: number;
-      accuracyAudioChallenge?: number;
-    };
-  };
 }
 
 export interface Statistics {

@@ -8,6 +8,8 @@ import {
   WordsStatistic,
   UsersWordsResponseSchema,
   Statistics,
+  DailyStatSprint,
+  SprintSchema,
 } from '../../../types/types';
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
@@ -252,11 +254,17 @@ export default class SprintService {
         await api.usersStatistics.setStatistics(userId, body);
       } else {
         body = { optional: response.optional };
-        const lastDailyStat: number = response.optional?.dailyStat as number;
+        if (!body.optional?.dailyStatSprint) {
+          body = this.createUserStatisticsObject(currentDate, allWordsCounter, inARow, accuracy);
+          await api.usersStatistics.setStatistics(userId, body);
+        }
+        const dailyStatSprint: DailyStatSprint = body.optional?.dailyStatSprint as DailyStatSprint;
+        const key: string = Object.keys(dailyStatSprint)[0];
+        const lastDailyStat = Number(key);
         const diff: number = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
         await api.usersStatistics.setStatistics(
           userId,
-          this.userStatisticsDaily(body as Statistics, currentDate, allWordsCounter, inARow, accuracy, diff)
+          this.userStatisticsDaily(body as Statistics, currentDate, allWordsCounter, inARow, accuracy, diff, key)
         );
 
         await api.usersStatistics.setStatistics(
@@ -275,13 +283,16 @@ export default class SprintService {
   ): Statistics {
     const body: Statistics = {
       optional: {
-        dailyStat: currentDate,
-        pointsValueSprint: this.pointsValue,
-        mistakesSprint: this.mistakes,
-        allWordsCounterSprint: allWordsCounter,
-        inARowSprint: inARow,
-        accuracySprint: accuracy,
-        longStat: {
+        dailyStatSprint: {
+          [currentDate]: {
+            pointsValueSprint: this.pointsValue,
+            mistakesSprint: this.mistakes,
+            allWordsCounterSprint: allWordsCounter,
+            inARowSprint: inARow,
+            accuracySprint: accuracy,
+          },
+        },
+        longStatSprint: {
           [currentDate]: {
             pointsValueSprint: this.pointsValue,
             mistakesSprint: this.mistakes,
@@ -301,23 +312,32 @@ export default class SprintService {
     allWordsCounter: number,
     inARow: number,
     accuracy: number,
-    diff: number
+    diff: number,
+    key: string
   ): Statistics {
-    if (diff > 1 && body.optional) {
-      body.optional.dailyStat = currentDate;
-      body.optional.pointsValueSprint = this.pointsValue;
-      body.optional.mistakesSprint = this.mistakes;
-      body.optional.allWordsCounterSprint = allWordsCounter;
-      body.optional.inARowSprint = inARow;
-      body.optional.accuracySprint = accuracy;
+    if (diff > 1 && body.optional?.dailyStatSprint) {
+      body.optional.dailyStatSprint = {};
+      Object.defineProperty(body.optional?.dailyStatSprint, currentDate, {
+        value: {
+          pointsValueSprint: this.pointsValue,
+          mistakesSprint: this.mistakes,
+          allWordsCounterSprint: allWordsCounter,
+          inARowSprint: inARow,
+          accuracySprint: accuracy,
+        },
+        enumerable: true,
+        configurable: true,
+        writable: true,
+      });
     }
-    if (diff < 1 && body.optional) {
-      body.optional.pointsValueSprint = Number(body.optional.pointsValueSprint) + this.pointsValue;
-      body.optional.mistakesSprint = Number(body.optional.mistakesSprint) + this.mistakes;
-      body.optional.allWordsCounterSprint = Number(body.optional.allWordsCounterSprint) + allWordsCounter;
-      body.optional.inARowSprint =
-        Number(body.optional.inARowSprint) > inARow ? Number(body.optional.inARowSprint) : inARow;
-      body.optional.accuracySprint = (Number(body.optional.accuracySprint) + accuracy) / 2;
+
+    if (diff < 1 && body.optional?.dailyStatSprint) {
+      const target: SprintSchema = body.optional?.dailyStatSprint[key];
+      target.pointsValueSprint = Number(target.pointsValueSprint) + this.pointsValue;
+      target.mistakesSprint = Number(target.mistakesSprint) + this.mistakes;
+      target.allWordsCounterSprint = Number(target.allWordsCounterSprint) + allWordsCounter;
+      target.inARowSprint = Number(target.inARowSprint) > inARow ? Number(target.inARowSprint) : inARow;
+      target.accuracySprint = Number(target.accuracySprint) + accuracy / 2;
     }
     return body;
   }
@@ -329,7 +349,7 @@ export default class SprintService {
     inARow: number,
     accuracy: number
   ): Statistics {
-    Object.defineProperty(body.optional?.longStat, currentDate, {
+    Object.defineProperty(body.optional?.longStatSprint, currentDate, {
       value: {
         pointsValueSprint: this.pointsValue,
         mistakesSprint: this.mistakes,
