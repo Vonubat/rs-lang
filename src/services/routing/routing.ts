@@ -95,18 +95,24 @@ export class Route {
     switch (path) {
       case '/':
         rootDiv.append(this.view.mainView.view());
+        this.view.footer.showFooter();
         break;
       case 'textbook':
         this.view.drawTextbook();
+        this.view.footer.showFooter();
         break;
       case 'dictionary':
         this.view.drawDictionary();
+        this.view.footer.showFooter();
         break;
       case 'games':
         this.view.drawGamesCards();
+        this.view.footer.hideFooter();
         break;
       case 'statistics':
         // TO DO
+        this.view.footer.showFooter();
+        this.view.drawStatistics();
         break;
       default:
         rootDiv.append(this.notFound.notFound());

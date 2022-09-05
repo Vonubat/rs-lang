@@ -8,6 +8,7 @@ import Menu from './menu/menu';
 import TextbookView from './textbook/textbook-view';
 import DictionaryView from './dictionary/dictionary-view';
 import GamesView from './games/games-view';
+import Statistics from './statistics/statistics-view';
 
 export class View {
   htmlConstructor: HTMLConstructor;
@@ -28,6 +29,8 @@ export class View {
 
   gamesView: GamesView;
 
+  statistics: Statistics;
+
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
     this.menu = new Menu();
@@ -38,6 +41,7 @@ export class View {
     this.dictionaryView = new DictionaryView();
     this.gamesView = new GamesView();
     this.loading = new Loading();
+    this.statistics = new Statistics();
   }
 
   drawHeader(): DocumentFragment {
@@ -60,6 +64,11 @@ export class View {
 
   drawGamesCards(): void {
     services.gamesService.drawPage();
+  }
+
+  async drawStatistics() {
+    // throw new Error('Method not implemented.');
+    await this.statistics.drawPage();
   }
 
   drawMainPage(): void {

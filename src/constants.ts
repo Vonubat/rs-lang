@@ -87,4 +87,6 @@ export default class Constants {
       github: 'https://github.com/der-thun',
     },
   ];
+
+  static readonly MAIN_ID = 'main';
 }

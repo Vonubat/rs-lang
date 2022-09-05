@@ -30,4 +30,12 @@ export default class Footer {
   view(): HTMLElement {
     return this.footer;
   }
+
+  hideFooter() {
+    document.getElementsByClassName('footer')[0].classList.add('footer_hidden');
+  }
+
+  showFooter() {
+    document.getElementsByClassName('footer')[0].classList.remove('footer_hidden');
+  }
 }
