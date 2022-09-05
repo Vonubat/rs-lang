@@ -1,6 +1,6 @@
 .card-wrapper-games {
   gap: 30px;
-  margin: 20px;
+  padding: 20px;
 
   .card {
     max-width: 360px;
@@ -120,6 +120,12 @@
   .modal-body {
     gap: 5px;
     font-size: medium;
+
+    .text-bg-warning {
+      &::after {
+        content: ' %';
+      }
+    }
 
     .word-container {
       gap: 5px;

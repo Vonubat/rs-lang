@@ -84,12 +84,28 @@ interface TotalCount {
   count: number;
 }
 
-export interface Optional {
-  [index: string]: DailyStatistics | number;
+interface Optional {
+  correctAttempts?: number;
+  incorrectAttempts?: number;
+  dailyStat?: number;
+  pointsValueSprint?: number;
+  mistakesSprint?: number;
+  allWordsCounterSprint?: number;
+  inARowSprint?: number;
+  accuracySprint?: number;
+  longStat?: {
+    currentDate?: {
+      pointsValueSprint?: number;
+      mistakesSprint?: number;
+      allWordsCounterSprint?: number;
+      inARowSprint?: number;
+      accuracySprint?: number;
+    };
+  };
 }
 
 export interface Statistics {
-  learnedWords: number;
+  wordsPerDay?: number;
   id?: string;
   optional?: Optional;
 }
@@ -97,7 +113,7 @@ export interface Statistics {
 export interface Settings {
   wordsPerDay: number;
   id?: string;
-  optional?: Optional;
+  optional?: Partial<Optional>;
 }
 
 // https://gist.github.com/daxartio/f387e811ba38eca5d5f8bff53f9fadb1
