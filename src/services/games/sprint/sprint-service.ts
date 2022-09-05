@@ -42,6 +42,8 @@ export default class SprintService {
 
   inARowHistory: number[];
 
+  learnedWordsCounterSprint: number;
+
   right!: HTMLButtonElement;
 
   wrong!: HTMLButtonElement;
@@ -89,9 +91,11 @@ export default class SprintService {
     this.inARow = 0;
     this.inARowCurrent = 0;
     this.inARowHistory = [];
+    this.learnedWordsCounterSprint = 0;
   }
 
   launchSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
+    this.eraseData();
     const page: HTMLElement = view.gamesView.games;
     page.innerHTML = '';
 
@@ -136,7 +140,6 @@ export default class SprintService {
   }
 
   closeGame(): void {
-    this.eraseData();
     window.location.href = '#';
     window.location.href = '#games';
   }
@@ -153,6 +156,7 @@ export default class SprintService {
     this.wordsStatistics = {};
     this.inARow = 0;
     this.inARowCurrent = 0;
+    this.learnedWordsCounterSprint = 0;
     this.inARowHistory = [];
   }
 
@@ -291,6 +295,7 @@ export default class SprintService {
         dailyStatSprint: {
           [currentDate]: {
             pointsValueSprint: this.pointsValue,
+            learnedWordsCounterSprint: this.learnedWordsCounterSprint,
             mistakesSprint: this.mistakes,
             allWordsCounterSprint: allWordsCounter,
             inARowSprint: inARow,
@@ -300,6 +305,7 @@ export default class SprintService {
         longStatSprint: {
           [currentDate]: {
             pointsValueSprint: this.pointsValue,
+            learnedWordsCounterSprint: this.learnedWordsCounterSprint,
             mistakesSprint: this.mistakes,
             allWordsCounterSprint: allWordsCounter,
             inARowSprint: inARow,
@@ -325,6 +331,7 @@ export default class SprintService {
       Object.defineProperty(body.optional?.dailyStatSprint, currentDate, {
         value: {
           pointsValueSprint: this.pointsValue,
+          learnedWordsCounterSprint: this.learnedWordsCounterSprint,
           mistakesSprint: this.mistakes,
           allWordsCounterSprint: allWordsCounter,
           inARowSprint: inARow,
@@ -339,6 +346,7 @@ export default class SprintService {
     if (diff < 1 && body.optional?.dailyStatSprint && key) {
       const target: SprintSchema = body.optional?.dailyStatSprint[key];
       target.pointsValueSprint = Number(target.pointsValueSprint) + this.pointsValue;
+      target.learnedWordsCounterSprint = Number(target.learnedWordsCounterSprint) + this.learnedWordsCounterSprint;
       target.mistakesSprint = Number(target.mistakesSprint) + this.mistakes;
       target.allWordsCounterSprint = Number(target.allWordsCounterSprint) + allWordsCounter;
       target.inARowSprint = Number(target.inARowSprint) > inARow ? Number(target.inARowSprint) : inARow;
@@ -363,6 +371,7 @@ export default class SprintService {
     Object.defineProperty(body.optional?.longStatSprint, currentDate, {
       value: {
         pointsValueSprint: this.pointsValue,
+        learnedWordsCounterSprint: this.learnedWordsCounterSprint,
         mistakesSprint: this.mistakes,
         allWordsCounterSprint: allWordsCounter,
         inARowSprint: inARow,
@@ -424,6 +433,7 @@ export default class SprintService {
       if (minAttempts) {
         if (ratio > 0.5) {
           word.difficulty = 'learned';
+          this.learnedWordsCounterSprint += 1;
         } else {
           word.difficulty = 'hard';
         }
@@ -434,6 +444,7 @@ export default class SprintService {
       if (minAttempts) {
         if (ratio > 0.7) {
           word.difficulty = 'learned';
+          this.learnedWordsCounterSprint += 1;
         }
         return;
       }
@@ -441,6 +452,7 @@ export default class SprintService {
     if (word.difficulty === 'learned') {
       if (word.incorrectAttemptsSession > 0) {
         word.difficulty = 'none';
+        this.learnedWordsCounterSprint -= 1;
       }
     }
   }

@@ -40,6 +40,8 @@ export default class AudioChallengeService {
 
   inARowHistory: number[];
 
+  learnedWordsCounterAudioChallenge: number;
+
   pointsElement!: HTMLElement;
 
   multiplicatorElement!: HTMLElement;
@@ -82,9 +84,11 @@ export default class AudioChallengeService {
     this.inARow = 0;
     this.inARowCurrent = 0;
     this.inARowHistory = [];
+    this.learnedWordsCounterAudioChallenge = 0;
   }
 
   launchAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
+    this.eraseData();
     const page: HTMLElement = view.gamesView.games;
     page.innerHTML = '';
 
@@ -124,7 +128,6 @@ export default class AudioChallengeService {
   }
 
   closeGame(): void {
-    this.eraseData();
     window.location.href = '#';
     window.location.href = '#games';
   }
@@ -273,6 +276,7 @@ export default class AudioChallengeService {
         dailyStatAudioChallenge: {
           [currentDate]: {
             pointsValueAudioChallenge: this.pointsValue,
+            learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
             mistakesAudioChallenge: this.mistakes,
             allWordsCounterAudioChallenge: allWordsCounter,
             inARowAudioChallenge: inARow,
@@ -282,6 +286,7 @@ export default class AudioChallengeService {
         longStatAudioChallenge: {
           [currentDate]: {
             pointsValueAudioChallenge: this.pointsValue,
+            learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
             mistakesAudioChallenge: this.mistakes,
             allWordsCounterAudioChallenge: allWordsCounter,
             inARowAudioChallenge: inARow,
@@ -307,6 +312,7 @@ export default class AudioChallengeService {
       Object.defineProperty(body.optional?.dailyStatAudioChallenge, currentDate, {
         value: {
           pointsValueAudioChallenge: this.pointsValue,
+          learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
           mistakesAudioChallenge: this.mistakes,
           allWordsCounterAudioChallenge: allWordsCounter,
           inARowAudioChallenge: inARow,
@@ -321,6 +327,8 @@ export default class AudioChallengeService {
     if (diff < 1 && body.optional?.dailyStatAudioChallenge && key) {
       const target: AudioChallengeSchema = body.optional?.dailyStatAudioChallenge[key];
       target.pointsValueAudioChallenge = Number(target.pointsValueAudioChallenge) + this.pointsValue;
+      target.learnedWordsCounterAudioChallenge =
+        Number(target.learnedWordsCounterAudioChallenge) + this.learnedWordsCounterAudioChallenge;
       target.mistakesAudioChallenge = Number(target.mistakesAudioChallenge) + this.mistakes;
       target.allWordsCounterAudioChallenge = Number(target.allWordsCounterAudioChallenge) + allWordsCounter;
       target.inARowAudioChallenge =
@@ -346,6 +354,7 @@ export default class AudioChallengeService {
     Object.defineProperty(body.optional?.longStatAudioChallenge, currentDate, {
       value: {
         pointsValueAudioChallenge: this.pointsValue,
+        learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
         mistakesAudioChallenge: this.mistakes,
         allWordsCounterAudioChallenge: allWordsCounter,
         inARowAudioChallenge: inARow,
@@ -401,6 +410,7 @@ export default class AudioChallengeService {
     if (word.difficulty === 'none') {
       if (word.correctAttemptsSession > 0) {
         word.difficulty = 'learned';
+        this.learnedWordsCounterAudioChallenge += 1;
       } else {
         word.difficulty = 'hard';
       }
@@ -409,12 +419,14 @@ export default class AudioChallengeService {
     if (word.difficulty === 'hard') {
       if (word.correctAttemptsSession > 0) {
         word.difficulty = 'learned';
+        this.learnedWordsCounterAudioChallenge += 1;
       }
       return;
     }
     if (word.difficulty === 'learned') {
       if (word.incorrectAttemptsSession > 0) {
         word.difficulty = 'none';
+        this.learnedWordsCounterAudioChallenge -= 1;
       }
     }
   }
