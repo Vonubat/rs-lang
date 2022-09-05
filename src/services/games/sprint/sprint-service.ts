@@ -254,14 +254,19 @@ export default class SprintService {
         await api.usersStatistics.setStatistics(userId, body);
       } else {
         body = { optional: response.optional };
-        if (!body.optional?.dailyStatSprint) {
-          body = this.createUserStatisticsObject(currentDate, allWordsCounter, inARow, accuracy);
-          await api.usersStatistics.setStatistics(userId, body);
+
+        const dailyStatSprint: DailyStatSprint | undefined = body.optional?.dailyStatSprint;
+        let key: string | undefined;
+        let diff: number;
+        let lastDailyStat: number;
+        if (!dailyStatSprint) {
+          diff = 100; // dirty hack
+        } else {
+          [key] = Object.keys(dailyStatSprint);
+          lastDailyStat = Number(key);
+          diff = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
         }
-        const dailyStatSprint: DailyStatSprint = body.optional?.dailyStatSprint as DailyStatSprint;
-        const key: string = Object.keys(dailyStatSprint)[0];
-        const lastDailyStat = Number(key);
-        const diff: number = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
+
         await api.usersStatistics.setStatistics(
           userId,
           this.userStatisticsDaily(body as Statistics, currentDate, allWordsCounter, inARow, accuracy, diff, key)
@@ -313,9 +318,9 @@ export default class SprintService {
     inARow: number,
     accuracy: number,
     diff: number,
-    key: string
+    key?: string
   ): Statistics {
-    if (diff > 1 && body.optional?.dailyStatSprint) {
+    if (diff > 1 && body.optional) {
       body.optional.dailyStatSprint = {};
       Object.defineProperty(body.optional?.dailyStatSprint, currentDate, {
         value: {
@@ -331,13 +336,13 @@ export default class SprintService {
       });
     }
 
-    if (diff < 1 && body.optional?.dailyStatSprint) {
+    if (diff < 1 && body.optional?.dailyStatSprint && key) {
       const target: SprintSchema = body.optional?.dailyStatSprint[key];
       target.pointsValueSprint = Number(target.pointsValueSprint) + this.pointsValue;
       target.mistakesSprint = Number(target.mistakesSprint) + this.mistakes;
       target.allWordsCounterSprint = Number(target.allWordsCounterSprint) + allWordsCounter;
       target.inARowSprint = Number(target.inARowSprint) > inARow ? Number(target.inARowSprint) : inARow;
-      target.accuracySprint = Number(target.accuracySprint) + accuracy / 2;
+      target.accuracySprint = (Number(target.accuracySprint) + accuracy) / 2;
     }
     return body;
   }
@@ -349,6 +354,12 @@ export default class SprintService {
     inARow: number,
     accuracy: number
   ): Statistics {
+    if (body.optional) {
+      if (!body.optional.longStatSprint) {
+        body.optional.longStatSprint = {};
+      }
+    }
+
     Object.defineProperty(body.optional?.longStatSprint, currentDate, {
       value: {
         pointsValueSprint: this.pointsValue,
@@ -423,9 +434,8 @@ export default class SprintService {
       if (minAttempts) {
         if (ratio > 0.7) {
           word.difficulty = 'learned';
-        } else {
-          word.difficulty = 'hard';
         }
+        return;
       }
     }
     if (word.difficulty === 'learned') {
