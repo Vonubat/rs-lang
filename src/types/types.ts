@@ -112,15 +112,10 @@ export interface LongAudioChallenge {
 export interface SprintSchema {
   pointsValueSprint?: number;
   learnedWordsCounterSprint?: number;
-  learnedWordsCounterAudioChallenge?: number;
   mistakesSprint?: number;
   allWordsCounterSprint?: number;
   inARowSprint?: number;
-  inARowAudioChallenge?: number;
   accuracySprint?: number;
-  accuracyAudioChallenge?: number;
-  dailyStatSprint?: object;
-  dailyStatAudioChallenge?: object;
 }
 
 export interface AudioChallengeSchema {
@@ -173,10 +168,6 @@ export interface Team {
 
 export function TypeOfWordIsPaginatedResult(word: WordsResponseSchema | PaginatedResult): word is PaginatedResult {
   return '_id' in word;
-}
-
-export function TypeOfWordsIsAggregatedWords(words: WordsResponseSchema[] | AggregatedWords): words is AggregatedWords {
-  return 'paginatedResults' in words;
 }
 
 type RGB = `rgb(${number}, ${number}, ${number})`;
