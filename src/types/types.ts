@@ -112,10 +112,15 @@ export interface LongAudioChallenge {
 export interface SprintSchema {
   pointsValueSprint?: number;
   learnedWordsCounterSprint?: number;
+  learnedWordsCounterAudioChallenge?: number;
   mistakesSprint?: number;
   allWordsCounterSprint?: number;
   inARowSprint?: number;
+  inARowAudioChallenge?: number;
   accuracySprint?: number;
+  accuracyAudioChallenge?: number;
+  dailyStatSprint?: object;
+  dailyStatAudioChallenge?: object;
 }
 
 export interface AudioChallengeSchema {
