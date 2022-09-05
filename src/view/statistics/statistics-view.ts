@@ -1,8 +1,15 @@
-import Chart from 'chart.js/auto';
+import Chart, { ChartConfiguration, ChartConfigurationCustomTypesPerDataset, ChartTypeRegistry } from 'chart.js/auto';
 import Constants from '../../constants';
 import HTMLConstructor from '../components/constructor';
 import { services } from '../../services/services';
-import { AudioChallengeSchema, SprintSchema, Statistics } from '../../types/types';
+import {
+  AudioChallengeSchema,
+  DailyStatAudioChallenge,
+  DailyStatSprint,
+  LongStatSprint,
+  SprintSchema,
+  Statistics,
+} from '../../types/types';
 
 export default class Statistic {
   private mainId: string = Constants.MAIN_ID;
@@ -141,7 +148,8 @@ export default class Statistic {
     const accuracyWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
     const accuracyAmount = this.htmlConstructor.createHtmlElement('h4');
     if (data) {
-      accuracyAmount.innerText = this.gameAccuracyDaily(data, gameName);
+      const value = this.gameAccuracyDaily(data, gameName);
+      accuracyAmount.innerText = value;
     } else accuracyAmount.innerText = '0%';
     const accuracyTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     accuracyTitle.innerText = 'accuracy';
@@ -161,31 +169,58 @@ export default class Statistic {
 
   private gameTopInRowDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): number {
     let top = 0;
-    const folder = (data.optional as SprintSchema | AudioChallengeSchema)[`dailyStat${type}`];
-    if (typeof folder === 'object') {
-      const values = Object.values(folder) as SprintSchema[] | AudioChallengeSchema[];
-      top = values[0][`inARow${type}`] as number;
+    let folder: DailyStatSprint | DailyStatAudioChallenge | undefined;
+    if (data.optional) {
+      folder = data.optional[`dailyStat${type}`];
+
+      if (typeof folder === 'object') {
+        const values: SprintSchema[] | AudioChallengeSchema[] = Object.values(folder);
+        if (type === 'Sprint') {
+          top = (values[0] as SprintSchema).inARowSprint as number;
+        } else {
+          top = (values[0] as AudioChallengeSchema).inARowAudioChallenge as number;
+        }
+      }
     }
+
     return top;
   }
 
   private gameAccuracyDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): string {
     let sum = 0;
-    const folder = (data.optional as SprintSchema | AudioChallengeSchema)[`dailyStat${type}`];
-    if (typeof folder === 'object') {
-      const values = Object.values(folder) as SprintSchema[] | AudioChallengeSchema[];
-      sum = values[0][`accuracy${type}`] as number;
+    let folder: DailyStatSprint | DailyStatAudioChallenge | undefined;
+    if (data.optional) {
+      folder = data.optional[`dailyStat${type}`];
+
+      if (typeof folder === 'object') {
+        const values: SprintSchema[] | AudioChallengeSchema[] = Object.values(folder);
+        if (type === 'Sprint') {
+          sum = (values[0] as SprintSchema).accuracySprint as number;
+        } else {
+          sum = (values[0] as AudioChallengeSchema).accuracyAudioChallenge as number;
+        }
+      }
     }
+
     return `${sum}%`;
   }
 
   private gameWordsDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): number {
     let words = 0;
-    const folder = (data.optional as SprintSchema | AudioChallengeSchema)[`dailyStat${type}`];
-    if (typeof folder === 'object') {
-      const values = Object.values(folder) as SprintSchema[] | AudioChallengeSchema[];
-      words = values[0][`learnedWordsCounter${type}`] as number;
+    let folder: DailyStatSprint | DailyStatAudioChallenge | undefined;
+    if (data.optional) {
+      folder = data.optional[`dailyStat${type}`];
+
+      if (typeof folder === 'object') {
+        const values: SprintSchema[] | AudioChallengeSchema[] = Object.values(folder);
+        if (type === 'Sprint') {
+          words = (values[0] as SprintSchema).learnedWordsCounterSprint as number;
+        } else {
+          words = (values[0] as AudioChallengeSchema).learnedWordsCounterAudioChallenge as number;
+        }
+      }
     }
+
     return words;
   }
 
@@ -222,71 +257,85 @@ export default class Statistic {
         },
       ],
     };
-    const config = {
+    const config:
+      | ChartConfiguration<keyof ChartTypeRegistry, number[], string | Date>
+      | ChartConfigurationCustomTypesPerDataset<keyof ChartTypeRegistry, number[], string | Date> = {
       type: 'line',
       data: graphData,
       options: {},
     };
 
     const graphID = type === 'Progress' ? 'progressGraphBody' : 'learnedGraphBody';
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const myChart = new Chart(document.getElementById(graphID) as HTMLCanvasElement, config);
   }
 
-  private dataForGraphs(data: Statistics, type: 'Progress' | 'Learned words') {
-    let result = [];
-    const folderSprint = data.optional?.longStatSprint;
+  private dataForGraphs(data: Statistics, type: 'Progress' | 'Learned words'): [Date | string, number][] {
+    let result: [Date | string, number][] = [];
+    const folderSprint: LongStatSprint | undefined = data.optional?.longStatSprint;
     if (folderSprint) {
-      const keys = Object.keys(folderSprint);
-      for (const key of keys) result.push([key, folderSprint[key].learnedWordsCounterSprint]);
+      const keys: string[] = Object.keys(folderSprint);
+      keys.forEach((key: string): void => {
+        result.push([key, folderSprint[key].learnedWordsCounterSprint as number]);
+      });
     }
     const folderAudioChallenge = data.optional?.longStatAudioChallenge;
     if (folderAudioChallenge) {
-      const keys = Object.keys(folderAudioChallenge);
-      for (const key of keys) result.push([key, folderAudioChallenge[key].learnedWordsCounterAudioChallenge]);
+      const keys: string[] = Object.keys(folderAudioChallenge);
+      keys.forEach((key: string): void => {
+        result.push([key, folderAudioChallenge[key].learnedWordsCounterAudioChallenge as number]);
+      });
     }
     result.sort();
-    result = result.map((e) => [(e[0] = new Date(+e[0])), e[1]]);
+    result = result.map((e: [Date | string, number]): [Date | string, number] => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      [(e[0] = new Date(+e[0])), e[1]];
+      return [e[0], e[1]];
+    });
     result = this.zipData(result);
     if (type === 'Progress') {
       for (let i = 1; i < result.length; i += 1) {
-        result[i][1] = result[i][1] + result[i - 1][1];
+        // eslint-disable-next-line operator-assignment
+        result[i][1] = (result[i][1] as number) + (result[i - 1][1] as number);
       }
     }
     return result;
   }
 
-  private zipData(data) {
-    const datesAreOnSameDay = (first, second) =>
+  private zipData(data: [Date | string, number][]): [Date | string, number][] {
+    const datesAreOnSameDay = (first: Date, second: Date) =>
       first &&
       second &&
       first.getFullYear() === second.getFullYear() &&
       first.getMonth() === second.getMonth() &&
       first.getDate() === second.getDate();
-    const result = [];
-    let date = 0;
+    const result: [Date, number][] = [];
+    let date: Date | number | string;
     let amount = 0;
     for (let i = 0; i < data.length; i += 1) {
-      date = data[i][0];
-      if (i < data.length - 1 && datesAreOnSameDay(data[i][0], data[i + 1][0])) {
+      [date] = data[i];
+      if (i < data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i + 1][0] as Date)) {
         amount += data[i][1];
-      } else if (i === data.length - 1 && datesAreOnSameDay(data[i][0], data[i - 1][0])) {
+      } else if (i === data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i - 1][0] as Date)) {
         amount += data[i][1];
-        result.push([date, amount]);
+        result.push([date as Date, amount]);
       } else {
-        result.push([date, amount]);
+        result.push([date as Date, amount]);
         date = 0;
         amount = 0;
       }
     }
     // if (amount) result.push([date, amount]);
-    result.forEach((elem) => {
-      const bufer = `${elem[0].getDate()}.${elem[0].getMonth()}.${elem[0].getFullYear()}`;
-      elem[0] = bufer;
+    result.forEach((elem: [Date | string, number]): void => {
+      const buffer = `${(elem[0] as Date).getDate()}.${(elem[0] as Date).getMonth()}.${(elem[0] as Date).getFullYear()}`;
+      // eslint-disable-next-line no-param-reassign
+      elem[0] = buffer;
     });
     return result;
   }
+}
 
-  /* async drawDiagrams() {
+/* async drawDiagrams() {
     const statistics = await services.statisticsService.getStatisticsData();
     const width = 800;
     const height = 400;
@@ -334,4 +383,3 @@ export default class Statistic {
       }
     }
   } */
-}
