@@ -3,10 +3,11 @@ import PageConfig from './components/page-config';
 import SoundHelper from './components/sound-helper';
 import DictionaryService from './dictionary/dictionary-service';
 import GamesService from './games/games-service';
+import StatisticsService from './statistics/statistics-service';
 /* <<<<<<< HEAD
 import SprintService from './games/sprint/sprint-service';
 import Timer from './games/timer';
-import StatisticsService from './statistics/statistics-service';
+
 =======
 >>>>>>> minigames */
 import TextbookService from './textbook/textbook-service';
@@ -24,14 +25,16 @@ export class Services {
 
   soundHelper: SoundHelper;
 
-/* <<<<<<< HEAD
+  statisticsService: StatisticsService;
+
+  /* <<<<<<< HEAD
   timer: Timer;
 
   gamesData: GamesData;
 
   sprintService: SprintService;
 
-  statisticsService: StatisticsService;
+  
 
 =======
 >>>>>>> minigames */
@@ -42,12 +45,13 @@ export class Services {
     this.authService = new AuthService();
     this.dictionaryService = new DictionaryService();
     this.gamesService = new GamesService();
-/* <<<<<<< HEAD
+    this.statisticsService = new StatisticsService();
+    /* <<<<<<< HEAD
     this.soundHelper = new SoundHelper();
     this.timer = new Timer();
     this.gamesData = new GamesData();
     this.sprintService = new SprintService();
-    this.statisticsService = new StatisticsService();
+   
 =======
 >>>>>>> minigames */
   }

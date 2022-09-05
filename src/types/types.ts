@@ -84,7 +84,7 @@ interface TotalCount {
   count: number;
 }
 
-interface Optional {
+export interface Optional {
   correctAttempts?: number;
   incorrectAttempts?: number;
   dailyStatSprint?: DailyStatSprint;

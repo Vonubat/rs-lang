@@ -1,14 +1,18 @@
 import { api, Api } from '../../api/api';
-import Statistics from '../../view/statistics/statistics-view';
+import Statistic from '../../view/statistics/statistics-view';
 import Credentials from '../auth/credentials';
 
 export default class StatisticsService {
   private api: Api = api;
 
-  private statistics: Statistics;
+  statistics: Statistic;
 
-  setView(statistics: Statistics) {
-    this.statistics = statistics;
+  constructor() {
+    this.statistics = new Statistic();
+  }
+
+  setView() {
+    this.statistics.drawPage();
   }
 
   async getStatisticsData() {
