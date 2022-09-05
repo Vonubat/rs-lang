@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 import Constants from '../../constants';
 import HTMLConstructor from '../components/constructor';
 import { services } from '../../services/services';
-import { Statistics } from '../../types/types';
+import { SprintSchema, Statistics } from '../../types/types';
 
 export default class Statistic {
   private mainId: string = Constants.MAIN_ID;
@@ -33,7 +33,7 @@ export default class Statistic {
     todayTitle.innerText = 'TODAY';
     statsPerDay.append(
       todayTitle,
-      this.sectionTodayWordsLearned(),
+      this.sectionTodayWordsLearned(data),
       this.sectionGameLearned('Sprint', data),
       this.sectionGameLearned('AudioChallenge', data)
     );
@@ -46,6 +46,7 @@ export default class Statistic {
   async drawPage() {
     const main = document.getElementById(this.mainId);
     const data = await services.statisticsService.getStatisticsData();
+    console.log(data);
     if (main) {
       main.innerHTML = '';
       main.append(this.view(data));
@@ -56,11 +57,13 @@ export default class Statistic {
     }
   }
 
-  private sectionTodayWordsLearned() {
+  private sectionTodayWordsLearned(data: Statistics | null) {
     const section = this.htmlConstructor.div(['card', 'today-wrapper']);
     const wordsLearned = this.htmlConstructor.div(['card-body', 'today-words-learned']);
     const wordAmount = this.htmlConstructor.createHtmlElement('h2', ['words-learned']);
-    wordAmount.innerText = '0';
+    if (data) {
+      wordAmount.innerText = `${this.wordsDaily(data)}`;
+    } else wordAmount.innerText = '0';
     const body = this.htmlConstructor.div(['card-body']);
     const wordtitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'words-learned-title']);
     wordtitle.innerText = 'words';
@@ -70,18 +73,58 @@ export default class Statistic {
     wordsLearned.append(wordAmount, body);
     const accuracy = this.htmlConstructor.div(['card-body', 'today-accuracy']);
     const accuracyAmount = this.htmlConstructor.createHtmlElement('h2', ['accuracy-today-amount']);
-    accuracyAmount.innerText = '0%';
+    if (data) {
+      accuracyAmount.innerText = this.accuracyDaily(data);
+    } else accuracyAmount.innerText = '0%';
     const accuracyTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'accuracy-today-title']);
     accuracyTitle.innerText = 'Accuracy';
     accuracy.append(accuracyAmount, accuracyTitle);
     const topRow = this.htmlConstructor.div(['card-body', 'today-topRow']);
     const topRowAmount = this.htmlConstructor.createHtmlElement('h2', ['topRow-today-amount']);
-    topRowAmount.innerText = '0%';
+    if (data) {
+      topRowAmount.innerText = `${this.topInRowDaily(data)}`;
+    } else topRowAmount.innerText = '0';
     const topRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'topRow-today-title']);
     topRowTitle.innerText = 'top in a row';
     topRow.append(topRowAmount, topRowTitle);
     section.append(wordsLearned, accuracy, topRow);
     return section;
+  }
+
+  private wordsDaily(data: Statistics) {
+    let word = 0;
+    const folderSprint = data.optional?.dailyStatSprint;
+    const folderAudioChallenge = data.optional?.dailyStatAudioChallenge;
+    if (typeof folderSprint === 'object' && typeof folderAudioChallenge === 'object') {
+      const valuesSprint = Object.values(folderSprint)[0].learnedWordsCounterSprint as number;
+      const valuesAudioChallenge = Object.values(folderAudioChallenge)[0].learnedWordsCounterAudioChallenge as number;
+      word = valuesSprint + valuesAudioChallenge;
+    }
+    return word;
+  }
+
+  private accuracyDaily(data: Statistics) {
+    let accuracy = 0;
+    const folderSprint = data.optional?.dailyStatSprint;
+    const folderAudioChallenge = data.optional?.dailyStatAudioChallenge;
+    if (typeof folderSprint === 'object' && typeof folderAudioChallenge === 'object') {
+      const accuracySprint = Object.values(folderSprint)[0].accuracySprint as number;
+      const accuracyAudioChallenge = Object.values(folderAudioChallenge)[0].accuracyAudioChallenge as number;
+      accuracy = Math.floor((100 * (accuracySprint + accuracyAudioChallenge)) / 2) / 100;
+    }
+    return `${accuracy}%`;
+  }
+
+  private topInRowDaily(data: Statistics) {
+    let topRow = 0;
+    const folderSprint = data.optional?.dailyStatSprint;
+    const folderAudioChallenge = data.optional?.dailyStatAudioChallenge;
+    if (typeof folderSprint === 'object' && typeof folderAudioChallenge === 'object') {
+      const valuesSprint = Object.values(folderSprint)[0].inARowSprint as number;
+      const valuesAudioChallenge = Object.values(folderAudioChallenge)[0].inARowAudioChallenge as number;
+      topRow = valuesSprint > valuesAudioChallenge ? valuesSprint : valuesAudioChallenge;
+    }
+    return topRow;
   }
 
   private sectionGameLearned(gameName: 'Sprint' | 'AudioChallenge', data: Statistics | null) {
@@ -90,38 +133,27 @@ export default class Statistic {
     title.innerText = gameName;
     const body = this.htmlConstructor.div(['card-body']);
     const wordsWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
-    const wordsAmount = this.htmlConstructor.createHtmlElement('h4', [`game-${gameName.toLowerCase()}-wordsAmount`]);
+    const wordsAmount = this.htmlConstructor.createHtmlElement('h4');
     if (data) {
-      wordsAmount.innerText = `${this.wordsDaily(data, gameName)}`;
+      wordsAmount.innerText = `${this.gameWordsDaily(data, gameName)}`;
     } else wordsAmount.innerText = '0';
-    const wordsTitle = this.htmlConstructor.createHtmlElement('h3', [
-      'card-title',
-      `game-${gameName.toLowerCase()}-text`,
-    ]);
+    const wordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     wordsTitle.innerText = 'words';
     wordsWrapper.append(wordsAmount, wordsTitle);
     const accuracyWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
-    const accuracyAmount = this.htmlConstructor.createHtmlElement('h4', [
-      `game-${gameName.toLowerCase()}-accuracyAmount`,
-    ]);
+    const accuracyAmount = this.htmlConstructor.createHtmlElement('h4');
     if (data) {
-      accuracyAmount.innerText = this.accuracyMiddleDaily(data, gameName);
+      accuracyAmount.innerText = this.gameAccuracyDaily(data, gameName);
     } else accuracyAmount.innerText = '0%';
-    const accuracyTitle = this.htmlConstructor.createHtmlElement('h3', [
-      'card-title',
-      `game-${gameName.toLowerCase()}-text`,
-    ]);
+    const accuracyTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     accuracyTitle.innerText = 'accuracy';
     accuracyWrapper.append(accuracyAmount, accuracyTitle);
     const inRowWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
-    const inRowAmount = this.htmlConstructor.createHtmlElement('h4', [`game-${gameName.toLowerCase()}-inRowAmount`]);
+    const inRowAmount = this.htmlConstructor.createHtmlElement('h4');
     if (data) {
-      inRowAmount.innerText = `${this.topInRowDaily(data, gameName)}`;
+      inRowAmount.innerText = `${this.gameTopInRowDaily(data, gameName)}`;
     } else inRowAmount.innerText = '0';
-    const inRowTitle = this.htmlConstructor.createHtmlElement('h3', [
-      'card-title',
-      `game-${gameName.toLowerCase()}-text`,
-    ]);
+    const inRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     inRowTitle.innerText = 'in a row';
     inRowWrapper.append(inRowAmount, inRowTitle);
     body.append(wordsWrapper, accuracyWrapper, inRowWrapper);
@@ -129,33 +161,33 @@ export default class Statistic {
     return section;
   }
 
-  private topInRowDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): number {
-    const top = 10;
-    /* const stat = data.optional[`dailyStat${type}`];
-    console.log(stat);
-    stat.forEach((elem) => {
-      if (elem.inARowSprint > top) top = elem.inARowSprint;
-    }); */
+  private gameTopInRowDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): number {
+    let top = 0;
+    const folder = (data.optional as SprintSchema)[`dailyStat${type}`];
+    if (typeof folder === 'object') {
+      const values = Object.values(folder) as SprintSchema[];
+      top = values[0][`inARow${type}`] as number;
+    }
     return top;
   }
 
-  private accuracyMiddleDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): string {
-    // const sum = 10;
-    /* const stat = data.optional[`dailyStat${type}`];
-    stat.forEach((elem) => {
-      sum += elem[`accuracy${type}`];
-    })
-    return (sum / stat.length) + '%'; */
-    return '10%';
+  private gameAccuracyDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): string {
+    let sum = 0;
+    const folder = (data.optional as SprintSchema)[`dailyStat${type}`];
+    if (typeof folder === 'object') {
+      const values = Object.values(folder) as SprintSchema[];
+      sum = values[0][`accuracy${type}`] as number;
+    }
+    return `${sum}%`;
   }
 
-  private wordsDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): number {
-    const words = 10;
-    /* const stat = data.optional[`dailyStat${type}`];
-    stat.forEach((elem) => {
-      sum += elem[`accuracy${type}`];
-    })
-    return (sum / stat.length) + '%'; */
+  private gameWordsDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): number {
+    let words = 0;
+    const folder = (data.optional as SprintSchema)[`dailyStat${type}`];
+    if (typeof folder === 'object') {
+      const values = Object.values(folder) as SprintSchema[];
+      words = values[0][`learnedWordsCounter${type}`] as number;
+    }
     return words;
   }
 
