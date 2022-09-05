@@ -1,14 +1,6 @@
 #main {
   position: relative;
-  min-height: calc(100% - 120px);
-
-  @media (max-width: 767px) {
-    min-height: calc(100vh - 120px);
-  }
-
-  @media (max-width: 530px) {
-    min-height: calc(100vh - 170px);
-  }
+  flex-grow: 1;
 }
 
 .preview,
