@@ -3,22 +3,21 @@ import { api } from '../../../api/api';
 import {
   WordsResponseSchema,
   PaginatedResult,
-  TypeOfWordIsPaginatedResult,
   WordsStatistics,
   WordsStatistic,
   UsersWordsResponseSchema,
   Statistics,
-  DailyStatSprint,
-  SprintSchema,
+  TypeOfWordIsPaginatedResult,
+  DailyStatAudioChallenge,
+  AudioChallengeSchema,
 } from '../../../types/types';
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
 import AuthService from '../../auth/auth-service';
 import Credentials from '../../auth/credentials';
-import { Route } from '../../routing/routing';
 import { services } from '../../services';
 
-export default class SprintService {
+export default class AudioChallengeService {
   words: WordsResponseSchema[] | PaginatedResult[];
 
   currentWordCounter: number;
@@ -26,8 +25,6 @@ export default class SprintService {
   pointsValue: number;
 
   multiplicatorValue: number;
-
-  steps: boolean[];
 
   mistakes: number;
 
@@ -43,19 +40,9 @@ export default class SprintService {
 
   inARowHistory: number[];
 
-  learnedWordsCounterSprint: number;
-
-  right!: HTMLButtonElement;
-
-  wrong!: HTMLButtonElement;
+  learnedWordsCounterAudioChallenge: number;
 
   pointsElement!: HTMLElement;
-
-  step1!: HTMLSpanElement;
-
-  step2!: HTMLSpanElement;
-
-  step3!: HTMLSpanElement;
 
   multiplicatorElement!: HTMLElement;
 
@@ -67,21 +54,26 @@ export default class SprintService {
 
   word!: string;
 
-  correctWordTranslate!: string;
-
   accuracy!: number;
 
   triggerModal!: HTMLButtonElement;
-
-  soundIcons!: NodeListOf<SVGSVGElement>;
 
   closeBtn!: HTMLButtonElement;
 
   totalCount!: number;
 
+  btnsWord!: NodeListOf<HTMLButtonElement>;
+
+  soundIcons!: NodeListOf<SVGSVGElement>;
+
+  soundIconMain!: SVGSVGElement;
+
+  btnControl!: HTMLButtonElement;
+
+  wordsForIteration!: [string, WordsResponseSchema | PaginatedResult][];
+
   constructor() {
     this.words = [];
-    this.steps = [];
     this.currentWordCounter = 0;
     this.pointsValue = 0;
     this.multiplicatorValue = 10;
@@ -92,35 +84,27 @@ export default class SprintService {
     this.inARow = 0;
     this.inARowCurrent = 0;
     this.inARowHistory = [];
-    this.learnedWordsCounterSprint = 0;
+    this.learnedWordsCounterAudioChallenge = 0;
   }
 
-  launchSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  launchAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
     this.eraseData();
     const page: HTMLElement = view.gamesView.games;
     page.innerHTML = '';
 
     this.words = words;
     this.totalCount = services.pageConfig.getTotalCount();
-    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
 
     page.append(
-      view.gamesView.sprintView.generateGameContainer(
-        wordId,
-        newWord,
-        newWordTranslate,
-        this.finishSprint.bind(services.gamesService.sprintService),
-        words
-      )
+      view.gamesView.audioChallengeView.generateGameContainer(this.chooseWordsForIteration(), this.totalCount)
     );
     this.setItems();
     this.listenGame();
+    this.listenControlBtn();
+    services.soundHelper.playWordPronouncing(this.soundIconMain as SVGSVGElement);
   }
 
-  finishSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
-    if (!Route.checkUrl('games')) {
-      return;
-    }
+  finishAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
     const page: HTMLElement = view.gamesView.games;
     services.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
@@ -150,7 +134,6 @@ export default class SprintService {
 
   eraseData(): void {
     this.words = [];
-    this.steps = [];
     this.currentWordCounter = 0;
     this.pointsValue = 0;
     this.multiplicatorValue = 10;
@@ -160,50 +143,56 @@ export default class SprintService {
     this.wordsStatistics = {};
     this.inARow = 0;
     this.inARowCurrent = 0;
-    this.learnedWordsCounterSprint = 0;
     this.inARowHistory = [];
   }
 
-  chooseTranslate(
-    word: WordsResponseSchema | PaginatedResult
-  ): {
-    wordId: string;
-    newWord: string;
-    newWordTranslate: string;
-  } {
-    const chance: number = Utils.getChance(this.currentWordCounter, this.totalCount);
-    const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
-    const newWord: string = word.word;
-    const newWordTranslate: string = this.words[chance].wordTranslate;
+  chooseWordsForIteration(): [string, WordsResponseSchema | PaginatedResult][] {
+    const currentWordObject: WordsResponseSchema | PaginatedResult = this.words[this.currentWordCounter];
 
-    this.prediction = false;
+    this.word = currentWordObject.word;
+    const wordId: string = TypeOfWordIsPaginatedResult(currentWordObject)
+      ? currentWordObject._id
+      : currentWordObject.id;
     this.wordId = wordId;
-    this.word = newWord;
-    this.correctWordTranslate = this.words[this.currentWordCounter].wordTranslate;
 
-    if (chance === this.currentWordCounter) {
-      this.prediction = true;
-      return {
-        wordId,
-        newWord,
-        newWordTranslate,
-      };
+    const result: {
+      keyWord: WordsResponseSchema | PaginatedResult;
+      [index: string]: WordsResponseSchema | PaginatedResult;
+    } = { keyWord: this.words[this.currentWordCounter] };
+
+    const uniqueChances: number[] = [];
+    for (let i = 1; i < 4; i += 1) {
+      const chance: number = Utils.getChance(this.currentWordCounter, this.totalCount);
+      if (uniqueChances.some((el: number): boolean => el === chance)) {
+        i -= 1;
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      const key = `fakeWord${i}`;
+      if (this.currentWordCounter === chance) {
+        i -= 1;
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+      result[key] = this.words[chance];
+      uniqueChances.push(chance);
     }
-
-    return {
-      wordId,
-      newWord,
-      newWordTranslate,
-    };
+    this.wordsForIteration = Utils.shuffleWords(Object.entries(result)) as [
+      string,
+      WordsResponseSchema | PaginatedResult
+    ][];
+    return this.wordsForIteration;
   }
 
-  controlCurrentWord(): void {
-    if (this.currentWordCounter < this.totalCount) {
-      this.currentWordCounter += 1;
-    } else {
-      this.currentWordCounter = 0;
-      this.words = Utils.shuffleWords(this.words) as WordsResponseSchema[] | PaginatedResult[];
+  controlCurrentWord(): boolean {
+    this.currentWordCounter += 1;
+
+    if (this.currentWordCounter > this.totalCount) {
+      this.finishAudioChallenge(this.words);
+      return true;
     }
+
+    return false;
   }
 
   addPoints(): void {
@@ -215,39 +204,27 @@ export default class SprintService {
     if (action === '+') {
       this.inARowCurrent += 1;
       this.inARowHistory.push(this.inARowCurrent);
-      this.steps.push(true);
-    } else {
-      this.inARowCurrent = 0;
-      this.steps.length = 0;
-      this.multiplicatorValue = 10;
-    }
-
-    if (this.steps.length > 3) {
       this.multiplicatorElement.classList.add('blink');
       setTimeout(() => {
         this.multiplicatorElement.classList.remove('blink');
       }, 2000);
-      this.steps.length = 0;
       this.multiplicatorValue += 10;
+    } else {
+      this.inARowCurrent = 0;
+      this.multiplicatorValue = 10;
     }
 
     this.multiplicatorElement.innerText = `+ ${this.multiplicatorValue} points`;
   }
 
-  setSteps(): void {
-    this.step1.style.backgroundColor = `#565e64`;
-    this.step2.style.backgroundColor = `#565e64`;
-    this.step3.style.backgroundColor = `#565e64`;
-
-    for (let i = 0; i < this.steps.length; i += 1) {
-      this.stepsElements[i].style.backgroundColor = '#dc3545';
-    }
-  }
-
   setNextWord(): void {
-    const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
-    view.gamesView.sprintView.createWord(wordId, newWord);
-    view.gamesView.sprintView.createWordTranslate(wordId, newWordTranslate);
+    const wordsForIteration: [string, WordsResponseSchema | PaginatedResult][] = this.chooseWordsForIteration();
+    view.gamesView.audioChallengeView.updateGameContainer(wordsForIteration);
+    view.gamesView.audioChallengeView.incrementWordsCounter(this.totalCount);
+
+    this.setItems();
+    this.listenGame();
+    services.soundHelper.playWordPronouncing(this.soundIconMain as SVGSVGElement);
   }
 
   async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
@@ -263,14 +240,14 @@ export default class SprintService {
       } else {
         body = { optional: response.optional };
 
-        const dailyStatSprint: DailyStatSprint | undefined = body.optional?.dailyStatSprint;
+        const dailyStatAudioChallenge: DailyStatAudioChallenge | undefined = body.optional?.dailyStatAudioChallenge;
         let key: string | undefined;
         let diff: number;
         let lastDailyStat: number;
-        if (!dailyStatSprint) {
+        if (!dailyStatAudioChallenge) {
           diff = 100; // dirty hack
         } else {
-          [key] = Object.keys(dailyStatSprint);
+          [key] = Object.keys(dailyStatAudioChallenge);
           lastDailyStat = Number(key);
           diff = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
         }
@@ -296,24 +273,24 @@ export default class SprintService {
   ): Statistics {
     const body: Statistics = {
       optional: {
-        dailyStatSprint: {
+        dailyStatAudioChallenge: {
           [currentDate]: {
-            pointsValueSprint: this.pointsValue,
-            learnedWordsCounterSprint: this.learnedWordsCounterSprint,
-            mistakesSprint: this.mistakes,
-            allWordsCounterSprint: allWordsCounter,
-            inARowSprint: inARow,
-            accuracySprint: accuracy,
+            pointsValueAudioChallenge: this.pointsValue,
+            learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
+            mistakesAudioChallenge: this.mistakes,
+            allWordsCounterAudioChallenge: allWordsCounter,
+            inARowAudioChallenge: inARow,
+            accuracyAudioChallenge: accuracy,
           },
         },
-        longStatSprint: {
+        longStatAudioChallenge: {
           [currentDate]: {
-            pointsValueSprint: this.pointsValue,
-            learnedWordsCounterSprint: this.learnedWordsCounterSprint,
-            mistakesSprint: this.mistakes,
-            allWordsCounterSprint: allWordsCounter,
-            inARowSprint: inARow,
-            accuracySprint: accuracy,
+            pointsValueAudioChallenge: this.pointsValue,
+            learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
+            mistakesAudioChallenge: this.mistakes,
+            allWordsCounterAudioChallenge: allWordsCounter,
+            inARowAudioChallenge: inARow,
+            accuracyAudioChallenge: accuracy,
           },
         },
       },
@@ -331,15 +308,15 @@ export default class SprintService {
     key?: string
   ): Statistics {
     if (diff > 1 && body.optional) {
-      body.optional.dailyStatSprint = {};
-      Object.defineProperty(body.optional?.dailyStatSprint, currentDate, {
+      body.optional.dailyStatAudioChallenge = {};
+      Object.defineProperty(body.optional?.dailyStatAudioChallenge, currentDate, {
         value: {
-          pointsValueSprint: this.pointsValue,
-          learnedWordsCounterSprint: this.learnedWordsCounterSprint,
-          mistakesSprint: this.mistakes,
-          allWordsCounterSprint: allWordsCounter,
-          inARowSprint: inARow,
-          accuracySprint: accuracy,
+          pointsValueAudioChallenge: this.pointsValue,
+          learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
+          mistakesAudioChallenge: this.mistakes,
+          allWordsCounterAudioChallenge: allWordsCounter,
+          inARowAudioChallenge: inARow,
+          accuracyAudioChallenge: accuracy,
         },
         enumerable: true,
         configurable: true,
@@ -347,14 +324,16 @@ export default class SprintService {
       });
     }
 
-    if (diff < 1 && body.optional?.dailyStatSprint && key) {
-      const target: SprintSchema = body.optional?.dailyStatSprint[key];
-      target.pointsValueSprint = Number(target.pointsValueSprint) + this.pointsValue;
-      target.learnedWordsCounterSprint = Number(target.learnedWordsCounterSprint) + this.learnedWordsCounterSprint;
-      target.mistakesSprint = Number(target.mistakesSprint) + this.mistakes;
-      target.allWordsCounterSprint = Number(target.allWordsCounterSprint) + allWordsCounter;
-      target.inARowSprint = Number(target.inARowSprint) > inARow ? Number(target.inARowSprint) : inARow;
-      target.accuracySprint = (Number(target.accuracySprint) + accuracy) / 2;
+    if (diff < 1 && body.optional?.dailyStatAudioChallenge && key) {
+      const target: AudioChallengeSchema = body.optional?.dailyStatAudioChallenge[key];
+      target.pointsValueAudioChallenge = Number(target.pointsValueAudioChallenge) + this.pointsValue;
+      target.learnedWordsCounterAudioChallenge =
+        Number(target.learnedWordsCounterAudioChallenge) + this.learnedWordsCounterAudioChallenge;
+      target.mistakesAudioChallenge = Number(target.mistakesAudioChallenge) + this.mistakes;
+      target.allWordsCounterAudioChallenge = Number(target.allWordsCounterAudioChallenge) + allWordsCounter;
+      target.inARowAudioChallenge =
+        Number(target.inARowAudioChallenge) > inARow ? Number(target.inARowAudioChallenge) : inARow;
+      target.accuracyAudioChallenge = (Number(target.accuracyAudioChallenge) + accuracy) / 2;
     }
     return body;
   }
@@ -367,19 +346,19 @@ export default class SprintService {
     accuracy: number
   ): Statistics {
     if (body.optional) {
-      if (!body.optional.longStatSprint) {
-        body.optional.longStatSprint = {};
+      if (!body.optional.longStatAudioChallenge) {
+        body.optional.longStatAudioChallenge = {};
       }
     }
 
-    Object.defineProperty(body.optional?.longStatSprint, currentDate, {
+    Object.defineProperty(body.optional?.longStatAudioChallenge, currentDate, {
       value: {
-        pointsValueSprint: this.pointsValue,
-        learnedWordsCounterSprint: this.learnedWordsCounterSprint,
-        mistakesSprint: this.mistakes,
-        allWordsCounterSprint: allWordsCounter,
-        inARowSprint: inARow,
-        accuracySprint: accuracy,
+        pointsValueAudioChallenge: this.pointsValue,
+        learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
+        mistakesAudioChallenge: this.mistakes,
+        allWordsCounterAudioChallenge: allWordsCounter,
+        inARowAudioChallenge: inARow,
+        accuracyAudioChallenge: accuracy,
       },
       enumerable: true,
       configurable: true,
@@ -428,35 +407,26 @@ export default class SprintService {
   }
 
   wordStatisticsLogicEngine(word: WordsStatistic) {
-    const minAttempts: boolean = word.correctAttemptsSession + word.incorrectAttemptsSession >= 3;
-    let ratio: number = word.correctAttemptsSession / word.incorrectAttemptsSession;
-    if (ratio === 0) {
-      ratio = word.correctAttemptsSession === 0 ? 0 : 1;
-    }
     if (word.difficulty === 'none') {
-      if (minAttempts) {
-        if (ratio > 0.5) {
-          word.difficulty = 'learned';
-          this.learnedWordsCounterSprint += 1;
-        } else {
-          word.difficulty = 'hard';
-        }
+      if (word.correctAttemptsSession > 0) {
+        word.difficulty = 'learned';
+        this.learnedWordsCounterAudioChallenge += 1;
+      } else {
+        word.difficulty = 'hard';
       }
       return;
     }
     if (word.difficulty === 'hard') {
-      if (minAttempts) {
-        if (ratio > 0.7) {
-          word.difficulty = 'learned';
-          this.learnedWordsCounterSprint += 1;
-        }
-        return;
+      if (word.correctAttemptsSession > 0) {
+        word.difficulty = 'learned';
+        this.learnedWordsCounterAudioChallenge += 1;
       }
+      return;
     }
     if (word.difficulty === 'learned') {
       if (word.incorrectAttemptsSession > 0) {
         word.difficulty = 'none';
-        this.learnedWordsCounterSprint -= 1;
+        this.learnedWordsCounterAudioChallenge -= 1;
       }
     }
   }
@@ -482,7 +452,7 @@ export default class SprintService {
         value: {
           word: this.word,
           wordId: this.wordId,
-          wordTranslate: this.correctWordTranslate,
+          wordTranslate: this.words[this.currentWordCounter].wordTranslate,
           audio: this.words[this.currentWordCounter].audio,
           correctAttempts: 0,
           correctAttemptsSession: 0,
@@ -500,7 +470,7 @@ export default class SprintService {
         value: {
           word: this.word,
           wordId: this.wordId,
-          wordTranslate: this.correctWordTranslate,
+          wordTranslate: this.words[this.currentWordCounter].wordTranslate,
           audio: this.words[this.currentWordCounter].audio,
           correctAttempts:
             (this.words[this.currentWordCounter] as PaginatedResult).userWord?.optional?.correctAttempts || 0,
@@ -519,20 +489,44 @@ export default class SprintService {
 
   checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
-    if ((id.includes('right') && this.prediction === true) || (id.includes('wrong') && this.prediction === false)) {
+    const target: HTMLButtonElement = event.target as HTMLButtonElement;
+
+    if (id.includes('keyWord')) {
       services.soundHelper.playGameSound('../../assets/sounds/ok.wav');
+      target.style.backgroundColor = '#198754';
       this.addPoints();
       this.setMultiplicator('+');
       this.setWordStatistics('+');
-      this.setSteps();
     } else {
       services.soundHelper.playGameSound('../../assets/sounds/error.wav');
+      target.style.backgroundColor = '#dc3545';
       this.setMultiplicator('-');
       this.setWordStatistics('-');
-      this.setSteps();
     }
-    this.controlCurrentWord();
+    view.gamesView.audioChallengeView.updateBtnControl('next');
+    view.gamesView.audioChallengeView.createImage(this.wordsForIteration);
+    view.gamesView.audioChallengeView.createWord(this.wordsForIteration);
+    this.btnsWord.forEach((item: HTMLButtonElement) => item.classList.add('disabled'));
+  }
+
+  checkBtnControl(event: Event): void {
+    const { innerText } = event.target as HTMLButtonElement;
+    this.btnsWord.forEach((item: HTMLButtonElement) => item.classList.remove('disabled'));
+
+    const thisIsTheEnd: boolean = this.controlCurrentWord();
+    if (thisIsTheEnd) {
+      return;
+    }
+
     this.setNextWord();
+
+    if (innerText === 'Next word') {
+      view.gamesView.audioChallengeView.updateBtnControl('skip');
+    }
+
+    if (innerText === `I don't know`) {
+      this.inARowCurrent = 0;
+    }
   }
 
   checkForNonValidValues(value: number): number {
@@ -575,33 +569,58 @@ export default class SprintService {
 
   controlKeyboard(event: KeyboardEvent): void {
     event.preventDefault();
-
     const { code } = event;
-    if (code === 'ArrowLeft') {
-      this.right.dispatchEvent(new Event('click'));
+    if (code === 'Space') {
+      this.btnControl.dispatchEvent(new Event('click'));
     }
-    if (code === 'ArrowRight') {
-      this.wrong.dispatchEvent(new Event('click'));
+    if (code === 'Digit1') {
+      this.btnsWord.forEach((item: HTMLButtonElement) => {
+        if (item.innerText.includes('1')) {
+          item.dispatchEvent(new Event('click'));
+        }
+      });
+    }
+    if (code === 'Digit2') {
+      this.btnsWord.forEach((item: HTMLButtonElement) => {
+        if (item.innerText.includes('2')) {
+          item.dispatchEvent(new Event('click'));
+        }
+      });
+    }
+    if (code === 'Digit3') {
+      this.btnsWord.forEach((item: HTMLButtonElement) => {
+        if (item.innerText.includes('3')) {
+          item.dispatchEvent(new Event('click'));
+        }
+      });
+    }
+    if (code === 'Digit4') {
+      this.btnsWord.forEach((item: HTMLButtonElement) => {
+        if (item.innerText.includes('4')) {
+          item.dispatchEvent(new Event('click'));
+        }
+      });
     }
   }
 
   setItems(): void {
-    this.right = document.getElementById('btn-right') as HTMLButtonElement;
-    this.wrong = document.getElementById('btn-wrong') as HTMLButtonElement;
-    this.pointsElement = document.getElementById('points-sprint') as HTMLElement;
-    this.multiplicatorElement = document.getElementById('multiplicator-sprint') as HTMLElement;
-    this.step1 = document.getElementById('step-1') as HTMLSpanElement;
-    this.step2 = document.getElementById('step-2') as HTMLSpanElement;
-    this.step3 = document.getElementById('step-3') as HTMLSpanElement;
-    this.stepsElements = [this.step1, this.step2, this.step3];
+    this.btnsWord = document.querySelectorAll('.btn-word') as NodeListOf<HTMLButtonElement>;
+    this.pointsElement = document.getElementById('points-audio-challenge') as HTMLElement;
+    this.multiplicatorElement = document.getElementById('multiplicator-audio-challenge') as HTMLElement;
+    this.btnControl = document.getElementById('btn-control') as HTMLButtonElement;
+    this.soundIconMain = document.querySelector('#sound-icon-main') as SVGSVGElement;
     this.triggerModal = document.getElementById('trigger-modal') as HTMLButtonElement;
-    this.soundIcons = document.querySelectorAll('.sound-icon');
+    this.soundIcons = document.querySelectorAll('.sound-icon') as NodeListOf<SVGSVGElement>;
     this.closeBtn = document.getElementById('btn-close') as HTMLButtonElement;
   }
 
   listenGame(): void {
-    this.right.addEventListener('click', this.checkAnswer.bind(this));
-    this.wrong.addEventListener('click', this.checkAnswer.bind(this));
+    this.btnsWord.forEach((item: HTMLButtonElement) => item.addEventListener('click', this.checkAnswer.bind(this)));
+    this.soundIconMain.addEventListener('click', this.playSound.bind(this));
+  }
+
+  listenControlBtn(): void {
+    this.btnControl.addEventListener('click', this.checkBtnControl.bind(this));
     document.addEventListener('keydown', this.controlKeyboard.bind(this));
   }
 

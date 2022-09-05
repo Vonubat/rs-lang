@@ -1,17 +1,36 @@
 import { PaginatedResult, WordsResponseSchema } from '../../types/types';
 import { view } from '../../view/view';
 import { services } from '../services';
+import AudioChallengeService from './audio-challenge/audio-challenge-service';
+import GamesData from './games-data';
+import SprintService from './sprint/sprint-service';
+import Timer from './timer';
 
 export default class GamesService {
+  sprintService: SprintService;
+
+  gamesData: GamesData;
+
+  timer: Timer;
+
+  audioChallengeService: AudioChallengeService;
+
   gamesSprintCard!: HTMLDivElement;
 
   gamesAudioChallengeCard!: HTMLDivElement;
 
   backBtnToGames!: HTMLButtonElement;
 
-  levelsWrapper!: HTMLDivElement;
+  levelsContainer!: HTMLDivElement;
 
   level!: number;
+
+  constructor() {
+    this.gamesData = new GamesData();
+    this.timer = new Timer();
+    this.sprintService = new SprintService();
+    this.audioChallengeService = new AudioChallengeService();
+  }
 
   drawPage(): void {
     view.gamesView.drawCards();
@@ -28,18 +47,24 @@ export default class GamesService {
   }
 
   async launchGame(event: Event): Promise<void> {
-    view.loading.createSpinners();
     const { id } = event.currentTarget as HTMLElement;
-    const game: 'sprint' | 'audio-challenge' = id.includes('sprint') ? 'sprint' : 'audio-challenge';
     const trigger: HTMLElement = event.target as HTMLElement;
+    const triggerId: string = trigger.id;
+
+    if (triggerId.includes('levels-container')) {
+      return;
+    }
+
+    view.loading.createSpinners();
+    const game: 'sprint' | 'audio-challenge' = id.includes('sprint') ? 'sprint' : 'audio-challenge';
 
     let words: WordsResponseSchema[] | PaginatedResult[];
 
     if (trigger.classList.contains('level')) {
       this.level = Number(trigger.innerText) - 1;
-      words = await services.gamesData.prepareData(id, this.level);
+      words = await services.gamesService.gamesData.prepareData(id, this.level);
     } else {
-      words = await services.gamesData.prepareData(id);
+      words = await services.gamesService.gamesData.prepareData(id);
     }
 
     view.gamesView.drawGame(game, words);
@@ -50,7 +75,7 @@ export default class GamesService {
     this.gamesSprintCard = document.getElementById('card-minigames-sprint') as HTMLDivElement;
     this.gamesAudioChallengeCard = document.getElementById('card-minigames-audio-challenge') as HTMLDivElement;
     this.backBtnToGames = view.gamesView.games.querySelector('.back-btn-to-games') as HTMLButtonElement;
-    this.levelsWrapper = view.gamesView.games.querySelector('.wrapper-levels') as HTMLDivElement;
+    this.levelsContainer = view.gamesView.games.querySelector('.levels-container') as HTMLDivElement;
   }
 
   listenGamesCards(): void {
@@ -60,6 +85,6 @@ export default class GamesService {
 
   listenGamesLevels(): void {
     this.backBtnToGames.addEventListener('click', this.drawPage.bind(this));
-    this.levelsWrapper.addEventListener('click', this.launchGame.bind(this));
+    this.levelsContainer.addEventListener('click', this.launchGame.bind(this));
   }
 }

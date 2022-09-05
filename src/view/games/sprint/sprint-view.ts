@@ -2,7 +2,7 @@ import { services } from '../../../services/services';
 import { PaginatedResult, WordsResponseSchema } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
-export default class SprintGame extends HTMLConstructor {
+export default class SprintView extends HTMLConstructor {
   newWord!: HTMLElement;
 
   newTranslate!: HTMLElement;
@@ -134,7 +134,7 @@ export default class SprintGame extends HTMLConstructor {
       classList,
       `btn-right`,
       [['type', 'button']],
-      `RIGHT`
+      `&#8592; RIGHT`
     );
     return btnRight;
   }
@@ -146,7 +146,7 @@ export default class SprintGame extends HTMLConstructor {
       classList,
       `btn-wrong`,
       [['type', 'button']],
-      `WRONG`
+      ` WRONG &#8594;`
     );
     return btnWrong;
   }
@@ -168,8 +168,8 @@ export default class SprintGame extends HTMLConstructor {
     cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
     words: WordsResponseSchema[] | PaginatedResult[]
   ): HTMLElement {
-    const timer: HTMLElement = services.timer.createTimerElement('sprint', 'game');
-    services.timer.createTimerConfig(timer, 10000, cb, words);
+    const timer: HTMLElement = services.gamesService.timer.createTimerElement('sprint', 'game');
+    services.gamesService.timer.createTimerConfig(timer, 60000, cb, words);
 
     return timer;
   }
@@ -201,6 +201,7 @@ export default class SprintGame extends HTMLConstructor {
     const timer: HTMLElement = this.createTimer(cb, words);
 
     gameContainer.append(pointsWrapper, card, timer);
+    gameContainer.classList.add('game-container-sprint');
 
     return gameContainer;
   }

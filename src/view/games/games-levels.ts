@@ -29,7 +29,7 @@ export default class GamesLevels extends HTMLConstructor {
     return text;
   }
 
-  createLevelsContainer(): HTMLElement {
+  createLevelsContainer(game: 'sprint' | 'audio-challenge'): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-row',
@@ -42,7 +42,7 @@ export default class GamesLevels extends HTMLConstructor {
       'bg-gradient',
       `levels-container`,
     ];
-    const levelsContainer: HTMLElement = this.createHtmlElement('div', classList);
+    const levelsContainer: HTMLElement = this.createHtmlElement('div', classList, `levels-container-${game}`);
     return levelsContainer;
   }
 
@@ -69,7 +69,7 @@ export default class GamesLevels extends HTMLConstructor {
     const wrapper: HTMLElement = this.createWrapper(game);
     const name: HTMLElement = this.createName(game);
     const text: HTMLElement = this.createText();
-    const levelContainer: HTMLElement = this.createLevelsContainer();
+    const levelContainer: HTMLElement = this.createLevelsContainer(game);
     const colors: Color[] = Object.values(Constants.CONTAINER_COLORS) as Color[];
     for (let i = 1; i <= colors.length; i += 1) {
       const circle: HTMLElement = this.createCircle(colors[i - 1], i);

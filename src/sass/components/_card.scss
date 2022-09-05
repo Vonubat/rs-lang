@@ -54,17 +54,6 @@
   }
 }
 
-@keyframes append-animate {
-  from {
-    transform: scale(0);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
 // main
 .card-ourAdvantages {
   width: 360px;

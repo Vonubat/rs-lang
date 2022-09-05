@@ -1,6 +1,7 @@
 .card-wrapper-games {
   gap: 30px;
   padding: 20px;
+  animation: append-animate 0.3s linear;
 
   .card {
     max-width: 360px;
@@ -57,6 +58,7 @@
 .wrapper-levels {
   margin-top: 30px;
   gap: 20px;
+  animation: append-animate 0.3s linear;
 
   h2 {
     font-weight: 700;
@@ -81,7 +83,7 @@
   margin-right: -50px;
 }
 
-.game-container {
+.game-container-sprint {
   padding-top: 30px;
   gap: 30px;
 
@@ -113,6 +115,67 @@
 
   .countdown-canvas-sprint-game {
     margin-bottom: 30px;
+  }
+}
+
+.game-container-audio-challenge {
+  padding-top: 30px;
+
+  .points-wrapper {
+    margin-bottom: 30px;
+    color: whitesmoke;
+  }
+
+  .card-container {
+    padding: 40px;
+
+    .image {
+      width: 200px;
+      height: 200px;
+      background-size: auto 200px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      animation: append-animate 0.3s linear;
+    }
+
+    .word-correct {
+      margin-bottom: 10px;
+      color: whitesmoke;
+      animation: append-animate 0.3s linear;
+    }
+
+    .sound-icon {
+      height: 70px;
+      width: 70px;
+      padding: 20px;
+      border-radius: 50%;
+      background-color: rgba($color: #565e64, $alpha: 0.3);
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba($color: #565e64, $alpha: 0.2);
+      }
+    }
+
+    .btn-wrapper {
+      margin-top: 30px;
+      gap: 40px;
+
+      .btn-word {
+        text-transform: uppercase;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .progress {
+    margin-top: 30px;
+    height: 50px;
+    margin-bottom: 30px;
+  }
+
+  .btn-control {
+    font-weight: 500;
   }
 }
 
