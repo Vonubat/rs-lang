@@ -1,4 +1,3 @@
-// import d3, { range } from 'd3';
 import Chart from 'chart.js/auto';
 import Constants from '../../constants';
 import HTMLConstructor from '../components/constructor';
@@ -46,7 +45,6 @@ export default class Statistic {
   async drawPage() {
     const main = document.getElementById(this.mainId);
     const data = await services.statisticsService.getStatisticsData();
-    console.log(data);
     if (main) {
       main.innerHTML = '';
       main.append(this.view(data));
