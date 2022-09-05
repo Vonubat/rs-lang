@@ -121,6 +121,11 @@ export default class AuthService {
         this.updateCardsState();
       }
 
+      if (Route.checkUrl('statistics')) {
+        window.location.href = '#';
+        window.location.href = '#statistics';
+      }
+
       this.changeBtnState();
       return true;
     }
