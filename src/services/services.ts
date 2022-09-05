@@ -4,13 +4,10 @@ import SoundHelper from './components/sound-helper';
 import DictionaryService from './dictionary/dictionary-service';
 import GamesService from './games/games-service';
 import StatisticsService from './statistics/statistics-service';
-/* <<<<<<< HEAD
 import SprintService from './games/sprint/sprint-service';
 import Timer from './games/timer';
-
-=======
->>>>>>> minigames */
 import TextbookService from './textbook/textbook-service';
+import GamesData from './games/games-data';
 
 export class Services {
   textbookService: TextbookService;
@@ -27,17 +24,12 @@ export class Services {
 
   statisticsService: StatisticsService;
 
-  /* <<<<<<< HEAD
   timer: Timer;
 
   gamesData: GamesData;
 
   sprintService: SprintService;
 
-  
-
-=======
->>>>>>> minigames */
   constructor() {
     this.textbookService = new TextbookService();
     this.pageConfig = new PageConfig();
@@ -46,14 +38,10 @@ export class Services {
     this.dictionaryService = new DictionaryService();
     this.gamesService = new GamesService();
     this.statisticsService = new StatisticsService();
-    /* <<<<<<< HEAD
     this.soundHelper = new SoundHelper();
     this.timer = new Timer();
     this.gamesData = new GamesData();
     this.sprintService = new SprintService();
-   
-=======
->>>>>>> minigames */
   }
 }
 export const services: Services = new Services();
