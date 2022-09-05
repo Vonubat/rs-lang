@@ -134,7 +134,7 @@ export default class SprintView extends HTMLConstructor {
       classList,
       `btn-right`,
       [['type', 'button']],
-      `RIGHT`
+      `&#8592; RIGHT`
     );
     return btnRight;
   }
@@ -146,7 +146,7 @@ export default class SprintView extends HTMLConstructor {
       classList,
       `btn-wrong`,
       [['type', 'button']],
-      `WRONG`
+      ` WRONG &#8594;`
     );
     return btnWrong;
   }
@@ -169,7 +169,7 @@ export default class SprintView extends HTMLConstructor {
     words: WordsResponseSchema[] | PaginatedResult[]
   ): HTMLElement {
     const timer: HTMLElement = services.gamesService.timer.createTimerElement('sprint', 'game');
-    services.gamesService.timer.createTimerConfig(timer, 10000, cb, words);
+    services.gamesService.timer.createTimerConfig(timer, 60000, cb, words);
 
     return timer;
   }

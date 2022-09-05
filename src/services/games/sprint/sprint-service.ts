@@ -569,6 +569,18 @@ export default class SprintService {
     this.inARow = this.checkForNonValidValues(Math.max(...this.inARowHistory));
   }
 
+  controlKeyboard(event: KeyboardEvent): void {
+    event.preventDefault();
+
+    const { code } = event;
+    if (code === 'ArrowLeft') {
+      this.right.dispatchEvent(new Event('click'));
+    }
+    if (code === 'ArrowRight') {
+      this.wrong.dispatchEvent(new Event('click'));
+    }
+  }
+
   setItems(): void {
     this.right = document.getElementById('btn-right') as HTMLButtonElement;
     this.wrong = document.getElementById('btn-wrong') as HTMLButtonElement;
@@ -586,6 +598,7 @@ export default class SprintService {
   listenGame(): void {
     this.right.addEventListener('click', this.checkAnswer.bind(this));
     this.wrong.addEventListener('click', this.checkAnswer.bind(this));
+    document.addEventListener('keydown', this.controlKeyboard.bind(this));
   }
 
   listenFinal(): void {
