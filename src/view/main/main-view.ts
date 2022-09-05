@@ -55,7 +55,7 @@ export default class MainView {
     cardBody.appendChild(button);
     previewContainer.appendChild(previewCard);
     const previewImg = this.HTMLConstructor.createFreeSvg(
-      '../../assets/img/statue.svg',
+      './assets/img/statue.svg',
       'statue',
       ['preview-img'],
       'statue',
@@ -75,21 +75,21 @@ export default class MainView {
     title.innerText = 'Our advantages';
     advantagesContainer.appendChild(title);
     const cardWrapper = this.HTMLConstructor.div(['d-flex', 'justify-content-around', 'flex-wrap', 'gap-5']);
-    const TextbookCard = this.card('ourAdvantages', 'Textbook', '', this.TextbookText, '../../assets/img/textbook.svg');
+    const TextbookCard = this.card('ourAdvantages', 'Textbook', '', this.TextbookText, './assets/img/textbook.svg');
     const DictionaryCard = this.card(
       'ourAdvantages',
       'Dictionary',
       '',
       this.DictionaryText,
-      '../../assets/img/dictionary.svg'
+      './assets/img/dictionary.svg'
     );
-    const GamesCard = this.card('ourAdvantages', 'Games', '', this.GamesText, '../../assets/img/games.svg');
+    const GamesCard = this.card('ourAdvantages', 'Games', '', this.GamesText, './assets/img/games.svg');
     const StatisticsCard = this.card(
       'ourAdvantages',
       'Statistics',
       '',
       this.StatisticsText,
-      '../../assets/img/statistics.svg'
+      './assets/img/statistics.svg'
     );
     cardWrapper.appendChild(TextbookCard);
     cardWrapper.appendChild(DictionaryCard);
@@ -127,7 +127,7 @@ export default class MainView {
       'Vonubat',
       'Team leader',
       'Basic project settings, API communication, Authorization, Textbook, Dictionary, Minigames',
-      '../../assets/img/vonubat.jpg',
+      './assets/img/vonubat.jpg',
       this.gitVonubat
     );
     const slavikusVOG = this.card(
@@ -135,7 +135,7 @@ export default class MainView {
       'SlavikusVOG',
       'Frontend developer',
       'API communication, Statistics, Architecture, Menu',
-      '../../assets/img/slavikusvog.jpg',
+      './assets/img/slavikusvog.jpg',
       this.gitSlavikusVOG
     );
     const derThun = this.card(
@@ -143,7 +143,7 @@ export default class MainView {
       'Der_Thun',
       'Frontend developer',
       'Routing, Design, Adaptive, Main Page, Authorization',
-      '../../assets/img/der-thun.jpg',
+      './assets/img/der-thun.jpg',
       this.gitDerThun
     );
     teamContainer.appendChild(vonubat);

@@ -106,7 +106,7 @@ export default class AudioChallengeService {
 
   finishAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
     const page: HTMLElement = view.gamesView.games;
-    services.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
+    services.soundHelper.playGameSound('./assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
     this.processWordStatistics();
     this.processUserStatistics(this.allWordsCounter, this.inARow, this.accuracy);
@@ -492,13 +492,13 @@ export default class AudioChallengeService {
     const target: HTMLButtonElement = event.target as HTMLButtonElement;
 
     if (id.includes('keyWord')) {
-      services.soundHelper.playGameSound('../../assets/sounds/ok.wav');
+      services.soundHelper.playGameSound('./assets/sounds/ok.wav');
       target.style.backgroundColor = '#198754';
       this.addPoints();
       this.setMultiplicator('+');
       this.setWordStatistics('+');
     } else {
-      services.soundHelper.playGameSound('../../assets/sounds/error.wav');
+      services.soundHelper.playGameSound('./assets/sounds/error.wav');
       target.style.backgroundColor = '#dc3545';
       this.setMultiplicator('-');
       this.setWordStatistics('-');
