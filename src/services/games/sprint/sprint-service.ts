@@ -15,6 +15,7 @@ import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
 import AuthService from '../../auth/auth-service';
 import Credentials from '../../auth/credentials';
+import { Route } from '../../routing/routing';
 import { services } from '../../services';
 
 export default class SprintService {
@@ -117,6 +118,9 @@ export default class SprintService {
   }
 
   finishSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
+    if (!Route.checkUrl('games')) {
+      return;
+    }
     const page: HTMLElement = view.gamesView.games;
     services.soundHelper.playGameSound('../../assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
