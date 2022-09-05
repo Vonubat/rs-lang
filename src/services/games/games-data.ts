@@ -34,11 +34,11 @@ export default class GamesData {
         this.randomPageNumber()
       );
       services.pageConfig.setTotalCount(20);
-      words = Utils.shuffleWords(aggregatedWords.paginatedResults);
+      words = Utils.shuffleWords(aggregatedWords.paginatedResults) as WordsResponseSchema[] | PaginatedResult[];
       return words;
     }
     const chunkOfWords: WordsResponseSchema[] = await api.words.getWords(level, this.randomPageNumber());
-    words = Utils.shuffleWords(chunkOfWords);
+    words = Utils.shuffleWords(chunkOfWords) as WordsResponseSchema[] | PaginatedResult[];
     return words;
   }
 
@@ -49,7 +49,9 @@ export default class GamesData {
       600
     );
     services.pageConfig.setTotalCount(aggregatedWords.totalCount[0].count);
-    const words: WordsResponseSchema[] | PaginatedResult[] = Utils.shuffleWords(aggregatedWords.paginatedResults);
+    const words: WordsResponseSchema[] | PaginatedResult[] = Utils.shuffleWords(aggregatedWords.paginatedResults) as
+      | WordsResponseSchema[]
+      | PaginatedResult[];
     return words;
   }
 
@@ -58,20 +60,20 @@ export default class GamesData {
     if (AuthService.checkUser()) {
       const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
         Credentials.getUserId(),
-        '',
+        '{"$or":[{"userWord.difficulty":"hard"},{"userWord.difficulty":"none"},{"userWord":null}]}',
         20,
         services.pageConfig.getGroupNumber(),
         services.pageConfig.getPageNumber()
       );
       services.pageConfig.setTotalCount(20);
-      words = Utils.shuffleWords(aggregatedWords.paginatedResults);
+      words = Utils.shuffleWords(aggregatedWords.paginatedResults) as WordsResponseSchema[] | PaginatedResult[];
       return words;
     }
     const chunkOfWords: WordsResponseSchema[] = await api.words.getWords(
       services.pageConfig.getGroupNumber(),
       services.pageConfig.getPageNumber()
     );
-    words = Utils.shuffleWords(chunkOfWords);
+    words = Utils.shuffleWords(chunkOfWords) as WordsResponseSchema[] | PaginatedResult[];
     return words;
   }
 

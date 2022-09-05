@@ -52,3 +52,14 @@ body {
   border-color: red;
   border-width: 3px;
 }
+
+@keyframes append-animate {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

@@ -1,9 +1,10 @@
 import { services } from '../../services/services';
 import { WordsResponseSchema, PaginatedResult } from '../../types/types';
+import AudioChallengeView from './audio-challenge/audio-challenge-view';
 import GamesCards from './games-cards';
 import GamesLevels from './games-levels';
 import GamesResults from './games-results';
-import SprintGame from './sprint/sprint-game';
+import SprintGame from './sprint/sprint-view';
 import StartGameView from './start-game';
 
 export default class GamesView {
@@ -13,7 +14,9 @@ export default class GamesView {
 
   gamesLevels: GamesLevels;
 
-  sprintGame: SprintGame;
+  sprintView: SprintGame;
+
+  audioChallengeView: AudioChallengeView;
 
   gamesResults: GamesResults;
 
@@ -32,7 +35,8 @@ export default class GamesView {
     this.gamesLevels = new GamesLevels();
     this.startGameView = new StartGameView();
     this.gamesResults = new GamesResults();
-    this.sprintGame = new SprintGame();
+    this.sprintView = new SprintGame();
+    this.audioChallengeView = new AudioChallengeView();
   }
 
   drawCards(): void {
@@ -64,17 +68,19 @@ export default class GamesView {
       this.currentGame = this.startGameView.drawStartLocation(
         this.games,
         game,
-        services.sprintService.launchSprint.bind(services.sprintService),
+        services.gamesService.sprintService.launchSprint.bind(services.gamesService.sprintService),
+        words
+      );
+    } else {
+      this.currentGame = this.startGameView.drawStartLocation(
+        this.games,
+        game,
+        services.gamesService.audioChallengeService.launchAudioChallenge.bind(
+          services.gamesService.audioChallengeService
+        ),
         words
       );
     }
-
-    /*  this.currentGame = this.startGameView.drawStartLocation(
-      this.games,
-      game,
-      words,
-      services.sprintService.launchSprint
-    ); */
 
     return this.currentGame;
   }

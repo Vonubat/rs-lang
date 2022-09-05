@@ -87,21 +87,44 @@ interface TotalCount {
 interface Optional {
   correctAttempts?: number;
   incorrectAttempts?: number;
-  dailyStat?: number;
+  dailyStatSprint?: DailyStatSprint;
+  dailyStatAudioChallenge?: DailyStatAudioChallenge;
+  longStatSprint?: LongStatSprint;
+  longStatAudioChallenge?: LongAudioChallenge;
+}
+
+export interface DailyStatSprint {
+  [index: string]: SprintSchema;
+}
+
+export interface DailyStatAudioChallenge {
+  [index: string]: AudioChallengeSchema;
+}
+
+export interface LongStatSprint {
+  [index: string]: SprintSchema;
+}
+
+export interface LongAudioChallenge {
+  [index: string]: AudioChallengeSchema;
+}
+
+export interface SprintSchema {
   pointsValueSprint?: number;
+  learnedWordsCounterSprint?: number;
   mistakesSprint?: number;
   allWordsCounterSprint?: number;
   inARowSprint?: number;
   accuracySprint?: number;
-  longStat?: {
-    currentDate?: {
-      pointsValueSprint?: number;
-      mistakesSprint?: number;
-      allWordsCounterSprint?: number;
-      inARowSprint?: number;
-      accuracySprint?: number;
-    };
-  };
+}
+
+export interface AudioChallengeSchema {
+  pointsValueAudioChallenge?: number;
+  learnedWordsCounterAudioChallenge?: number;
+  mistakesAudioChallenge?: number;
+  allWordsCounterAudioChallenge?: number;
+  inARowAudioChallenge?: number;
+  accuracyAudioChallenge?: number;
 }
 
 export interface Statistics {
@@ -167,7 +190,9 @@ export interface WordsStatistic {
   wordTranslate: string;
   audio: string;
   correctAttempts: number;
+  correctAttemptsSession: number;
   incorrectAttempts: number;
+  incorrectAttemptsSession: number;
   difficulty?: 'hard' | 'learned' | 'none';
 }
 

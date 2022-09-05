@@ -9,8 +9,8 @@ export default class StartGameView {
     words: WordsResponseSchema[] | PaginatedResult[]
   ): HTMLElement {
     const element: HTMLElement = elem;
-    const timer: HTMLElement = services.timer.createTimerElement(game, 'start');
-    services.timer.createTimerConfig(timer, 3000, cb, words);
+    const timer: HTMLElement = services.gamesService.timer.createTimerElement(game, 'start');
+    services.gamesService.timer.createTimerConfig(timer, 3000, cb, words);
 
     element.innerHTML = '';
 
