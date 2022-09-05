@@ -7,6 +7,7 @@ import {
   WordsStatistic,
   UsersWordsResponseSchema,
   Statistics,
+  TypeOfWordIsPaginatedResult,
 } from '../../../types/types';
 import Utils from '../../../utilities/utils';
 import { view } from '../../../view/view';
@@ -48,8 +49,6 @@ export default class AudioChallengeService {
   wordId!: string;
 
   word!: string;
-
-  correctWordTranslate!: string;
 
   accuracy!: number;
 
@@ -96,7 +95,7 @@ export default class AudioChallengeService {
     this.setItems();
     this.listenGame();
     this.listenControlBtn();
-    this.soundIconMain.dispatchEvent(new Event('click'));
+    services.soundHelper.playWordPronouncing(this.soundIconMain as SVGSVGElement);
   }
 
   finishAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
@@ -143,7 +142,14 @@ export default class AudioChallengeService {
   }
 
   chooseWordsForIteration(): [string, WordsResponseSchema | PaginatedResult][] {
-    this.word = this.words[this.currentWordCounter].word;
+    const currentWordObject: WordsResponseSchema | PaginatedResult = this.words[this.currentWordCounter];
+
+    this.word = currentWordObject.word;
+    const wordId: string = TypeOfWordIsPaginatedResult(currentWordObject)
+      ? currentWordObject._id
+      : currentWordObject.id;
+    this.wordId = wordId;
+
     const result: {
       keyWord: WordsResponseSchema | PaginatedResult;
       [index: string]: WordsResponseSchema | PaginatedResult;
@@ -212,10 +218,11 @@ export default class AudioChallengeService {
   setNextWord(): void {
     const wordsForIteration: [string, WordsResponseSchema | PaginatedResult][] = this.chooseWordsForIteration();
     view.gamesView.audioChallengeView.updateGameContainer(wordsForIteration);
+    view.gamesView.audioChallengeView.incrementWordsCounter(this.totalCount);
 
     this.setItems();
     this.listenGame();
-    this.soundIconMain.dispatchEvent(new Event('click'));
+    services.soundHelper.playWordPronouncing(this.soundIconMain as SVGSVGElement);
   }
 
   async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
@@ -254,18 +261,18 @@ export default class AudioChallengeService {
     const body: Statistics = {
       optional: {
         dailyStat: currentDate,
-        pointsValueSprint: this.pointsValue,
-        mistakesSprint: this.mistakes,
-        allWordsCounterSprint: allWordsCounter,
-        inARowSprint: inARow,
-        accuracySprint: accuracy,
+        pointsValueAudioChallenge: this.pointsValue,
+        mistakesAudioChallenge: this.mistakes,
+        allWordsCounterAudioChallenge: allWordsCounter,
+        inARowAudioChallenge: inARow,
+        accuracyAudioChallenge: accuracy,
         longStat: {
           [currentDate]: {
-            pointsValueSprint: this.pointsValue,
-            mistakesSprint: this.mistakes,
-            allWordsCounterSprint: allWordsCounter,
-            inARowSprint: inARow,
-            accuracySprint: accuracy,
+            pointsValueAudioChallenge: this.pointsValue,
+            mistakesAudioChallenge: this.mistakes,
+            allWordsCounterAudioChallenge: allWordsCounter,
+            inARowAudioChallenge: inARow,
+            accuracyAudioChallenget: accuracy,
           },
         },
       },
@@ -283,19 +290,20 @@ export default class AudioChallengeService {
   ): Statistics {
     if (diff > 1 && body.optional) {
       body.optional.dailyStat = currentDate;
-      body.optional.pointsValueSprint = this.pointsValue;
-      body.optional.mistakesSprint = this.mistakes;
-      body.optional.allWordsCounterSprint = allWordsCounter;
-      body.optional.inARowSprint = inARow;
-      body.optional.accuracySprint = accuracy;
+      body.optional.pointsValueAudioChallenge = this.pointsValue;
+      body.optional.mistakesAudioChallenge = this.mistakes;
+      body.optional.allWordsCounterAudioChallenge = allWordsCounter;
+      body.optional.inARowAudioChallenge = inARow;
+      body.optional.accuracyAudioChallenge = accuracy;
     }
     if (diff < 1 && body.optional) {
-      body.optional.pointsValueSprint = Number(body.optional.pointsValueSprint) + this.pointsValue;
-      body.optional.mistakesSprint = Number(body.optional.mistakesSprint) + this.mistakes;
-      body.optional.allWordsCounterSprint = Number(body.optional.allWordsCounterSprint) + allWordsCounter;
-      body.optional.inARowSprint =
-        Number(body.optional.inARowSprint) > inARow ? Number(body.optional.inARowSprint) : inARow;
-      body.optional.accuracySprint = (Number(body.optional.accuracySprint) + accuracy) / 2;
+      body.optional.pointsValueAudioChallenge = Number(body.optional.pointsValueAudioChallenge) + this.pointsValue;
+      body.optional.mistakesAudioChallenge = Number(body.optional.mistakesAudioChallenge) + this.mistakes;
+      body.optional.allWordsCounterAudioChallenge =
+        Number(body.optional.allWordsCounterAudioChallenge) + allWordsCounter;
+      body.optional.inARowAudioChallenge =
+        Number(body.optional.inARowAudioChallenge) > inARow ? Number(body.optional.inARowAudioChallenge) : inARow;
+      body.optional.accuracyAudioChallenge = (Number(body.optional.accuracyAudioChallenge) + accuracy) / 2;
     }
     return body;
   }
@@ -309,11 +317,11 @@ export default class AudioChallengeService {
   ): Statistics {
     Object.defineProperty(body.optional?.longStat, currentDate, {
       value: {
-        pointsValueSprint: this.pointsValue,
-        mistakesSprint: this.mistakes,
-        allWordsCounterSprint: allWordsCounter,
-        inARowSprint: inARow,
-        accuracySprint: accuracy,
+        pointsValueAudioChallenge: this.pointsValue,
+        mistakesAudioChallenge: this.mistakes,
+        allWordsCounterAudioChallenge: allWordsCounter,
+        inARowAudioChallenge: inARow,
+        accuracyAudioChallenge: accuracy,
       },
       enumerable: true,
       configurable: true,
@@ -362,29 +370,26 @@ export default class AudioChallengeService {
   }
 
   wordStatisticsLogicEngine(word: WordsStatistic) {
-    const minAttempts: boolean = word.correctAttemptsSession + word.incorrectAttemptsSession >= 3;
     let ratio: number = word.correctAttemptsSession / word.incorrectAttemptsSession;
     if (ratio === 0) {
       ratio = word.correctAttemptsSession === 0 ? 0 : 1;
     }
     if (word.difficulty === 'none') {
-      if (minAttempts) {
-        if (ratio > 0.5) {
-          word.difficulty = 'learned';
-        } else {
-          word.difficulty = 'hard';
-        }
+      if (ratio > 0) {
+        word.difficulty = 'learned';
+      } else {
+        word.difficulty = 'hard';
       }
+
       return;
     }
     if (word.difficulty === 'hard') {
-      if (minAttempts) {
-        if (ratio > 0.7) {
-          word.difficulty = 'learned';
-        } else {
-          word.difficulty = 'hard';
-        }
+      if (ratio > 0) {
+        word.difficulty = 'learned';
+      } else {
+        word.difficulty = 'hard';
       }
+      return;
     }
     if (word.difficulty === 'learned') {
       if (word.incorrectAttemptsSession > 0) {
@@ -414,7 +419,7 @@ export default class AudioChallengeService {
         value: {
           word: this.word,
           wordId: this.wordId,
-          wordTranslate: this.correctWordTranslate,
+          wordTranslate: this.words[this.currentWordCounter].wordTranslate,
           audio: this.words[this.currentWordCounter].audio,
           correctAttempts: 0,
           correctAttemptsSession: 0,
@@ -432,7 +437,7 @@ export default class AudioChallengeService {
         value: {
           word: this.word,
           wordId: this.wordId,
-          wordTranslate: this.correctWordTranslate,
+          wordTranslate: this.words[this.currentWordCounter].wordTranslate,
           audio: this.words[this.currentWordCounter].audio,
           correctAttempts:
             (this.words[this.currentWordCounter] as PaginatedResult).userWord?.optional?.correctAttempts || 0,
@@ -482,9 +487,12 @@ export default class AudioChallengeService {
 
     this.setNextWord();
 
-    view.gamesView.audioChallengeView.incrementWordsCounter(this.totalCount);
     if (innerText === 'Next word') {
       view.gamesView.audioChallengeView.updateBtnControl('skip');
+    }
+
+    if (innerText === `I don't know`) {
+      this.inARowCurrent = 0;
     }
   }
 

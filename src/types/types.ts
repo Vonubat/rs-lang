@@ -93,6 +93,11 @@ interface Optional {
   allWordsCounterSprint?: number;
   inARowSprint?: number;
   accuracySprint?: number;
+  pointsValueAudioChallenge?: number;
+  mistakesAudioChallenge?: number;
+  allWordsCounterAudioChallenge?: number;
+  inARowAudioChallenge?: number;
+  accuracyAudioChallenge?: number;
   longStat?: {
     currentDate?: {
       pointsValueSprint?: number;
@@ -100,6 +105,11 @@ interface Optional {
       allWordsCounterSprint?: number;
       inARowSprint?: number;
       accuracySprint?: number;
+      pointsValueAudioChallenget?: number;
+      mistakesAudioChallenge?: number;
+      allWordsAudioChallenge?: number;
+      inARowAudioChallenge?: number;
+      accuracyAudioChallenge?: number;
     };
   };
 }

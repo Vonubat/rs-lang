@@ -144,9 +144,9 @@ export default class AudioChallengeView extends HTMLConstructor {
   }
 
   createImage(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
-    const cardContainer: HTMLElement = document.querySelector('.card-container') as HTMLElement;
+    const cardContainer: HTMLElement | null = document.querySelector('.card-container');
 
-    if (this.image) {
+    if (this.image && cardContainer) {
       cardContainer.prepend(this.image);
       this.image = null;
     }
@@ -215,7 +215,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     const image: HTMLElement = this.createImage(wordsForIteration);
     this.image = image;
 
-    gameContainer.append(pointsWrapper, card, btnControl, wordsCounter);
+    gameContainer.append(wordsCounter, btnControl, card, pointsWrapper);
     gameContainer.classList.add('game-container-audio-challenge');
 
     return gameContainer;
@@ -236,6 +236,6 @@ export default class AudioChallengeView extends HTMLConstructor {
     const image: HTMLElement = this.createImage(wordsForIteration);
     this.image = image;
     oldCard.remove();
-    pointsWrapper.after(newCard);
+    pointsWrapper.before(newCard);
   }
 }

@@ -120,19 +120,8 @@
   padding-top: 30px;
 
   .points-wrapper {
+    margin-bottom: 30px;
     color: whitesmoke;
-
-    .steps-wrapper {
-      margin-top: 20px;
-      gap: 10px;
-
-      .badge {
-        height: 30px;
-        width: 30px;
-        border-radius: 50%;
-        background-color: #565e64;
-      }
-    }
   }
 
   .card-container {
@@ -160,7 +149,7 @@
       border-radius: 50%;
       background-color: rgba($color: #565e64, $alpha: 0.3);
       cursor: pointer;
-      transition: 0.3s;
+
       &:hover {
         background-color: rgba($color: #565e64, $alpha: 0.2);
       }
