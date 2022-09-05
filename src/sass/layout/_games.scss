@@ -138,6 +138,21 @@
   .card-container {
     padding: 40px;
 
+    .image {
+      width: 200px;
+      height: 200px;
+      background-size: auto 200px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+      animation: append-animate 0.3s linear;
+    }
+
+    .word-correct {
+      margin-bottom: 10px;
+      color: whitesmoke;
+      animation: append-animate 0.3s linear;
+    }
+
     .sound-icon {
       height: 70px;
       width: 70px;

@@ -67,6 +67,8 @@ export default class AudioChallengeService {
 
   btnControl!: HTMLButtonElement;
 
+  wordsForIteration!: [string, WordsResponseSchema | PaginatedResult][];
+
   constructor() {
     this.words = [];
     this.currentWordCounter = 0;
@@ -87,9 +89,10 @@ export default class AudioChallengeService {
 
     this.words = words;
     this.totalCount = services.pageConfig.getTotalCount();
-    const wordsForIteration: [string, WordsResponseSchema | PaginatedResult][] = this.chooseWordsForIteration();
 
-    page.append(view.gamesView.audioChallengeView.generateGameContainer(wordsForIteration, this.totalCount));
+    page.append(
+      view.gamesView.audioChallengeView.generateGameContainer(this.chooseWordsForIteration(), this.totalCount)
+    );
     this.setItems();
     this.listenGame();
     this.listenControlBtn();
@@ -166,7 +169,11 @@ export default class AudioChallengeService {
       }
       result[key] = this.words[chance];
     }
-    return Utils.shuffleWords(Object.entries(result)) as [string, WordsResponseSchema | PaginatedResult][];
+    this.wordsForIteration = Utils.shuffleWords(Object.entries(result)) as [
+      string,
+      WordsResponseSchema | PaginatedResult
+    ][];
+    return this.wordsForIteration;
   }
 
   controlCurrentWord(): boolean {
@@ -459,6 +466,8 @@ export default class AudioChallengeService {
       this.setWordStatistics('-');
     }
     view.gamesView.audioChallengeView.updateBtnControl('next');
+    view.gamesView.audioChallengeView.createImage(this.wordsForIteration);
+    view.gamesView.audioChallengeView.createWord(this.wordsForIteration);
     this.btnsWord.forEach((item: HTMLButtonElement) => item.classList.add('disabled'));
   }
 

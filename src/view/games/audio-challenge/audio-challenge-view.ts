@@ -1,8 +1,11 @@
+import Constants from '../../../constants';
 import { WordsResponseSchema, PaginatedResult } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
 export default class AudioChallengeView extends HTMLConstructor {
   btnControl!: HTMLElement;
+
+  image!: HTMLElement | null;
 
   createPointsWrapper(): HTMLElement {
     const classList: string[] = [
@@ -140,6 +143,52 @@ export default class AudioChallengeView extends HTMLConstructor {
     return btnControl;
   }
 
+  createImage(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
+    const cardContainer: HTMLElement = document.querySelector('.card-container') as HTMLElement;
+
+    if (this.image) {
+      cardContainer.prepend(this.image);
+      this.image = null;
+    }
+
+    let imgPath = '';
+
+    wordsForIteration.forEach((word) => {
+      if (word[0] === 'keyWord') {
+        imgPath = word[1].image;
+      }
+    });
+
+    const image: HTMLElement = this.createHtmlElement('img', ['img-fluid', 'image'], `image-correct`, [
+      ['alt', `image of correct word`],
+      ['src', `${Constants.BASE_URL}/${imgPath}`],
+    ]);
+
+    return image;
+  }
+
+  createWord(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
+    const soundIcon: HTMLElement = document.querySelector('.sound-icon') as HTMLElement;
+    let correctWord = '';
+
+    wordsForIteration.forEach((word) => {
+      if (word[0] === 'keyWord') {
+        correctWord = word[1].word;
+      }
+    });
+
+    const word: HTMLElement = this.createHtmlElement(
+      'h2',
+      ['word-correct'],
+      `word-correct`,
+      undefined,
+      `${correctWord}`
+    );
+
+    soundIcon.before(word);
+    return word;
+  }
+
   createGameContainer(): HTMLElement {
     const classList: string[] = [
       'd-flex',
@@ -163,6 +212,8 @@ export default class AudioChallengeView extends HTMLConstructor {
     const card: HTMLElement = this.generateCard(wordsForIteration);
     const btnControl: HTMLElement = this.createBtnControl();
     const wordsCounter: HTMLElement = this.createWordsCounter(totalCount);
+    const image: HTMLElement = this.createImage(wordsForIteration);
+    this.image = image;
 
     gameContainer.append(pointsWrapper, card, btnControl, wordsCounter);
     gameContainer.classList.add('game-container-audio-challenge');
@@ -182,6 +233,8 @@ export default class AudioChallengeView extends HTMLConstructor {
     const oldCard: HTMLElement = document.querySelector('.card-container') as HTMLElement;
     const pointsWrapper: HTMLElement = document.querySelector('.points-wrapper') as HTMLElement;
     const newCard: HTMLElement = this.generateCard(wordsForIteration);
+    const image: HTMLElement = this.createImage(wordsForIteration);
+    this.image = image;
     oldCard.remove();
     pointsWrapper.after(newCard);
   }
