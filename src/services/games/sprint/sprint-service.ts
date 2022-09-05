@@ -97,11 +97,6 @@ export default class SprintService {
 
   launchSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
     this.eraseData();
-
-    if (!Route.checkUrl('games')) {
-      window.location.hash = 'games';
-    }
-
     const page: HTMLElement = view.gamesView.games;
     page.innerHTML = '';
 

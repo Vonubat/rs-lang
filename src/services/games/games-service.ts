@@ -1,5 +1,6 @@
 import { PaginatedResult, WordsResponseSchema } from '../../types/types';
 import { view } from '../../view/view';
+import { Route } from '../routing/routing';
 import { services } from '../services';
 import AudioChallengeService from './audio-challenge/audio-challenge-service';
 import GamesData from './games-data';
@@ -53,6 +54,10 @@ export default class GamesService {
 
     if (triggerId.includes('levels-container')) {
       return;
+    }
+
+    if (!Route.checkUrl('games')) {
+      window.location.hash = 'games';
     }
 
     view.loading.createSpinners();
