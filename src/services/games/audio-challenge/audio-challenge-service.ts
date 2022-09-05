@@ -567,6 +567,42 @@ export default class AudioChallengeService {
     this.inARow = this.checkForNonValidValues(Math.max(...this.inARowHistory));
   }
 
+  controlKeyboard(event: KeyboardEvent): void {
+    event.preventDefault();
+    const { code } = event;
+    if (code === 'Space') {
+      this.btnControl.dispatchEvent(new Event('click'));
+    }
+    if (code === 'Digit1') {
+      this.btnsWord.forEach((item: HTMLButtonElement) => {
+        if (item.innerText.includes('1')) {
+          item.dispatchEvent(new Event('click'));
+        }
+      });
+    }
+    if (code === 'Digit2') {
+      this.btnsWord.forEach((item: HTMLButtonElement) => {
+        if (item.innerText.includes('2')) {
+          item.dispatchEvent(new Event('click'));
+        }
+      });
+    }
+    if (code === 'Digit3') {
+      this.btnsWord.forEach((item: HTMLButtonElement) => {
+        if (item.innerText.includes('3')) {
+          item.dispatchEvent(new Event('click'));
+        }
+      });
+    }
+    if (code === 'Digit4') {
+      this.btnsWord.forEach((item: HTMLButtonElement) => {
+        if (item.innerText.includes('4')) {
+          item.dispatchEvent(new Event('click'));
+        }
+      });
+    }
+  }
+
   setItems(): void {
     this.btnsWord = document.querySelectorAll('.btn-word') as NodeListOf<HTMLButtonElement>;
     this.pointsElement = document.getElementById('points-audio-challenge') as HTMLElement;
@@ -585,6 +621,7 @@ export default class AudioChallengeService {
 
   listenControlBtn(): void {
     this.btnControl.addEventListener('click', this.checkBtnControl.bind(this));
+    document.addEventListener('keydown', this.controlKeyboard.bind(this));
   }
 
   listenFinal(): void {
