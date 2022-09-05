@@ -1,0 +1,16 @@
+/*!
+  * Bootstrap v5.2.0 (https://getbootstrap.com/)
+  * Copyright 2011-2022 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+  */
+
+/*!
+ * canvas-circular-countdown
+ * Draw a configurable circular canvas countdown timer
+ *
+ * @version v1.7.0
+ * @author George Raptis <georapbox@gmail.com>
+ * @homepage https://github.com/georapbox/canvas-circular-countdown#readme
+ * @repository git+https://github.com/georapbox/canvas-circular-countdown.git
+ * @license MIT
+ */
