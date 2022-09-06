@@ -59,7 +59,6 @@ export default class Statistic {
       main.innerHTML = '';
       main.append(this.view(data));
       if (data) {
-        console.log(data);
         this.drawDiagrams(data, 'Progress');
         this.drawDiagrams(data, 'Learned words');
         this.drawDiagrams(data, 'New Words');
@@ -376,17 +375,21 @@ export default class Statistic {
     const result: [Date, number][] = [];
     let date: Date | number | string;
     let amount = 0;
-    for (let i = 0; i < data.length; i += 1) {
-      [date] = data[i];
-      if (i < data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i + 1][0] as Date)) {
-        amount += data[i][1];
-      } else if (i === data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i - 1][0] as Date)) {
-        amount += data[i][1];
-        result.push([date as Date, amount]);
-      } else {
-        result.push([date as Date, amount]);
-        date = 0;
-        amount = 0;
+    if (data.length === 1) {
+      result.push([data[0][0] as Date, data[0][1]]);
+    } else {
+      for (let i = 0; i < data.length; i += 1) {
+        [date] = data[i];
+        if (i < data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i + 1][0] as Date)) {
+          amount += data[i][1];
+        } else if (i === data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i - 1][0] as Date)) {
+          amount += data[i][1];
+          result.push([date as Date, amount]);
+        } else {
+          result.push([date as Date, amount]);
+          date = 0;
+          amount = 0;
+        }
       }
     }
     // if (amount) result.push([date, amount]);
