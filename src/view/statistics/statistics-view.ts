@@ -49,9 +49,12 @@ export default class Statistic {
     return fragment;
   }
 
-  async drawPage() {
-    const main = document.getElementById(this.mainId);
-    const data = await services.statisticsService.getStatisticsData();
+  async drawPage(): Promise<void> {
+    const main: HTMLElement | null = document.getElementById(this.mainId);
+    let data: Statistics | Response | null = await services.statisticsService.getStatisticsData();
+    if (data instanceof Response) {
+      data = null;
+    }
     if (main) {
       main.innerHTML = '';
       main.append(this.view(data));

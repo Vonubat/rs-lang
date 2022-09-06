@@ -233,13 +233,11 @@ export default class AudioChallengeService {
       const currentDate: number = Date.now();
       const response: Statistics | Response = await api.usersStatistics.getStatistics(userId);
       let body: Statistics | Response;
-
       if (response instanceof Response) {
         body = this.createUserStatisticsObject(currentDate, allWordsCounter, inARow, accuracy);
         await api.usersStatistics.setStatistics(userId, body);
       } else {
         body = { optional: response.optional };
-
         const dailyStatAudioChallenge: DailyStatAudioChallenge | undefined = body.optional?.dailyStatAudioChallenge;
         let key: string | undefined;
         let diff: number;
@@ -569,33 +567,38 @@ export default class AudioChallengeService {
 
   controlKeyboard(event: KeyboardEvent): void {
     const { code } = event;
+    const conditional: (num: number, el: HTMLButtonElement) => boolean = (
+      num: number,
+      el: HTMLButtonElement
+    ): boolean => el.innerText.includes(`${num}`) && !el.classList.contains('disabled');
+
     if (code === 'Enter') {
       this.btnControl.dispatchEvent(new Event('click'));
     }
     if (code === 'Digit1') {
       this.btnsWord.forEach((item: HTMLButtonElement) => {
-        if (item.innerText.includes('1')) {
+        if (conditional(1, item)) {
           item.dispatchEvent(new Event('click'));
         }
       });
     }
     if (code === 'Digit2') {
       this.btnsWord.forEach((item: HTMLButtonElement) => {
-        if (item.innerText.includes('2')) {
+        if (conditional(2, item)) {
           item.dispatchEvent(new Event('click'));
         }
       });
     }
     if (code === 'Digit3') {
       this.btnsWord.forEach((item: HTMLButtonElement) => {
-        if (item.innerText.includes('3')) {
+        if (conditional(3, item)) {
           item.dispatchEvent(new Event('click'));
         }
       });
     }
     if (code === 'Digit4') {
       this.btnsWord.forEach((item: HTMLButtonElement) => {
-        if (item.innerText.includes('4')) {
+        if (conditional(4, item)) {
           item.dispatchEvent(new Event('click'));
         }
       });

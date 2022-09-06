@@ -194,7 +194,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     );
     const img: HTMLElement = this.createHtmlElement('img', ['img-fluid', 'rounded', 'image'], undefined, [
       ['alt', `image-sorry`],
-      ['src', `../../assets/img/sorry.jpg`],
+      ['src', `./assets/img/sorry.jpg`],
     ]);
     const text: HTMLElement = this.createHtmlElement(
       'h5',

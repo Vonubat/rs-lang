@@ -1,4 +1,5 @@
 import { api, Api } from '../../api/api';
+import { Statistics } from '../../types/types';
 import Statistic from '../../view/statistics/statistics-view';
 import Credentials from '../auth/credentials';
 
@@ -15,10 +16,10 @@ export default class StatisticsService {
     this.statistics.drawPage();
   }
 
-  async getStatisticsData() {
-    const userId = Credentials.getUserId();
+  async getStatisticsData(): Promise<Statistics | Response | null> {
+    const userId: string = Credentials.getUserId();
     if (userId) {
-      const data = await this.api.usersStatistics.getStatistics(userId);
+      const data: Statistics | Response = await this.api.usersStatistics.getStatistics(userId);
       return data;
     }
     return null;
