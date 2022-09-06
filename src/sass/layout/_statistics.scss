@@ -8,14 +8,14 @@
     gap: 5px;
 }
 
-.today-words-learned, .today-accuracy, .today-topRow {
+.today-words-learned, .today-accuracy, .today-topRow, .today-newWords {
     display: flex;
     align-items: center;
     flex-direction: row;
     gap: 10px;
 }
 
-.words-learned, .accuracy-today-amount, .topRow-today-amount {
+.words-learned, .accuracy-today-amount, .topRow-today-amount, .newWords-today-amount {
     font-size: 60px;
 }
 

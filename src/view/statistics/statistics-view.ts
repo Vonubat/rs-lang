@@ -61,6 +61,7 @@ export default class Statistic {
       if (data) {
         this.drawDiagrams(data, 'Progress');
         this.drawDiagrams(data, 'Learned words');
+        this.drawDiagrams(data, 'New Words');
       }
     }
   }
@@ -79,6 +80,14 @@ export default class Statistic {
     subTitle.innerText = 'were learned';
     body.append(wordtitle, subTitle);
     wordsLearned.append(wordAmount, body);
+    const newWords = this.htmlConstructor.div(['card-body', 'today-newWords']);
+    const newWordsAmount = this.htmlConstructor.createHtmlElement('h2', ['newWords-today-amount']);
+    if (data) {
+      newWordsAmount.innerText = `${this.newWordsDaily(data)}`;
+    } else newWordsAmount.innerText = '0';
+    const newWordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'newWords-today-title']);
+    newWordsTitle.innerText = 'New Words';
+    newWords.append(newWordsAmount, newWordsTitle);
     const accuracy = this.htmlConstructor.div(['card-body', 'today-accuracy']);
     const accuracyAmount = this.htmlConstructor.createHtmlElement('h2', ['accuracy-today-amount']);
     if (data) {
@@ -95,43 +104,52 @@ export default class Statistic {
     const topRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'topRow-today-title']);
     topRowTitle.innerText = 'top in a row';
     topRow.append(topRowAmount, topRowTitle);
-    section.append(wordsLearned, accuracy, topRow);
+    section.append(wordsLearned, newWords, accuracy, topRow);
     return section;
+  }
+
+  private newWordsDaily(data: Statistics) {
+    let word = 0;
+    const folderSprint = data.optional?.dailyStatSprint;
+    const folderAudioChallenge = data.optional?.dailyStatAudioChallenge;
+    if (typeof folderSprint === 'object') word += Object.values(folderSprint)[0].newWordsCounterSprint as number;
+    if (typeof folderAudioChallenge === 'object')
+      word += Object.values(folderAudioChallenge)[0].newWordsCounterAudioChallenge as number;
+    return word;
   }
 
   private wordsDaily(data: Statistics) {
     let word = 0;
     const folderSprint = data.optional?.dailyStatSprint;
     const folderAudioChallenge = data.optional?.dailyStatAudioChallenge;
-    if (typeof folderSprint === 'object' && typeof folderAudioChallenge === 'object') {
-      const valuesSprint = Object.values(folderSprint)[0].learnedWordsCounterSprint as number;
-      const valuesAudioChallenge = Object.values(folderAudioChallenge)[0].learnedWordsCounterAudioChallenge as number;
-      word = valuesSprint + valuesAudioChallenge;
-    }
+    if (typeof folderSprint === 'object') word += Object.values(folderSprint)[0].learnedWordsCounterSprint as number;
+    if (typeof folderAudioChallenge === 'object')
+      word += Object.values(folderAudioChallenge)[0].learnedWordsCounterAudioChallenge as number;
     return word;
   }
 
   private accuracyDaily(data: Statistics) {
-    let accuracy = 0;
     const folderSprint = data.optional?.dailyStatSprint;
     const folderAudioChallenge = data.optional?.dailyStatAudioChallenge;
-    if (typeof folderSprint === 'object' && typeof folderAudioChallenge === 'object') {
-      const accuracySprint = Object.values(folderSprint)[0].accuracySprint as number;
-      const accuracyAudioChallenge = Object.values(folderAudioChallenge)[0].accuracyAudioChallenge as number;
-      accuracy = Math.floor((100 * (accuracySprint + accuracyAudioChallenge)) / 2) / 100;
-    }
+    const accuracySprint =
+      typeof folderSprint === 'object' ? (Object.values(folderSprint)[0].accuracySprint as number) : 0;
+    const accuracyAudioChallenge =
+      typeof folderAudioChallenge === 'object'
+        ? (Object.values(folderAudioChallenge)[0].accuracyAudioChallenge as number)
+        : 0;
+    const accuracy = Math.floor((100 * (accuracySprint + accuracyAudioChallenge)) / 2) / 100;
     return `${accuracy}%`;
   }
 
   private topInRowDaily(data: Statistics) {
-    let topRow = 0;
     const folderSprint = data.optional?.dailyStatSprint;
     const folderAudioChallenge = data.optional?.dailyStatAudioChallenge;
-    if (typeof folderSprint === 'object' && typeof folderAudioChallenge === 'object') {
-      const valuesSprint = Object.values(folderSprint)[0].inARowSprint as number;
-      const valuesAudioChallenge = Object.values(folderAudioChallenge)[0].inARowAudioChallenge as number;
-      topRow = valuesSprint > valuesAudioChallenge ? valuesSprint : valuesAudioChallenge;
-    }
+    const valuesSprint = typeof folderSprint === 'object' ? (Object.values(folderSprint)[0].inARowSprint as number) : 0;
+    const valuesAudioChallenge =
+      typeof folderAudioChallenge === 'object'
+        ? (Object.values(folderAudioChallenge)[0].inARowAudioChallenge as number)
+        : 0;
+    const topRow = valuesSprint > valuesAudioChallenge ? valuesSprint : valuesAudioChallenge;
     return topRow;
   }
 
@@ -148,6 +166,14 @@ export default class Statistic {
     const wordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     wordsTitle.innerText = 'words';
     wordsWrapper.append(wordsAmount, wordsTitle);
+    const newWordsWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
+    const newWordsAmount = this.htmlConstructor.createHtmlElement('h4');
+    if (data) {
+      newWordsAmount.innerText = `${this.gameNewWordsDaily(data, gameName)}`;
+    } else newWordsAmount.innerText = '0';
+    const newWordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
+    newWordsTitle.innerText = 'new words';
+    newWordsWrapper.append(newWordsAmount, newWordsTitle);
     const accuracyWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
     const accuracyAmount = this.htmlConstructor.createHtmlElement('h4');
     if (data) {
@@ -165,7 +191,7 @@ export default class Statistic {
     const inRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     inRowTitle.innerText = 'in a row';
     inRowWrapper.append(inRowAmount, inRowTitle);
-    body.append(wordsWrapper, accuracyWrapper, inRowWrapper);
+    body.append(wordsWrapper, newWordsWrapper, accuracyWrapper, inRowWrapper);
     section.append(title, body);
     return section;
   }
@@ -227,6 +253,23 @@ export default class Statistic {
     return words;
   }
 
+  private gameNewWordsDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): number {
+    let words = 0;
+    let folder: DailyStatSprint | DailyStatAudioChallenge | undefined;
+    if (data.optional) {
+      folder = data.optional[`dailyStat${type}`];
+      if (typeof folder === 'object') {
+        const values: SprintSchema[] | AudioChallengeSchema[] = Object.values(folder);
+        if (type === 'Sprint') {
+          words = (values[0] as SprintSchema).newWordsCounterSprint as number;
+        } else {
+          words = (values[0] as AudioChallengeSchema).newWordsCounterAudioChallenge as number;
+        }
+      }
+    }
+    return words;
+  }
+
   private authSection() {
     const fragment = document.createDocumentFragment();
     const allTimeTitle = this.htmlConstructor.createHtmlElement('h2', ['today-title']);
@@ -241,14 +284,23 @@ export default class Statistic {
     progressGraphTitle.innerText = 'Progress';
     const progressGraphBody = this.htmlConstructor.createHtmlElement('canvas', ['graph-body'], 'progressGraphBody');
     progressGraphWrapper.append(progressGraphTitle, progressGraphBody);
-    fragment.append(allTimeTitle, learnedGraphWrapper, progressGraphWrapper);
+
+    const newWordsGraphWrapper = this.htmlConstructor.div(['card', 'card-body', 'newWordsGraphWrapper']);
+    const newWordsGraphTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'graph-title']);
+    newWordsGraphTitle.innerText = 'New Words';
+    const newWordsGraphBody = this.htmlConstructor.createHtmlElement('canvas', ['graph-body'], 'newWordsGraphBody');
+    newWordsGraphWrapper.append(newWordsGraphTitle, newWordsGraphBody);
+
+    fragment.append(allTimeTitle, learnedGraphWrapper, progressGraphWrapper, newWordsGraphWrapper);
     return fragment;
   }
 
-  private drawDiagrams(data: Statistics, type: 'Progress' | 'Learned words') {
+  private drawDiagrams(data: Statistics, type: 'Progress' | 'Learned words' | 'New Words') {
     const dataForGraphs = this.dataForGraphs(data, type);
     const labels = dataForGraphs.map((value) => value[0]);
-    const color = type === 'Progress' ? 'rgba(54, 162, 235, 1)' : 'rgb(255, 99, 132)';
+    let color = 'rgba(54, 162, 235, 1)';
+    if (type === 'Learned words') color = 'rgb(255, 99, 132)';
+    if (type === 'New Words') color = 'rgba(75, 192, 192, 1)';
     const graphData = {
       labels,
       datasets: [
@@ -268,25 +320,33 @@ export default class Statistic {
       options: {},
     };
 
-    const graphID = type === 'Progress' ? 'progressGraphBody' : 'learnedGraphBody';
+    let graphID = 'progressGraphBody';
+    if (type === 'Learned words') graphID = 'learnedGraphBody';
+    if (type === 'New Words') graphID = 'newWordsGraphBody';
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const myChart = new Chart(document.getElementById(graphID) as HTMLCanvasElement, config);
   }
 
-  private dataForGraphs(data: Statistics, type: 'Progress' | 'Learned words'): [Date | string, number][] {
+  private dataForGraphs(data: Statistics, type: 'Progress' | 'Learned words' | 'New Words'): [Date | string, number][] {
     let result: [Date | string, number][] = [];
     const folderSprint: LongStatSprint | undefined = data.optional?.longStatSprint;
     if (folderSprint) {
       const keys: string[] = Object.keys(folderSprint);
       keys.forEach((key: string): void => {
-        result.push([key, folderSprint[key].learnedWordsCounterSprint as number]);
+        const value =
+          type === 'New Words' ? folderSprint[key].newWordsCounterSprint : folderSprint[key].learnedWordsCounterSprint;
+        result.push([key, value as number]);
       });
     }
     const folderAudioChallenge = data.optional?.longStatAudioChallenge;
     if (folderAudioChallenge) {
       const keys: string[] = Object.keys(folderAudioChallenge);
       keys.forEach((key: string): void => {
-        result.push([key, folderAudioChallenge[key].learnedWordsCounterAudioChallenge as number]);
+        const value =
+          type === 'New Words'
+            ? folderAudioChallenge[key].newWordsCounterAudioChallenge
+            : folderAudioChallenge[key].learnedWordsCounterAudioChallenge;
+        result.push([key, value as number]);
       });
     }
     result.sort();
@@ -315,17 +375,21 @@ export default class Statistic {
     const result: [Date, number][] = [];
     let date: Date | number | string;
     let amount = 0;
-    for (let i = 0; i < data.length; i += 1) {
-      [date] = data[i];
-      if (i < data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i + 1][0] as Date)) {
-        amount += data[i][1];
-      } else if (i === data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i - 1][0] as Date)) {
-        amount += data[i][1];
-        result.push([date as Date, amount]);
-      } else {
-        result.push([date as Date, amount]);
-        date = 0;
-        amount = 0;
+    if (data.length === 1) {
+      result.push([data[0][0] as Date, data[0][1]]);
+    } else {
+      for (let i = 0; i < data.length; i += 1) {
+        [date] = data[i];
+        if (i < data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i + 1][0] as Date)) {
+          amount += data[i][1];
+        } else if (i === data.length - 1 && datesAreOnSameDay(data[i][0] as Date, data[i - 1][0] as Date)) {
+          amount += data[i][1];
+          result.push([date as Date, amount]);
+        } else {
+          result.push([date as Date, amount]);
+          date = 0;
+          amount = 0;
+        }
       }
     }
     // if (amount) result.push([date, amount]);
