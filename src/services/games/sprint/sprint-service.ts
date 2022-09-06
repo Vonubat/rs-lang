@@ -279,7 +279,7 @@ export default class SprintService {
         } else {
           [key] = Object.keys(dailyStatSprint);
           lastDailyStat = Number(key);
-          diff = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
+          diff = new Date(currentDate).getDate() - new Date(lastDailyStat).getDate();
         }
 
         await api.usersStatistics.setStatistics(
@@ -339,7 +339,7 @@ export default class SprintService {
     diff: number,
     key?: string
   ): Statistics {
-    if (diff > 1 && body.optional) {
+    if (diff >= 1 && body.optional) {
       body.optional.dailyStatSprint = {};
       Object.defineProperty(body.optional?.dailyStatSprint, currentDate, {
         value: {
@@ -357,7 +357,7 @@ export default class SprintService {
       });
     }
 
-    if (diff < 1 && body.optional?.dailyStatSprint && key) {
+    if (diff <= 1 && body.optional?.dailyStatSprint && key) {
       const target: SprintSchema = body.optional?.dailyStatSprint[key];
       target.pointsValueSprint = Number(target.pointsValueSprint) + this.pointsValue;
       target.newWordsCounterSprint = Number(target.newWordsCounterSprint) + this.newWordsCounterSprint;

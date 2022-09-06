@@ -251,7 +251,7 @@ export default class AudioChallengeService {
         } else {
           [key] = Object.keys(dailyStatAudioChallenge);
           lastDailyStat = Number(key);
-          diff = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
+          diff = new Date(currentDate).getDate() - new Date(lastDailyStat).getDate();
         }
 
         await api.usersStatistics.setStatistics(
@@ -311,7 +311,7 @@ export default class AudioChallengeService {
     diff: number,
     key?: string
   ): Statistics {
-    if (diff > 1 && body.optional) {
+    if (diff >= 1 && body.optional) {
       body.optional.dailyStatAudioChallenge = {};
       Object.defineProperty(body.optional?.dailyStatAudioChallenge, currentDate, {
         value: {
@@ -328,7 +328,7 @@ export default class AudioChallengeService {
         writable: true,
       });
     }
-    if (diff < 1 && body.optional?.dailyStatAudioChallenge && key) {
+    if (diff <= 1 && body.optional?.dailyStatAudioChallenge && key) {
       const target: AudioChallengeSchema = body.optional?.dailyStatAudioChallenge[key];
       target.pointsValueAudioChallenge = Number(target.pointsValueAudioChallenge) + this.pointsValue;
       target.newWordsCounterAudioChallenge =
