@@ -42,6 +42,8 @@ export default class AudioChallengeService {
 
   learnedWordsCounterAudioChallenge: number;
 
+  newWordsCounterAudioChallenge: number;
+
   pointsElement!: HTMLElement;
 
   multiplicatorElement!: HTMLElement;
@@ -85,6 +87,7 @@ export default class AudioChallengeService {
     this.inARowCurrent = 0;
     this.inARowHistory = [];
     this.learnedWordsCounterAudioChallenge = 0;
+    this.newWordsCounterAudioChallenge = 0;
   }
 
   launchAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
@@ -144,6 +147,7 @@ export default class AudioChallengeService {
     this.inARow = 0;
     this.inARowCurrent = 0;
     this.inARowHistory = [];
+    this.newWordsCounterAudioChallenge = 0;
   }
 
   chooseWordsForIteration(): [string, WordsResponseSchema | PaginatedResult][] {
@@ -247,7 +251,7 @@ export default class AudioChallengeService {
         } else {
           [key] = Object.keys(dailyStatAudioChallenge);
           lastDailyStat = Number(key);
-          diff = (currentDate - lastDailyStat) / (60 * 60 * 24 * 1000);
+          diff = new Date(currentDate).getDate() - new Date(lastDailyStat).getDate();
         }
 
         await api.usersStatistics.setStatistics(
@@ -274,6 +278,7 @@ export default class AudioChallengeService {
         dailyStatAudioChallenge: {
           [currentDate]: {
             pointsValueAudioChallenge: this.pointsValue,
+            newWordsCounterAudioChallenge: this.newWordsCounterAudioChallenge,
             learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
             mistakesAudioChallenge: this.mistakes,
             allWordsCounterAudioChallenge: allWordsCounter,
@@ -284,6 +289,7 @@ export default class AudioChallengeService {
         longStatAudioChallenge: {
           [currentDate]: {
             pointsValueAudioChallenge: this.pointsValue,
+            newWordsCounterAudioChallenge: this.newWordsCounterAudioChallenge,
             learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
             mistakesAudioChallenge: this.mistakes,
             allWordsCounterAudioChallenge: allWordsCounter,
@@ -305,11 +311,12 @@ export default class AudioChallengeService {
     diff: number,
     key?: string
   ): Statistics {
-    if (diff > 1 && body.optional) {
+    if (diff >= 1 && body.optional) {
       body.optional.dailyStatAudioChallenge = {};
       Object.defineProperty(body.optional?.dailyStatAudioChallenge, currentDate, {
         value: {
           pointsValueAudioChallenge: this.pointsValue,
+          newWordsCounterAudioChallenge: this.newWordsCounterAudioChallenge,
           learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
           mistakesAudioChallenge: this.mistakes,
           allWordsCounterAudioChallenge: allWordsCounter,
@@ -321,10 +328,11 @@ export default class AudioChallengeService {
         writable: true,
       });
     }
-
-    if (diff < 1 && body.optional?.dailyStatAudioChallenge && key) {
+    if (diff <= 1 && body.optional?.dailyStatAudioChallenge && key) {
       const target: AudioChallengeSchema = body.optional?.dailyStatAudioChallenge[key];
       target.pointsValueAudioChallenge = Number(target.pointsValueAudioChallenge) + this.pointsValue;
+      target.newWordsCounterAudioChallenge =
+        Number(target.newWordsCounterAudioChallenge) + this.newWordsCounterAudioChallenge;
       target.learnedWordsCounterAudioChallenge =
         Number(target.learnedWordsCounterAudioChallenge) + this.learnedWordsCounterAudioChallenge;
       target.mistakesAudioChallenge = Number(target.mistakesAudioChallenge) + this.mistakes;
@@ -352,6 +360,7 @@ export default class AudioChallengeService {
     Object.defineProperty(body.optional?.longStatAudioChallenge, currentDate, {
       value: {
         pointsValueAudioChallenge: this.pointsValue,
+        newWordsCounterAudioChallenge: this.newWordsCounterAudioChallenge,
         learnedWordsCounterAudioChallenge: this.learnedWordsCounterAudioChallenge,
         mistakesAudioChallenge: this.mistakes,
         allWordsCounterAudioChallenge: allWordsCounter,
@@ -404,8 +413,9 @@ export default class AudioChallengeService {
     }
   }
 
-  wordStatisticsLogicEngine(word: WordsStatistic) {
+  wordStatisticsLogicEngine(word: WordsStatistic): void {
     if (word.difficulty === 'none') {
+      this.newWordsCounterAudioChallenge += 1;
       if (word.correctAttemptsSession > 0) {
         word.difficulty = 'learned';
         this.learnedWordsCounterAudioChallenge += 1;

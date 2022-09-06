@@ -192,6 +192,10 @@
 
     .word-container {
       gap: 5px;
+
+      .sound-icon {
+        cursor: pointer;
+      }
     }
   }
 }
