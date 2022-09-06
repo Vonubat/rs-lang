@@ -59,9 +59,9 @@ export default class Statistic {
       main.innerHTML = '';
       main.append(this.view(data));
       if (data) {
-        console.log(data);
         this.drawDiagrams(data, 'Progress');
         this.drawDiagrams(data, 'Learned words');
+        // this.drawDiagrams(data, 'New Words');
       }
     }
   }
@@ -291,14 +291,23 @@ export default class Statistic {
     progressGraphTitle.innerText = 'Progress';
     const progressGraphBody = this.htmlConstructor.createHtmlElement('canvas', ['graph-body'], 'progressGraphBody');
     progressGraphWrapper.append(progressGraphTitle, progressGraphBody);
-    fragment.append(allTimeTitle, learnedGraphWrapper, progressGraphWrapper);
+
+    const newWordsGraphWrapper = this.htmlConstructor.div(['card', 'card-body', 'newWordsGraphWrapper']);
+    const newWordsGraphTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'graph-title']);
+    newWordsGraphTitle.innerText = 'New Words';
+    const newWordsGraphBody = this.htmlConstructor.createHtmlElement('canvas', ['graph-body'], 'newWordsGraphBody');
+    newWordsGraphWrapper.append(newWordsGraphTitle, newWordsGraphBody);
+
+    fragment.append(allTimeTitle, learnedGraphWrapper, progressGraphWrapper /* ,newWordsGraphWrapper */);
     return fragment;
   }
 
-  private drawDiagrams(data: Statistics, type: 'Progress' | 'Learned words') {
+  private drawDiagrams(data: Statistics, type: 'Progress' | 'Learned words' | 'New Words') {
     const dataForGraphs = this.dataForGraphs(data, type);
     const labels = dataForGraphs.map((value) => value[0]);
-    const color = type === 'Progress' ? 'rgba(54, 162, 235, 1)' : 'rgb(255, 99, 132)';
+    let color = 'rgba(54, 162, 235, 1)';
+    if (type === 'Learned words') color = 'rgb(255, 99, 132)';
+    if (type === 'New Words') color = 'rgba(75, 192, 192, 1)';
     const graphData = {
       labels,
       datasets: [
@@ -323,12 +332,13 @@ export default class Statistic {
     const myChart = new Chart(document.getElementById(graphID) as HTMLCanvasElement, config);
   }
 
-  private dataForGraphs(data: Statistics, type: 'Progress' | 'Learned words'): [Date | string, number][] {
+  private dataForGraphs(data: Statistics, type: 'Progress' | 'Learned words' | 'New Words'): [Date | string, number][] {
     let result: [Date | string, number][] = [];
     const folderSprint: LongStatSprint | undefined = data.optional?.longStatSprint;
     if (folderSprint) {
       const keys: string[] = Object.keys(folderSprint);
       keys.forEach((key: string): void => {
+        // const value = type === 'New Words' ? folderSprint[key].newWordsCounterSprint : folderSprint[key].learnedWordsCounterSprint;
         result.push([key, folderSprint[key].learnedWordsCounterSprint as number]);
       });
     }
@@ -336,6 +346,7 @@ export default class Statistic {
     if (folderAudioChallenge) {
       const keys: string[] = Object.keys(folderAudioChallenge);
       keys.forEach((key: string): void => {
+        // const value = type === 'New Words' ? folderAudioChallenge[key].newWordsCounterAudioChallenge : folderAudioChallenge[key].learnedWordsCounterAudioChallenge;
         result.push([key, folderAudioChallenge[key].learnedWordsCounterAudioChallenge as number]);
       });
     }
