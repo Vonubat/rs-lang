@@ -357,7 +357,7 @@ export default class SprintService {
       });
     }
 
-    if (diff <= 1 && body.optional?.dailyStatSprint && key) {
+    if (diff < 1 && body.optional?.dailyStatSprint && key) {
       const target: SprintSchema = body.optional?.dailyStatSprint[key];
       target.pointsValueSprint = Number(target.pointsValueSprint) + this.pointsValue;
       target.newWordsCounterSprint = Number(target.newWordsCounterSprint) + this.newWordsCounterSprint;

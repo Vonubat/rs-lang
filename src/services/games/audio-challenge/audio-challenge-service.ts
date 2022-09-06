@@ -328,7 +328,7 @@ export default class AudioChallengeService {
         writable: true,
       });
     }
-    if (diff <= 1 && body.optional?.dailyStatAudioChallenge && key) {
+    if (diff < 1 && body.optional?.dailyStatAudioChallenge && key) {
       const target: AudioChallengeSchema = body.optional?.dailyStatAudioChallenge[key];
       target.pointsValueAudioChallenge = Number(target.pointsValueAudioChallenge) + this.pointsValue;
       target.newWordsCounterAudioChallenge =
