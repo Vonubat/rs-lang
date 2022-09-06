@@ -83,7 +83,7 @@ export default class AudioChallengeView extends HTMLConstructor {
       classList,
       `btn-${index + 1}-${word[0]}`,
       [['type', 'button']],
-      `${index + 1} ${word[1].word}`
+      `${index + 1} ${word[1].wordTranslate}`
     );
     return btnWord;
   }
