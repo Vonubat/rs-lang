@@ -45,6 +45,8 @@ export default class SprintService {
 
   learnedWordsCounterSprint: number;
 
+  newWordsCounterSprint: number;
+
   right!: HTMLButtonElement;
 
   wrong!: HTMLButtonElement;
@@ -93,6 +95,7 @@ export default class SprintService {
     this.inARowCurrent = 0;
     this.inARowHistory = [];
     this.learnedWordsCounterSprint = 0;
+    this.newWordsCounterSprint = 0;
   }
 
   launchSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
@@ -165,6 +168,7 @@ export default class SprintService {
     this.inARowCurrent = 0;
     this.learnedWordsCounterSprint = 0;
     this.inARowHistory = [];
+    this.newWordsCounterSprint = 0;
   }
 
   chooseTranslate(
@@ -302,6 +306,7 @@ export default class SprintService {
         dailyStatSprint: {
           [currentDate]: {
             pointsValueSprint: this.pointsValue,
+            newWordsCounterSprint: this.newWordsCounterSprint,
             learnedWordsCounterSprint: this.learnedWordsCounterSprint,
             mistakesSprint: this.mistakes,
             allWordsCounterSprint: allWordsCounter,
@@ -312,6 +317,7 @@ export default class SprintService {
         longStatSprint: {
           [currentDate]: {
             pointsValueSprint: this.pointsValue,
+            newWordsCounterSprint: this.newWordsCounterSprint,
             learnedWordsCounterSprint: this.learnedWordsCounterSprint,
             mistakesSprint: this.mistakes,
             allWordsCounterSprint: allWordsCounter,
@@ -338,6 +344,7 @@ export default class SprintService {
       Object.defineProperty(body.optional?.dailyStatSprint, currentDate, {
         value: {
           pointsValueSprint: this.pointsValue,
+          newWordsCounterSprint: this.newWordsCounterSprint,
           learnedWordsCounterSprint: this.learnedWordsCounterSprint,
           mistakesSprint: this.mistakes,
           allWordsCounterSprint: allWordsCounter,
@@ -353,6 +360,7 @@ export default class SprintService {
     if (diff < 1 && body.optional?.dailyStatSprint && key) {
       const target: SprintSchema = body.optional?.dailyStatSprint[key];
       target.pointsValueSprint = Number(target.pointsValueSprint) + this.pointsValue;
+      target.newWordsCounterSprint = Number(target.newWordsCounterSprint) + this.newWordsCounterSprint;
       target.learnedWordsCounterSprint = Number(target.learnedWordsCounterSprint) + this.learnedWordsCounterSprint;
       target.mistakesSprint = Number(target.mistakesSprint) + this.mistakes;
       target.allWordsCounterSprint = Number(target.allWordsCounterSprint) + allWordsCounter;
@@ -378,6 +386,7 @@ export default class SprintService {
     Object.defineProperty(body.optional?.longStatSprint, currentDate, {
       value: {
         pointsValueSprint: this.pointsValue,
+        newWordsCounterSprint: this.newWordsCounterSprint,
         learnedWordsCounterSprint: this.learnedWordsCounterSprint,
         mistakesSprint: this.mistakes,
         allWordsCounterSprint: allWordsCounter,
@@ -430,13 +439,14 @@ export default class SprintService {
     }
   }
 
-  wordStatisticsLogicEngine(word: WordsStatistic) {
+  wordStatisticsLogicEngine(word: WordsStatistic): void {
     const minAttempts: boolean = word.correctAttemptsSession + word.incorrectAttemptsSession >= 3;
     let ratio: number = word.correctAttemptsSession / word.incorrectAttemptsSession;
     if (ratio === 0) {
       ratio = word.correctAttemptsSession === 0 ? 0 : 1;
     }
     if (word.difficulty === 'none') {
+      this.newWordsCounterSprint += 1;
       if (minAttempts) {
         if (ratio > 0.5) {
           word.difficulty = 'learned';
