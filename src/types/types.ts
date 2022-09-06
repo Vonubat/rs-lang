@@ -111,6 +111,7 @@ export interface LongAudioChallenge {
 
 export interface SprintSchema {
   pointsValueSprint?: number;
+  newWordsCounterSprint?: number;
   learnedWordsCounterSprint?: number;
   mistakesSprint?: number;
   allWordsCounterSprint?: number;
@@ -120,6 +121,7 @@ export interface SprintSchema {
 
 export interface AudioChallengeSchema {
   pointsValueAudioChallenge?: number;
+  newWordsCounterAudioChallenge?: number;
   learnedWordsCounterAudioChallenge?: number;
   mistakesAudioChallenge?: number;
   allWordsCounterAudioChallenge?: number;

@@ -20,7 +20,7 @@
   },
   "rules": {
     "@typescript-eslint/no-explicit-any": 2,
-    "max-lines-per-function": ["error", 40],
+    "max-lines-per-function": ["error", 45],
     "react/jsx-filename-extension": "off",
     "import/prefer-default-export": 0,
     "class-methods-use-this": "off",
