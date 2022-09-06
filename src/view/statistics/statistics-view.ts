@@ -75,8 +75,8 @@ export default class Statistic {
     } else wordAmount.innerText = '0';
     const body = this.htmlConstructor.div(['card-body']);
     const wordtitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'words-learned-title']);
-    wordtitle.innerText = 'words';
-    const subTitle = this.htmlConstructor.createHtmlElement('h4', ['card-subtitle', 'text-muted']);
+    wordtitle.innerText = 'Words';
+    const subTitle = this.htmlConstructor.createHtmlElement('h3', ['card-subtitle', 'text-muted']);
     subTitle.innerText = 'were learned';
     body.append(wordtitle, subTitle);
     wordsLearned.append(wordAmount, body);
@@ -86,7 +86,7 @@ export default class Statistic {
       newWordsAmount.innerText = `${this.newWordsDaily(data)}`;
     } else newWordsAmount.innerText = '0';
     const newWordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'newWords-today-title']);
-    newWordsTitle.innerText = 'New Words';
+    newWordsTitle.innerText = 'New words';
     newWords.append(newWordsAmount, newWordsTitle);
     const accuracy = this.htmlConstructor.div(['card-body', 'today-accuracy']);
     const accuracyAmount = this.htmlConstructor.createHtmlElement('h2', ['accuracy-today-amount']);
@@ -102,7 +102,7 @@ export default class Statistic {
       topRowAmount.innerText = `${this.topInRowDaily(data)}`;
     } else topRowAmount.innerText = '0';
     const topRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'topRow-today-title']);
-    topRowTitle.innerText = 'top in a row';
+    topRowTitle.innerText = 'Top in a row';
     topRow.append(topRowAmount, topRowTitle);
     section.append(wordsLearned, newWords, accuracy, topRow);
     return section;
@@ -159,37 +159,37 @@ export default class Statistic {
     title.innerText = gameName;
     const body = this.htmlConstructor.div(['card-body']);
     const wordsWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
-    const wordsAmount = this.htmlConstructor.createHtmlElement('h4');
+    const wordsAmount = this.htmlConstructor.createHtmlElement('h3');
     if (data) {
       wordsAmount.innerText = `${this.gameWordsDaily(data, gameName)}`;
     } else wordsAmount.innerText = '0';
     const wordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
-    wordsTitle.innerText = 'words';
+    wordsTitle.innerText = 'Words';
     wordsWrapper.append(wordsAmount, wordsTitle);
     const newWordsWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
-    const newWordsAmount = this.htmlConstructor.createHtmlElement('h4');
+    const newWordsAmount = this.htmlConstructor.createHtmlElement('h3');
     if (data) {
       newWordsAmount.innerText = `${this.gameNewWordsDaily(data, gameName)}`;
     } else newWordsAmount.innerText = '0';
     const newWordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
-    newWordsTitle.innerText = 'new words';
+    newWordsTitle.innerText = 'New words';
     newWordsWrapper.append(newWordsAmount, newWordsTitle);
     const accuracyWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
-    const accuracyAmount = this.htmlConstructor.createHtmlElement('h4');
+    const accuracyAmount = this.htmlConstructor.createHtmlElement('h3');
     if (data) {
       const value = this.gameAccuracyDaily(data, gameName);
       accuracyAmount.innerText = value;
     } else accuracyAmount.innerText = '0%';
     const accuracyTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
-    accuracyTitle.innerText = 'accuracy';
+    accuracyTitle.innerText = 'Accuracy';
     accuracyWrapper.append(accuracyAmount, accuracyTitle);
     const inRowWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
-    const inRowAmount = this.htmlConstructor.createHtmlElement('h4');
+    const inRowAmount = this.htmlConstructor.createHtmlElement('h3');
     if (data) {
       inRowAmount.innerText = `${this.gameTopInRowDaily(data, gameName)}`;
     } else inRowAmount.innerText = '0';
     const inRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
-    inRowTitle.innerText = 'in a row';
+    inRowTitle.innerText = 'In a row';
     inRowWrapper.append(inRowAmount, inRowTitle);
     body.append(wordsWrapper, newWordsWrapper, accuracyWrapper, inRowWrapper);
     section.append(title, body);
@@ -287,7 +287,7 @@ export default class Statistic {
 
     const newWordsGraphWrapper = this.htmlConstructor.div(['card', 'card-body', 'newWordsGraphWrapper']);
     const newWordsGraphTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'graph-title']);
-    newWordsGraphTitle.innerText = 'New Words';
+    newWordsGraphTitle.innerText = 'New words';
     const newWordsGraphBody = this.htmlConstructor.createHtmlElement('canvas', ['graph-body'], 'newWordsGraphBody');
     newWordsGraphWrapper.append(newWordsGraphTitle, newWordsGraphBody);
 
