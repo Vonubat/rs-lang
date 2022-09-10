@@ -13,15 +13,24 @@
   .progress {
     width: 100%;
   }
+
+  .card-body {
+    text-align: center;
+    padding-bottom: 25px;
+  }
+
+  .card-title {
+    flex: auto;
+  }
 }
 
 .statistics__stats-per-day {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 }
 
-.today-wrapper {
+.today-wrapper, .game-sprint-wrapper, .game-audiochallenge-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
@@ -42,12 +51,20 @@
 
 .today-words-learned,
 .today-accuracy,
-.today-topRow,
+.topRow-wrapper,
 .today-newWords {
   display: flex;
   align-items: center;
   flex-direction: row;
   gap: 10px;
+  width: 100%;
+}
+
+.today-topRow {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .words-learned,
@@ -63,11 +80,16 @@
   align-items: center;
 }
 
-.today-title {
+.today-title, .game-title {
   text-align: center;
   font-size: 35px;
 }
 
 .game-title {
   padding: 20px 20px;
+}
+
+.topInRow-svg {
+  width: 50px;
+  height: 50px;
 }
