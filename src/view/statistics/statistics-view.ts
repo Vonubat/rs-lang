@@ -67,8 +67,18 @@ export default class Statistic {
   }
 
   private sectionTodayWordsLearned(data: Statistics | null) {
-    const section = this.htmlConstructor.div(['card', 'today-wrapper']);
-    const wordsLearned = this.htmlConstructor.div(['card-body', 'today-words-learned']);
+    const section = this.htmlConstructor.div(['today-wrapper']);
+    section.append(
+      this.wordsLearnedSection(data),
+      this.newWordsSection(data),
+      this.accuracySection(data),
+      this.topRowSection(data)
+    );
+    return section;
+  }
+
+  private wordsLearnedSection(data: Statistics | null) {
+    const wordsLearned = this.htmlConstructor.div(['card', 'card-body', 'today-words-learned']);
     const wordAmount = this.htmlConstructor.createHtmlElement('h2', ['words-learned']);
     if (data) {
       wordAmount.innerText = `${this.wordsDaily(data)}`;
@@ -80,7 +90,11 @@ export default class Statistic {
     subTitle.innerText = 'were learned';
     body.append(wordtitle, subTitle);
     wordsLearned.append(wordAmount, body);
-    const newWords = this.htmlConstructor.div(['card-body', 'today-newWords']);
+    return wordsLearned;
+  }
+
+  private newWordsSection(data: Statistics | null) {
+    const newWords = this.htmlConstructor.div(['card', 'card-body', 'today-newWords']);
     const newWordsAmount = this.htmlConstructor.createHtmlElement('h2', ['newWords-today-amount']);
     if (data) {
       newWordsAmount.innerText = `${this.newWordsDaily(data)}`;
@@ -88,15 +102,38 @@ export default class Statistic {
     const newWordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'newWords-today-title']);
     newWordsTitle.innerText = 'New words';
     newWords.append(newWordsAmount, newWordsTitle);
-    const accuracy = this.htmlConstructor.div(['card-body', 'today-accuracy']);
+    return newWords;
+  }
+
+  private accuracySection(data: Statistics | null) {
+    const accuracy = this.htmlConstructor.div(['card', 'card-body', 'today-accuracy']);
+    const div = this.htmlConstructor.div(['card-body']);
     const accuracyAmount = this.htmlConstructor.createHtmlElement('h2', ['accuracy-today-amount']);
-    if (data) {
-      accuracyAmount.innerText = this.accuracyDaily(data);
-    } else accuracyAmount.innerText = '0%';
+
     const accuracyTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'accuracy-today-title']);
     accuracyTitle.innerText = 'Accuracy';
-    accuracy.append(accuracyAmount, accuracyTitle);
-    const topRow = this.htmlConstructor.div(['card-body', 'today-topRow']);
+    div.append(accuracyAmount, accuracyTitle);
+    const accuracyProgress = this.htmlConstructor.div(['progress']);
+    const accuracyProgressBar = this.htmlConstructor.div(['progress-bar']);
+    accuracyProgressBar.setAttribute('role', 'progressbar');
+    accuracyProgressBar.setAttribute('aria-valuemin', '0');
+    accuracyProgressBar.setAttribute('aria-valuemax', '100');
+    if (data) {
+      const amount = this.accuracyDaily(data);
+      accuracyAmount.innerText = amount;
+      accuracyProgressBar.setAttribute('aria-valuenow', amount.slice(0, -1));
+      accuracyProgressBar.setAttribute('style', `width: ${amount}`);
+      accuracyProgressBar.innerText = amount;
+    } else {
+      accuracyAmount.innerText = '0%';
+    }
+    accuracyProgress.append(accuracyProgressBar);
+    accuracy.append(div, accuracyProgress);
+    return accuracy;
+  }
+
+  private topRowSection(data: Statistics | null) {
+    const topRow = this.htmlConstructor.div(['card', 'card-body', 'today-topRow']);
     const topRowAmount = this.htmlConstructor.createHtmlElement('h2', ['topRow-today-amount']);
     if (data) {
       topRowAmount.innerText = `${this.topInRowDaily(data)}`;
@@ -104,8 +141,7 @@ export default class Statistic {
     const topRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'topRow-today-title']);
     topRowTitle.innerText = 'Top in a row';
     topRow.append(topRowAmount, topRowTitle);
-    section.append(wordsLearned, newWords, accuracy, topRow);
-    return section;
+    return topRow;
   }
 
   private newWordsDaily(data: Statistics) {

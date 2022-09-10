@@ -1,11 +1,43 @@
 .statistics {
   padding: 20px;
+
+  .card {
+    box-shadow: rgb(0 0 0 / 16%) 0 3px 6px, rgb(0 0 0 / 23%) 0 3px 6px;
+    border-radius: 1.5rem;
+  }
+
+  .today-accuracy {
+    flex-direction: column;
+  }
+  
+  .progress {
+    width: 100%;
+  }
 }
 
 .statistics__stats-per-day {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 20px;
+}
+
+.today-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  justify-items: center;
+
+  .card {
+    width: 400px;
+
+    @media (max-width: 530px) {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .today-words-learned,
@@ -34,10 +66,6 @@
 .today-title {
   text-align: center;
   font-size: 35px;
-}
-
-.card-body {
-  // display: flex;
 }
 
 .game-title {
