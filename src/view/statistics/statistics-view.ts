@@ -215,7 +215,8 @@ export default class Statistic {
       wordsAmount.innerText = `${this.gameWordsDaily(data, gameName)}`;
     } else wordsAmount.innerText = '0';
     const wordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
-    wordsTitle.innerText = 'Words';
+    wordsTitle.innerText = 'Words were learned';
+
     wordsWrapper.append(wordsAmount, wordsTitle);
     return wordsWrapper;
   }
