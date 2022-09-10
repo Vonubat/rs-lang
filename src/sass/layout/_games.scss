@@ -130,10 +130,9 @@
     padding: 40px;
 
     .image {
-      width: 200px;
-      height: 200px;
-      background-size: auto 200px;
-      border-radius: 50%;
+      width: 50%;
+      clip-path: circle(37%);
+      object-fit: cover;
       margin-bottom: 20px;
       animation: append-animate 0.3s linear;
     }
