@@ -18,61 +18,61 @@ import Credentials from '../../auth/credentials';
 import { services } from '../../services';
 
 export default class AudioChallengeService {
-  words: WordsResponseSchema[] | PaginatedResult[];
+  private words: WordsResponseSchema[] | PaginatedResult[];
 
-  currentWordCounter: number;
+  private currentWordCounter: number;
 
-  pointsValue: number;
+  private pointsValue: number;
 
-  multiplicatorValue: number;
+  private multiplicatorValue: number;
 
-  mistakes: number;
+  private mistakes: number;
 
-  correctAnswers: number;
+  private correctAnswers: number;
 
-  allWordsCounter: number;
+  private allWordsCounter: number;
 
-  wordsStatistics: WordsStatistics;
+  private wordsStatistics: WordsStatistics;
 
-  inARow: number;
+  private inARow: number;
 
-  inARowCurrent: number;
+  private inARowCurrent: number;
 
-  inARowHistory: number[];
+  private inARowHistory: number[];
 
-  learnedWordsCounterAudioChallenge: number;
+  private learnedWordsCounterAudioChallenge: number;
 
-  newWordsCounterAudioChallenge: number;
+  private newWordsCounterAudioChallenge: number;
 
-  pointsElement!: HTMLElement;
+  private pointsElement!: HTMLElement;
 
-  multiplicatorElement!: HTMLElement;
+  private multiplicatorElement!: HTMLElement;
 
-  stepsElements!: HTMLSpanElement[];
+  private stepsElements!: HTMLSpanElement[];
 
-  prediction!: boolean;
+  private prediction!: boolean;
 
-  wordId!: string;
+  private wordId!: string;
 
-  word!: string;
+  private word!: string;
 
-  accuracy!: number;
+  private accuracy!: number;
 
-  triggerModal!: HTMLButtonElement;
+  private triggerModal!: HTMLButtonElement;
 
-  closeBtn!: HTMLButtonElement;
+  private closeBtn!: HTMLButtonElement;
 
-  totalCount!: number;
+  private totalCount!: number;
 
-  btnsWord!: NodeListOf<HTMLButtonElement>;
+  private btnsWord!: NodeListOf<HTMLButtonElement>;
 
-  soundIcons!: NodeListOf<SVGSVGElement>;
+  private soundIcons!: NodeListOf<SVGSVGElement>;
 
-  soundIconMain!: SVGSVGElement;
+  private soundIconMain!: SVGSVGElement;
 
-  btnControl!: HTMLButtonElement;
+  private btnControl!: HTMLButtonElement;
 
-  wordsForIteration!: [string, WordsResponseSchema | PaginatedResult][];
+  private wordsForIteration!: [string, WordsResponseSchema | PaginatedResult][];
 
   constructor() {
     this.words = [];
@@ -90,7 +90,7 @@ export default class AudioChallengeService {
     this.newWordsCounterAudioChallenge = 0;
   }
 
-  launchAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  public launchAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
     this.eraseData();
     const page: HTMLElement = view.gamesView.games;
     page.innerHTML = '';
@@ -107,7 +107,7 @@ export default class AudioChallengeService {
     services.soundHelper.playWordPronouncing(this.soundIconMain as SVGSVGElement);
   }
 
-  finishAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  private finishAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
     const page: HTMLElement = view.gamesView.games;
     services.soundHelper.playGameSound('./assets/sounds/congratulations.wav');
     this.prepareFinalData(words);
@@ -130,12 +130,12 @@ export default class AudioChallengeService {
     this.triggerModal.dispatchEvent(new Event('click'));
   }
 
-  closeGame(): void {
+  private closeGame(): void {
     window.location.href = '#';
     window.location.href = '#games';
   }
 
-  eraseData(): void {
+  private eraseData(): void {
     this.words = [];
     this.currentWordCounter = 0;
     this.pointsValue = 0;
@@ -150,7 +150,7 @@ export default class AudioChallengeService {
     this.newWordsCounterAudioChallenge = 0;
   }
 
-  chooseWordsForIteration(): [string, WordsResponseSchema | PaginatedResult][] {
+  private chooseWordsForIteration(): [string, WordsResponseSchema | PaginatedResult][] {
     const currentWordObject: WordsResponseSchema | PaginatedResult = this.words[this.currentWordCounter];
 
     this.word = currentWordObject.word;
@@ -188,7 +188,7 @@ export default class AudioChallengeService {
     return this.wordsForIteration;
   }
 
-  controlCurrentWord(): boolean {
+  private controlCurrentWord(): boolean {
     this.currentWordCounter += 1;
 
     if (this.currentWordCounter > this.totalCount) {
@@ -199,12 +199,12 @@ export default class AudioChallengeService {
     return false;
   }
 
-  addPoints(): void {
+  private addPoints(): void {
     this.pointsValue += this.multiplicatorValue;
     this.pointsElement.innerText = `${this.pointsValue}`;
   }
 
-  setMultiplicator(action: '+' | '-'): void {
+  private setMultiplicator(action: '+' | '-'): void {
     if (action === '+') {
       this.inARowCurrent += 1;
       this.inARowHistory.push(this.inARowCurrent);
@@ -221,7 +221,7 @@ export default class AudioChallengeService {
     this.multiplicatorElement.innerText = `+ ${this.multiplicatorValue} points`;
   }
 
-  setNextWord(): void {
+  private setNextWord(): void {
     const wordsForIteration: [string, WordsResponseSchema | PaginatedResult][] = this.chooseWordsForIteration();
     view.gamesView.audioChallengeView.updateGameContainer(wordsForIteration);
     view.gamesView.audioChallengeView.incrementWordsCounter(this.totalCount);
@@ -231,7 +231,7 @@ export default class AudioChallengeService {
     services.soundHelper.playWordPronouncing(this.soundIconMain as SVGSVGElement);
   }
 
-  async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
+  private async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
     if (AuthService.checkUser()) {
       const userId: string = Credentials.getUserId();
       const currentDate: number = Date.now();
@@ -267,7 +267,7 @@ export default class AudioChallengeService {
     }
   }
 
-  createUserStatisticsObject(
+  private createUserStatisticsObject(
     currentDate: number,
     allWordsCounter: number,
     inARow: number,
@@ -302,7 +302,7 @@ export default class AudioChallengeService {
     return body;
   }
 
-  userStatisticsDaily(
+  private userStatisticsDaily(
     body: Statistics,
     currentDate: number,
     allWordsCounter: number,
@@ -344,7 +344,7 @@ export default class AudioChallengeService {
     return body;
   }
 
-  userStatisticsLong(
+  private userStatisticsLong(
     body: Statistics,
     currentDate: number,
     allWordsCounter: number,
@@ -375,7 +375,7 @@ export default class AudioChallengeService {
     return body;
   }
 
-  async processWordStatistics(): Promise<void> {
+  private async processWordStatistics(): Promise<void> {
     if (AuthService.checkUser()) {
       const result: WordsStatistic[] = Object.values(this.wordsStatistics);
       const userId: string = Credentials.getUserId();
@@ -413,7 +413,7 @@ export default class AudioChallengeService {
     }
   }
 
-  wordStatisticsLogicEngine(word: WordsStatistic): void {
+  private wordStatisticsLogicEngine(word: WordsStatistic): void {
     if (word.difficulty === 'none') {
       this.newWordsCounterAudioChallenge += 1;
       if (word.correctAttemptsSession > 0) {
@@ -439,7 +439,7 @@ export default class AudioChallengeService {
     }
   }
 
-  setWordStatistics(action: '+' | '-'): void {
+  private setWordStatistics(action: '+' | '-'): void {
     this.createWordStatisticsObject();
     if (action === '+') {
       this.wordsStatistics[this.word].correctAttempts += 1;
@@ -454,7 +454,7 @@ export default class AudioChallengeService {
     this.allWordsCounter = this.correctAnswers + this.mistakes;
   }
 
-  createWordStatisticsObject(): void {
+  private createWordStatisticsObject(): void {
     if (!AuthService.checkUser()) {
       Object.defineProperty(this.wordsStatistics, this.word, {
         value: {
@@ -495,7 +495,7 @@ export default class AudioChallengeService {
     }
   }
 
-  checkAnswer(event: Event): void {
+  private checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
     const target: HTMLButtonElement = event.target as HTMLButtonElement;
 
@@ -537,14 +537,14 @@ export default class AudioChallengeService {
     }
   }
 
-  checkForNonValidValues(value: number): number {
+  private checkForNonValidValues(value: number): number {
     if (Object.is(value, NaN) || Object.is(value, Infinity) || Object.is(value, -Infinity)) {
       return 0;
     }
     return value;
   }
 
-  playSound(event: Event): boolean {
+  private playSound(event: Event): boolean {
     let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
     if (elem instanceof SVGUseElement) {
       elem = elem.parentNode as SVGSVGElement;
@@ -569,13 +569,13 @@ export default class AudioChallengeService {
     return true;
   }
 
-  prepareFinalData(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  private prepareFinalData(words: WordsResponseSchema[] | PaginatedResult[]): void {
     this.words = words;
     this.accuracy = Number(this.checkForNonValidValues((this.correctAnswers / this.allWordsCounter) * 100).toFixed(1));
     this.inARow = this.checkForNonValidValues(Math.max(...this.inARowHistory));
   }
 
-  controlKeyboard(event: KeyboardEvent): void {
+  private controlKeyboard(event: KeyboardEvent): void {
     const { code } = event;
     const conditional: (num: number, el: HTMLButtonElement) => boolean = (
       num: number,
@@ -615,7 +615,7 @@ export default class AudioChallengeService {
     }
   }
 
-  setItems(): void {
+  private setItems(): void {
     this.btnsWord = document.querySelectorAll('.btn-word') as NodeListOf<HTMLButtonElement>;
     this.pointsElement = document.getElementById('points-audio-challenge') as HTMLElement;
     this.multiplicatorElement = document.getElementById('multiplicator-audio-challenge') as HTMLElement;
@@ -626,17 +626,17 @@ export default class AudioChallengeService {
     this.closeBtn = document.getElementById('btn-close') as HTMLButtonElement;
   }
 
-  listenGame(): void {
+  private listenGame(): void {
     this.btnsWord.forEach((item: HTMLButtonElement) => item.addEventListener('click', this.checkAnswer.bind(this)));
     this.soundIconMain.addEventListener('click', this.playSound.bind(this));
   }
 
-  listenControlBtn(): void {
+  private listenControlBtn(): void {
     this.btnControl.addEventListener('click', this.checkBtnControl.bind(this));
     document.addEventListener('keydown', this.controlKeyboard.bind(this));
   }
 
-  listenFinal(): void {
+  private listenFinal(): void {
     this.soundIcons.forEach((item: SVGSVGElement) => item.addEventListener('click', this.playSound.bind(this)));
     this.closeBtn.addEventListener('click', this.closeGame.bind(this));
   }

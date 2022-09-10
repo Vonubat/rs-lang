@@ -19,67 +19,67 @@ import { Route } from '../../routing/routing';
 import { services } from '../../services';
 
 export default class SprintService {
-  words: WordsResponseSchema[] | PaginatedResult[];
+  private words: WordsResponseSchema[] | PaginatedResult[];
 
-  currentWordCounter: number;
+  private currentWordCounter: number;
 
-  pointsValue: number;
+  private pointsValue: number;
 
-  multiplicatorValue: number;
+  private multiplicatorValue: number;
 
-  steps: boolean[];
+  private steps: boolean[];
 
-  mistakes: number;
+  private mistakes: number;
 
-  correctAnswers: number;
+  private correctAnswers: number;
 
-  allWordsCounter: number;
+  private allWordsCounter: number;
 
-  wordsStatistics: WordsStatistics;
+  private wordsStatistics: WordsStatistics;
 
-  inARow: number;
+  private inARow: number;
 
-  inARowCurrent: number;
+  private inARowCurrent: number;
 
-  inARowHistory: number[];
+  private inARowHistory: number[];
 
-  learnedWordsCounterSprint: number;
+  private learnedWordsCounterSprint: number;
 
-  newWordsCounterSprint: number;
+  private newWordsCounterSprint: number;
 
-  right!: HTMLButtonElement;
+  private right!: HTMLButtonElement;
 
-  wrong!: HTMLButtonElement;
+  private wrong!: HTMLButtonElement;
 
-  pointsElement!: HTMLElement;
+  private pointsElement!: HTMLElement;
 
-  step1!: HTMLSpanElement;
+  private step1!: HTMLSpanElement;
 
-  step2!: HTMLSpanElement;
+  private step2!: HTMLSpanElement;
 
-  step3!: HTMLSpanElement;
+  private step3!: HTMLSpanElement;
 
-  multiplicatorElement!: HTMLElement;
+  private multiplicatorElement!: HTMLElement;
 
-  stepsElements!: HTMLSpanElement[];
+  private stepsElements!: HTMLSpanElement[];
 
-  prediction!: boolean;
+  private prediction!: boolean;
 
-  wordId!: string;
+  private wordId!: string;
 
-  word!: string;
+  private word!: string;
 
-  correctWordTranslate!: string;
+  private correctWordTranslate!: string;
 
-  accuracy!: number;
+  private accuracy!: number;
 
-  triggerModal!: HTMLButtonElement;
+  private triggerModal!: HTMLButtonElement;
 
-  soundIcons!: NodeListOf<SVGSVGElement>;
+  private soundIcons!: NodeListOf<SVGSVGElement>;
 
-  closeBtn!: HTMLButtonElement;
+  private closeBtn!: HTMLButtonElement;
 
-  totalCount!: number;
+  private totalCount!: number;
 
   constructor() {
     this.words = [];
@@ -98,7 +98,7 @@ export default class SprintService {
     this.newWordsCounterSprint = 0;
   }
 
-  launchSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  public launchSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
     this.eraseData();
     if (!Route.checkUrl('games')) {
       window.location.hash = 'games';
@@ -123,7 +123,7 @@ export default class SprintService {
     this.listenGame();
   }
 
-  finishSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  private finishSprint(words: WordsResponseSchema[] | PaginatedResult[]): void {
     if (!Route.checkUrl('games')) {
       return;
     }
@@ -149,12 +149,12 @@ export default class SprintService {
     this.triggerModal.dispatchEvent(new Event('click'));
   }
 
-  closeGame(): void {
+  private closeGame(): void {
     window.location.href = '#';
     window.location.href = '#games';
   }
 
-  eraseData(): void {
+  private eraseData(): void {
     this.words = [];
     this.steps = [];
     this.currentWordCounter = 0;
@@ -171,7 +171,7 @@ export default class SprintService {
     this.newWordsCounterSprint = 0;
   }
 
-  chooseTranslate(
+  private chooseTranslate(
     word: WordsResponseSchema | PaginatedResult
   ): {
     wordId: string;
@@ -204,7 +204,7 @@ export default class SprintService {
     };
   }
 
-  controlCurrentWord(): void {
+  private controlCurrentWord(): void {
     if (this.currentWordCounter < this.totalCount) {
       this.currentWordCounter += 1;
     } else {
@@ -213,12 +213,12 @@ export default class SprintService {
     }
   }
 
-  addPoints(): void {
+  private addPoints(): void {
     this.pointsValue += this.multiplicatorValue;
     this.pointsElement.innerText = `${this.pointsValue}`;
   }
 
-  setMultiplicator(action: '+' | '-'): void {
+  private setMultiplicator(action: '+' | '-'): void {
     if (action === '+') {
       this.inARowCurrent += 1;
       this.inARowHistory.push(this.inARowCurrent);
@@ -241,7 +241,7 @@ export default class SprintService {
     this.multiplicatorElement.innerText = `+ ${this.multiplicatorValue} points`;
   }
 
-  setSteps(): void {
+  private setSteps(): void {
     this.step1.style.backgroundColor = `#565e64`;
     this.step2.style.backgroundColor = `#565e64`;
     this.step3.style.backgroundColor = `#565e64`;
@@ -251,13 +251,13 @@ export default class SprintService {
     }
   }
 
-  setNextWord(): void {
+  private setNextWord(): void {
     const { wordId, newWord, newWordTranslate } = this.chooseTranslate(this.words[this.currentWordCounter]);
     view.gamesView.sprintView.createWord(wordId, newWord);
     view.gamesView.sprintView.createWordTranslate(wordId, newWordTranslate);
   }
 
-  async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
+  private async processUserStatistics(allWordsCounter: number, inARow: number, accuracy: number): Promise<void> {
     if (AuthService.checkUser()) {
       const userId: string = Credentials.getUserId();
       const currentDate: number = Date.now();
@@ -295,7 +295,7 @@ export default class SprintService {
     }
   }
 
-  createUserStatisticsObject(
+  private createUserStatisticsObject(
     currentDate: number,
     allWordsCounter: number,
     inARow: number,
@@ -330,7 +330,7 @@ export default class SprintService {
     return body;
   }
 
-  userStatisticsDaily(
+  private userStatisticsDaily(
     body: Statistics,
     currentDate: number,
     allWordsCounter: number,
@@ -370,7 +370,7 @@ export default class SprintService {
     return body;
   }
 
-  userStatisticsLong(
+  private userStatisticsLong(
     body: Statistics,
     currentDate: number,
     allWordsCounter: number,
@@ -401,7 +401,7 @@ export default class SprintService {
     return body;
   }
 
-  async processWordStatistics(): Promise<void> {
+  private async processWordStatistics(): Promise<void> {
     if (AuthService.checkUser()) {
       const result: WordsStatistic[] = Object.values(this.wordsStatistics);
       const userId: string = Credentials.getUserId();
@@ -439,7 +439,7 @@ export default class SprintService {
     }
   }
 
-  wordStatisticsLogicEngine(word: WordsStatistic): void {
+  private wordStatisticsLogicEngine(word: WordsStatistic): void {
     const minAttempts: boolean = word.correctAttemptsSession + word.incorrectAttemptsSession >= 3;
     let ratio: number = word.correctAttemptsSession / word.incorrectAttemptsSession;
     if (ratio === 0) {
@@ -474,7 +474,7 @@ export default class SprintService {
     }
   }
 
-  setWordStatistics(action: '+' | '-'): void {
+  private setWordStatistics(action: '+' | '-'): void {
     this.createWordStatisticsObject();
     if (action === '+') {
       this.wordsStatistics[this.word].correctAttempts += 1;
@@ -489,7 +489,7 @@ export default class SprintService {
     this.allWordsCounter = this.correctAnswers + this.mistakes;
   }
 
-  createWordStatisticsObject(): void {
+  private createWordStatisticsObject(): void {
     if (!AuthService.checkUser()) {
       Object.defineProperty(this.wordsStatistics, this.word, {
         value: {
@@ -530,7 +530,7 @@ export default class SprintService {
     }
   }
 
-  checkAnswer(event: Event): void {
+  private checkAnswer(event: Event): void {
     const { id } = event.target as HTMLButtonElement;
     if ((id.includes('right') && this.prediction === true) || (id.includes('wrong') && this.prediction === false)) {
       services.soundHelper.playGameSound('./assets/sounds/ok.wav');
@@ -548,14 +548,14 @@ export default class SprintService {
     this.setNextWord();
   }
 
-  checkForNonValidValues(value: number): number {
+  private checkForNonValidValues(value: number): number {
     if (Object.is(value, NaN) || Object.is(value, Infinity) || Object.is(value, -Infinity)) {
       return 0;
     }
     return value;
   }
 
-  playSound(event: Event): boolean {
+  private playSound(event: Event): boolean {
     let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
     if (elem instanceof SVGUseElement) {
       elem = elem.parentNode as SVGSVGElement;
@@ -580,13 +580,13 @@ export default class SprintService {
     return true;
   }
 
-  prepareFinalData(words: WordsResponseSchema[] | PaginatedResult[]): void {
+  private prepareFinalData(words: WordsResponseSchema[] | PaginatedResult[]): void {
     this.words = words;
     this.accuracy = Number(this.checkForNonValidValues((this.correctAnswers / this.allWordsCounter) * 100).toFixed(1));
     this.inARow = this.checkForNonValidValues(Math.max(...this.inARowHistory));
   }
 
-  controlKeyboard(event: KeyboardEvent): void {
+  private controlKeyboard(event: KeyboardEvent): void {
     const { code } = event;
     if (code === 'ArrowLeft') {
       this.right.dispatchEvent(new Event('click'));
@@ -596,7 +596,7 @@ export default class SprintService {
     }
   }
 
-  setItems(): void {
+  private setItems(): void {
     this.right = document.getElementById('btn-right') as HTMLButtonElement;
     this.wrong = document.getElementById('btn-wrong') as HTMLButtonElement;
     this.pointsElement = document.getElementById('points-sprint') as HTMLElement;
@@ -610,13 +610,13 @@ export default class SprintService {
     this.closeBtn = document.getElementById('btn-close') as HTMLButtonElement;
   }
 
-  listenGame(): void {
+  private listenGame(): void {
     this.right.addEventListener('click', this.checkAnswer.bind(this));
     this.wrong.addEventListener('click', this.checkAnswer.bind(this));
     document.addEventListener('keydown', this.controlKeyboard.bind(this));
   }
 
-  listenFinal(): void {
+  private listenFinal(): void {
     this.soundIcons.forEach((item: SVGSVGElement) => item.addEventListener('click', this.playSound.bind(this)));
     this.closeBtn.addEventListener('click', this.closeGame.bind(this));
   }

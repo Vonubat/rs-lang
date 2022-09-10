@@ -15,37 +15,37 @@ import { services } from '../services';
 import Credentials from './credentials';
 
 export default class AuthService {
-  checkParams: CheckApiParams;
+  private checkParams: CheckApiParams;
 
-  loginBtn!: HTMLButtonElement;
+  private loginBtn!: HTMLButtonElement;
 
-  signUpButton!: HTMLButtonElement;
+  private signUpButton!: HTMLButtonElement;
 
-  signInButton!: HTMLButtonElement;
+  private signInButton!: HTMLButtonElement;
 
-  errorMessageLogin!: HTMLSpanElement;
+  private errorMessageLogin!: HTMLSpanElement;
 
-  errorMessageRegistration!: HTMLSpanElement;
+  private errorMessageRegistration!: HTMLSpanElement;
 
-  closeModalLogin!: HTMLButtonElement;
+  private closeModalLogin!: HTMLButtonElement;
 
-  closeModalRegistration!: HTMLButtonElement;
+  private closeModalRegistration!: HTMLButtonElement;
 
-  emailLoginInput!: HTMLInputElement;
+  private emailLoginInput!: HTMLInputElement;
 
-  passwordLoginInput!: HTMLInputElement;
+  private passwordLoginInput!: HTMLInputElement;
 
-  nameRegistrationInput!: HTMLInputElement;
+  private nameRegistrationInput!: HTMLInputElement;
 
-  emailRegistrationInput!: HTMLInputElement;
+  private emailRegistrationInput!: HTMLInputElement;
 
-  passwordRegistrationInput!: HTMLInputElement;
+  private passwordRegistrationInput!: HTMLInputElement;
 
   constructor() {
     this.checkParams = new CheckApiParams();
   }
 
-  errorHandler(response: Response): false {
+  private errorHandler(response: Response): false {
     if (response.status === 422) {
       this.errorMessageRegistration.innerHTML = 'Name or email address is not valid';
       this.errorMessageRegistration.style.display = '';
@@ -66,7 +66,7 @@ export default class AuthService {
     return false;
   }
 
-  static checkUser(): boolean {
+  public static checkUser(): boolean {
     const userName: string | null = localStorage.getItem('userName');
     if (userName) {
       return true;
@@ -74,7 +74,7 @@ export default class AuthService {
     return false;
   }
 
-  async checkTokenExpiring(): Promise<void> {
+  private async checkTokenExpiring(): Promise<void> {
     if (AuthService.checkUser()) {
       const userId: string = Credentials.getUserId();
       const currentTime: number = Date.now();
@@ -92,7 +92,7 @@ export default class AuthService {
     }
   }
 
-  changeBtnState(): void {
+  private changeBtnState(): void {
     const icon: SVGUseElement = view.header.icon.firstChild as SVGUseElement;
     if (AuthService.checkUser()) {
       const email: string = Credentials.getEmail();
@@ -108,7 +108,7 @@ export default class AuthService {
     }
   }
 
-  logOut(): boolean {
+  private logOut(): boolean {
     const content: string = (this.loginBtn.childNodes[0] as Text).data;
     if (content.includes('Log Out')) {
       Credentials.delCredentials();
@@ -132,7 +132,7 @@ export default class AuthService {
     return false;
   }
 
-  async signIn(event: Event): Promise<boolean> {
+  private async signIn(event: Event): Promise<boolean> {
     try {
       this.errorMessageLogin.style.display = 'none';
 
@@ -166,7 +166,7 @@ export default class AuthService {
     }
   }
 
-  async signUp(event: Event): Promise<boolean> {
+  private async signUp(event: Event): Promise<boolean> {
     try {
       this.errorMessageRegistration.style.display = 'none';
 
@@ -206,7 +206,7 @@ export default class AuthService {
     }
   }
 
-  async updateCardsState(): Promise<void> {
+  private async updateCardsState(): Promise<void> {
     const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await services.textbookService.getWords(pageConfig);
     view.textbookView.drawCardsContainer(words, pageConfig);
@@ -215,7 +215,7 @@ export default class AuthService {
     services.textbookService.checkMaxStackOfWords();
   }
 
-  setModalWindowsItems(): void {
+  public setModalWindowsItems(): void {
     this.loginBtn = document.getElementById('login-btn') as HTMLButtonElement;
     this.signInButton = document.getElementById('sign-in') as HTMLButtonElement;
     this.signUpButton = document.getElementById('sign-up') as HTMLButtonElement;
@@ -230,7 +230,7 @@ export default class AuthService {
     this.passwordRegistrationInput = document.getElementById('password-registration-input') as HTMLInputElement;
   }
 
-  listenAuth(): void {
+  public listenAuth(): void {
     this.signInButton.addEventListener('click', this.signIn.bind(this));
     this.signUpButton.addEventListener('click', this.signUp.bind(this));
     this.loginBtn.addEventListener('click', this.logOut.bind(this));
