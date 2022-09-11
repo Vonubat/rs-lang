@@ -1,21 +1,70 @@
 .statistics {
   padding: 20px;
+
+  .card {
+    box-shadow: rgb(0 0 0 / 16%) 0 3px 6px, rgb(0 0 0 / 23%) 0 3px 6px;
+    border-radius: 1.5rem;
+  }
+
+  .today-accuracy {
+    flex-direction: column;
+  }
+  
+  .progress {
+    width: 100%;
+  }
+
+  .card-body {
+    text-align: center;
+    padding-bottom: 25px;
+  }
+
+  .card-title {
+    flex: auto;
+  }
 }
 
 .statistics__stats-per-day {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 25px;
+}
+
+.today-wrapper, .game-sprint-wrapper, .game-audiochallenge-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  justify-items: center;
+
+  .card {
+    width: 400px;
+
+    @media (max-width: 530px) {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .today-words-learned,
 .today-accuracy,
-.today-topRow,
+.topRow-wrapper,
 .today-newWords {
   display: flex;
   align-items: center;
   flex-direction: row;
   gap: 10px;
+  width: 100%;
+}
+
+.today-topRow {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .words-learned,
@@ -25,21 +74,26 @@
   font-size: 60px;
 }
 
+.topRow-wrapper {
+  display: block;
+}
+
 .stat-wrapper {
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-.today-title {
+.today-title, .game-title {
   text-align: center;
   font-size: 35px;
 }
 
-.card-body {
-  // display: flex;
-}
-
 .game-title {
   padding: 20px 20px;
+}
+
+.topInRow-svg {
+  width: 50px;
+  height: 50px;
 }

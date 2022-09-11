@@ -67,8 +67,18 @@ export default class Statistic {
   }
 
   private sectionTodayWordsLearned(data: Statistics | null) {
-    const section = this.htmlConstructor.div(['card', 'today-wrapper']);
-    const wordsLearned = this.htmlConstructor.div(['card-body', 'today-words-learned']);
+    const section = this.htmlConstructor.div(['today-wrapper']);
+    section.append(
+      this.wordsLearnedSection(data),
+      this.newWordsSection(data),
+      this.accuracySection(data),
+      this.topRowSection(data)
+    );
+    return section;
+  }
+
+  private wordsLearnedSection(data: Statistics | null) {
+    const wordsLearned = this.htmlConstructor.div(['card', 'card-body', 'today-words-learned']);
     const wordAmount = this.htmlConstructor.createHtmlElement('h2', ['words-learned']);
     if (data) {
       wordAmount.innerText = `${this.wordsDaily(data)}`;
@@ -80,7 +90,11 @@ export default class Statistic {
     subTitle.innerText = 'were learned';
     body.append(wordtitle, subTitle);
     wordsLearned.append(wordAmount, body);
-    const newWords = this.htmlConstructor.div(['card-body', 'today-newWords']);
+    return wordsLearned;
+  }
+
+  private newWordsSection(data: Statistics | null) {
+    const newWords = this.htmlConstructor.div(['card', 'card-body', 'today-newWords']);
     const newWordsAmount = this.htmlConstructor.createHtmlElement('h2', ['newWords-today-amount']);
     if (data) {
       newWordsAmount.innerText = `${this.newWordsDaily(data)}`;
@@ -88,24 +102,49 @@ export default class Statistic {
     const newWordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'newWords-today-title']);
     newWordsTitle.innerText = 'New words';
     newWords.append(newWordsAmount, newWordsTitle);
-    const accuracy = this.htmlConstructor.div(['card-body', 'today-accuracy']);
+    return newWords;
+  }
+
+  private accuracySection(data: Statistics | null) {
+    const accuracy = this.htmlConstructor.div(['card', 'card-body', 'today-accuracy']);
+    const div = this.htmlConstructor.div(['card-body']);
     const accuracyAmount = this.htmlConstructor.createHtmlElement('h2', ['accuracy-today-amount']);
-    if (data) {
-      accuracyAmount.innerText = this.accuracyDaily(data);
-    } else accuracyAmount.innerText = '0%';
+
     const accuracyTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'accuracy-today-title']);
     accuracyTitle.innerText = 'Accuracy';
-    accuracy.append(accuracyAmount, accuracyTitle);
-    const topRow = this.htmlConstructor.div(['card-body', 'today-topRow']);
+    div.append(accuracyAmount, accuracyTitle);
+    const accuracyProgress = this.htmlConstructor.div(['progress']);
+    const accuracyProgressBar = this.htmlConstructor.div(['progress-bar']);
+    accuracyProgressBar.setAttribute('role', 'progressbar');
+    accuracyProgressBar.setAttribute('aria-valuemin', '0');
+    accuracyProgressBar.setAttribute('aria-valuemax', '100');
+    if (data) {
+      const amount = this.accuracyDaily(data);
+      accuracyAmount.innerText = amount;
+      accuracyProgressBar.setAttribute('aria-valuenow', amount.slice(0, -1));
+      accuracyProgressBar.setAttribute('style', `width: ${amount}`);
+      accuracyProgressBar.innerText = amount;
+    } else {
+      accuracyAmount.innerText = '0%';
+    }
+    accuracyProgress.append(accuracyProgressBar);
+    accuracy.append(div, accuracyProgress);
+    return accuracy;
+  }
+
+  private topRowSection(data: Statistics | null) {
+    const topRow = this.htmlConstructor.div(['card', 'card-body', 'today-topRow']);
     const topRowAmount = this.htmlConstructor.createHtmlElement('h2', ['topRow-today-amount']);
+    const div = this.htmlConstructor.div(['topRow-wrapper']);
     if (data) {
       topRowAmount.innerText = `${this.topInRowDaily(data)}`;
     } else topRowAmount.innerText = '0';
     const topRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title', 'topRow-today-title']);
     topRowTitle.innerText = 'Top in a row';
-    topRow.append(topRowAmount, topRowTitle);
-    section.append(wordsLearned, newWords, accuracy, topRow);
-    return section;
+    const svg = this.htmlConstructor.svg('trophy-fill', ['topInRow-svg']);
+    div.append(topRowAmount, topRowTitle);
+    topRow.append(div, svg);
+    return topRow;
   }
 
   private newWordsDaily(data: Statistics) {
@@ -157,16 +196,33 @@ export default class Statistic {
     const section = this.htmlConstructor.div(['card', `game-${gameName.toLowerCase()}-learned`]);
     const title = this.htmlConstructor.createHtmlElement('h2', [`game-${gameName.toLowerCase()}-title`, 'game-title']);
     title.innerText = gameName;
-    const body = this.htmlConstructor.div(['card-body']);
-    const wordsWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
+    const body = this.htmlConstructor.div(['card-body', `game-${gameName.toLowerCase()}-wrapper`]);
+
+    body.append(
+      this.gameWordsDailySection(gameName, data),
+      this.gameNewWordsDailySection(gameName, data),
+      this.gameAccuracyDailySection(gameName, data),
+      this.gameTopInRowDailySection(gameName, data)
+    );
+    section.append(title, body);
+    return section;
+  }
+
+  private gameWordsDailySection(gameName: 'Sprint' | 'AudioChallenge', data: Statistics | null) {
+    const wordsWrapper = this.htmlConstructor.div(['card', 'card-body', 'stat-wrapper']);
     const wordsAmount = this.htmlConstructor.createHtmlElement('h3');
     if (data) {
       wordsAmount.innerText = `${this.gameWordsDaily(data, gameName)}`;
     } else wordsAmount.innerText = '0';
     const wordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
-    wordsTitle.innerText = 'Words';
+    wordsTitle.innerText = 'Words were learned';
+
     wordsWrapper.append(wordsAmount, wordsTitle);
-    const newWordsWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
+    return wordsWrapper;
+  }
+
+  private gameNewWordsDailySection(gameName: 'Sprint' | 'AudioChallenge', data: Statistics | null) {
+    const newWordsWrapper = this.htmlConstructor.div(['card', 'card-body', 'stat-wrapper']);
     const newWordsAmount = this.htmlConstructor.createHtmlElement('h3');
     if (data) {
       newWordsAmount.innerText = `${this.gameNewWordsDaily(data, gameName)}`;
@@ -174,26 +230,46 @@ export default class Statistic {
     const newWordsTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     newWordsTitle.innerText = 'New words';
     newWordsWrapper.append(newWordsAmount, newWordsTitle);
-    const accuracyWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
+    return newWordsWrapper;
+  }
+
+  private gameAccuracyDailySection(gameName: 'Sprint' | 'AudioChallenge', data: Statistics | null) {
+    const accuracyWrapper = this.htmlConstructor.div(['card', 'card-body', 'stat-wrapper']);
     const accuracyAmount = this.htmlConstructor.createHtmlElement('h3');
+    const div = this.htmlConstructor.div(['card-body']);
+
+    const accuracyProgress = this.htmlConstructor.div(['progress']);
+    const accuracyProgressBar = this.htmlConstructor.div(['progress-bar']);
+    accuracyProgressBar.setAttribute('role', 'progressbar');
+    accuracyProgressBar.setAttribute('aria-valuemin', '0');
+    accuracyProgressBar.setAttribute('aria-valuemax', '100');
+
     if (data) {
       const value = this.gameAccuracyDaily(data, gameName);
       accuracyAmount.innerText = value;
+      accuracyProgressBar.setAttribute('aria-valuenow', value.slice(0, -1));
+      accuracyProgressBar.setAttribute('style', `width: ${value}`);
+      accuracyProgressBar.innerText = value;
     } else accuracyAmount.innerText = '0%';
     const accuracyTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     accuracyTitle.innerText = 'Accuracy';
-    accuracyWrapper.append(accuracyAmount, accuracyTitle);
-    const inRowWrapper = this.htmlConstructor.div(['card-body', 'stat-wrapper']);
+    accuracyProgress.append(accuracyProgressBar);
+    div.append(accuracyAmount, accuracyTitle);
+    accuracyWrapper.append(div, accuracyProgress);
+    return accuracyWrapper;
+  }
+
+  private gameTopInRowDailySection(gameName: 'Sprint' | 'AudioChallenge', data: Statistics | null) {
+    const inRowWrapper = this.htmlConstructor.div(['card', 'card-body', 'stat-wrapper']);
     const inRowAmount = this.htmlConstructor.createHtmlElement('h3');
     if (data) {
       inRowAmount.innerText = `${this.gameTopInRowDaily(data, gameName)}`;
     } else inRowAmount.innerText = '0';
     const inRowTitle = this.htmlConstructor.createHtmlElement('h3', ['card-title']);
     inRowTitle.innerText = 'In a row';
-    inRowWrapper.append(inRowAmount, inRowTitle);
-    body.append(wordsWrapper, newWordsWrapper, accuracyWrapper, inRowWrapper);
-    section.append(title, body);
-    return section;
+    const svg = this.htmlConstructor.svg('trophy', ['game-topInRow-svg']);
+    inRowWrapper.append(inRowAmount, inRowTitle, svg);
+    return inRowWrapper;
   }
 
   private gameTopInRowDaily(data: Statistics, type: 'AudioChallenge' | 'Sprint'): number {

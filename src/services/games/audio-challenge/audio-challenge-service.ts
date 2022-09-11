@@ -110,6 +110,7 @@ export default class AudioChallengeService {
   private finishAudioChallenge(words: WordsResponseSchema[] | PaginatedResult[]): void {
     const page: HTMLElement = view.gamesView.games;
     services.soundHelper.playGameSound('./assets/sounds/congratulations.wav');
+    this.removeControlBtnListeners();
     this.prepareFinalData(words);
     this.processWordStatistics();
     this.processUserStatistics(this.allWordsCounter, this.inARow, this.accuracy);
@@ -631,9 +632,15 @@ export default class AudioChallengeService {
     this.soundIconMain.addEventListener('click', this.playSound.bind(this));
   }
 
+  boundControlKeyboard = this.controlKeyboard.bind(this);
+
   private listenControlBtn(): void {
     this.btnControl.addEventListener('click', this.checkBtnControl.bind(this));
-    document.addEventListener('keydown', this.controlKeyboard.bind(this));
+    document.addEventListener('keydown', this.boundControlKeyboard);
+  }
+
+  removeControlBtnListeners(): void {
+    document.removeEventListener('keydown', this.boundControlKeyboard);
   }
 
   private listenFinal(): void {
