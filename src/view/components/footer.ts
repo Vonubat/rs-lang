@@ -20,22 +20,22 @@ export default class Footer {
     this.footer.append(link, this.team, copyright);
   }
 
-  fillTeam(): void {
+  public fillTeam(): void {
     Constants.TEAM.forEach((member) => {
       const a = this.htmlConstructor.a(`${member.github}`, ['footer__team_member'], `${member.name}`);
       this.team.appendChild(a);
     });
   }
 
-  view(): HTMLElement {
+  public view(): HTMLElement {
     return this.footer;
   }
 
-  hideFooter() {
+  public hideFooter() {
     document.getElementsByClassName('footer')[0].classList.add('footer_hidden');
   }
 
-  showFooter() {
+  public showFooter() {
     document.getElementsByClassName('footer')[0].classList.remove('footer_hidden');
   }
 }

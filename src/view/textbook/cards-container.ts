@@ -3,7 +3,7 @@ import HTMLConstructor from '../components/constructor';
 import { view } from '../view';
 
 export default class TextbookCardsContainer extends HTMLConstructor {
-  createCardContainer(): HTMLElement {
+  private createCardContainer(): HTMLElement {
     let cardsContainer: HTMLElement | null = document.getElementById('cards-container');
 
     if (cardsContainer) {
@@ -19,7 +19,7 @@ export default class TextbookCardsContainer extends HTMLConstructor {
     return cardsContainer;
   }
 
-  generateCardContainer(words: WordsResponseSchema[] | PaginatedResult[]): HTMLElement {
+  public generateCardContainer(words: WordsResponseSchema[] | PaginatedResult[]): HTMLElement {
     const cardsContainer: HTMLElement = this.createCardContainer();
     cardsContainer.innerHTML = '';
 

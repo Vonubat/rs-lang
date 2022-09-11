@@ -49,7 +49,7 @@ export default class Statistic {
     return fragment;
   }
 
-  async drawPage(): Promise<void> {
+  public async drawPage(): Promise<void> {
     const main: HTMLElement | null = document.getElementById(this.mainId);
     let data: Statistics | Response | null = await services.statisticsService.getStatisticsData();
     if (data instanceof Response) {

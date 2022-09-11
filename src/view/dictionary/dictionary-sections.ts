@@ -1,7 +1,7 @@
 import HTMLConstructor from '../components/constructor';
 
 export default class DictionarySections extends HTMLConstructor {
-  createSectionsWordsWrapper(): HTMLElement {
+  public createSectionsWordsWrapper(): HTMLElement {
     const sectionWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
       'justify-content-center',
@@ -16,7 +16,7 @@ export default class DictionarySections extends HTMLConstructor {
     return sectionWrapper;
   }
 
-  createSectionDifficultWords(): HTMLElement {
+  private createSectionDifficultWords(): HTMLElement {
     return this.createHtmlElement(
       'button',
       ['btn', 'btn-danger', 'btn-lg', 'shadow', 'section-difficult-words'],
@@ -26,7 +26,7 @@ export default class DictionarySections extends HTMLConstructor {
     );
   }
 
-  createSectionLearnedWords(): HTMLElement {
+  private createSectionLearnedWords(): HTMLElement {
     return this.createHtmlElement(
       'button',
       ['btn', 'btn-success', 'btn-lg', 'shadow', 'section-learned-words'],

@@ -11,46 +11,86 @@ import GamesView from './games/games-view';
 import Statistics from './statistics/statistics-view';
 
 export class View {
-  htmlConstructor: HTMLConstructor;
+  private _htmlConstructor: HTMLConstructor;
 
-  menu: Menu;
+  public get htmlConstructor(): HTMLConstructor {
+    return this._htmlConstructor;
+  }
 
-  header: Header;
+  private _menu: Menu;
 
-  footer: Footer;
+  public get menu(): Menu {
+    return this._menu;
+  }
 
-  mainView: MainView;
+  private _header: Header;
 
-  textbookView: TextbookView;
+  public get header(): Header {
+    return this._header;
+  }
 
-  loading: Loading;
+  private _footer: Footer;
 
-  dictionaryView: DictionaryView;
+  public get footer(): Footer {
+    return this._footer;
+  }
 
-  gamesView: GamesView;
+  private _mainView: MainView;
 
-  statistics: Statistics;
+  public get mainView(): MainView {
+    return this._mainView;
+  }
+
+  private _textbookView: TextbookView;
+
+  public get textbookView(): TextbookView {
+    return this._textbookView;
+  }
+
+  private _loading: Loading;
+
+  public get loading(): Loading {
+    return this._loading;
+  }
+
+  private _dictionaryView: DictionaryView;
+
+  public get dictionaryView(): DictionaryView {
+    return this._dictionaryView;
+  }
+
+  private _gamesView: GamesView;
+
+  public get gamesView(): GamesView {
+    return this._gamesView;
+  }
+
+  private _statistics: Statistics;
+
+  public get statistics(): Statistics {
+    return this._statistics;
+  }
 
   constructor() {
-    this.htmlConstructor = new HTMLConstructor();
-    this.menu = new Menu();
-    this.header = new Header();
-    this.footer = new Footer();
-    this.mainView = new MainView();
-    this.textbookView = new TextbookView();
-    this.dictionaryView = new DictionaryView();
-    this.gamesView = new GamesView();
-    this.loading = new Loading();
-    this.statistics = new Statistics();
+    this._htmlConstructor = new HTMLConstructor();
+    this._menu = new Menu();
+    this._header = new Header();
+    this._footer = new Footer();
+    this._mainView = new MainView();
+    this._textbookView = new TextbookView();
+    this._dictionaryView = new DictionaryView();
+    this._gamesView = new GamesView();
+    this._loading = new Loading();
+    this._statistics = new Statistics();
   }
 
   drawHeader(): DocumentFragment {
-    const headerElement: DocumentFragment = this.header.view();
+    const headerElement: DocumentFragment = this._header.view();
     return headerElement;
   }
 
   drawFooter(): HTMLElement {
-    const footerElement: HTMLElement = this.footer.view();
+    const footerElement: HTMLElement = this._footer.view();
     return footerElement;
   }
 
@@ -68,18 +108,18 @@ export class View {
 
   async drawStatistics() {
     // throw new Error('Method not implemented.');
-    await this.statistics.drawPage();
+    await this._statistics.drawPage();
   }
 
   drawMainPage(): void {
     const body: HTMLElement = document.getElementById('body') as HTMLElement;
-    const appWrapper: HTMLDivElement = this.htmlConstructor.div(['app-wrapper', 'd-flex', 'flex-nowrap']);
+    const appWrapper: HTMLDivElement = this._htmlConstructor.div(['app-wrapper', 'd-flex', 'flex-nowrap']);
     body.append(appWrapper);
 
-    const menuElement: HTMLDivElement = this.menu.getMenu();
-    const appElement: HTMLDivElement = this.htmlConstructor.div(['app']);
-    const mainElement: HTMLElement = this.htmlConstructor.createHtmlElement('main', undefined, 'main');
-    const mainContent: DocumentFragment = this.mainView.view();
+    const menuElement: HTMLDivElement = this._menu.getMenu();
+    const appElement: HTMLDivElement = this._htmlConstructor.div(['app']);
+    const mainElement: HTMLElement = this._htmlConstructor.createHtmlElement('main', undefined, 'main');
+    const mainContent: DocumentFragment = this._mainView.view();
     mainElement.append(mainContent);
 
     const footerElement: HTMLElement = this.drawFooter();

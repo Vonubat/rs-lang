@@ -2,7 +2,7 @@ import { WordsStatistic, WordsStatistics } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 
 export default class GamesResults extends HTMLConstructor {
-  createTriggerModal(): HTMLElement {
+  private createTriggerModal(): HTMLElement {
     const classList: string[] = ['btn', 'btn-primary', 'visually-hidden'];
     const triggerModal: HTMLElement = this.createHtmlElement('buttom', classList, `trigger-modal`, [
       ['data-bs-toggle', 'modal'],
@@ -11,7 +11,7 @@ export default class GamesResults extends HTMLConstructor {
     return triggerModal;
   }
 
-  createModal(): HTMLElement {
+  private createModal(): HTMLElement {
     const classList: string[] = ['modal', 'fade'];
     const modal: HTMLElement = this.createHtmlElement('div', classList, `modal`, [
       ['data-bs-backdrop', 'static'],
@@ -22,31 +22,31 @@ export default class GamesResults extends HTMLConstructor {
     return modal;
   }
 
-  createModalDialog(): HTMLElement {
+  private createModalDialog(): HTMLElement {
     const classList: string[] = ['modal-dialog', 'modal-dialog-centered', 'modal-dialog-scrollable'];
     const modalDialog: HTMLElement = this.createHtmlElement('div', classList, `modal-dialog`);
     return modalDialog;
   }
 
-  createModalContent(): HTMLElement {
+  private createModalContent(): HTMLElement {
     const classList: string[] = ['modal-content'];
     const modalContent: HTMLElement = this.createHtmlElement('div', classList, `modal-content`);
     return modalContent;
   }
 
-  createModalHeader(): HTMLElement {
+  private createModalHeader(): HTMLElement {
     const classList: string[] = ['modal-header'];
     const modalHeader: HTMLElement = this.createHtmlElement('div', classList, `modal-header`);
     return modalHeader;
   }
 
-  createModalTitle(): HTMLElement {
+  private createModalTitle(): HTMLElement {
     const classList: string[] = ['modal-title'];
     const modalTitle: HTMLElement = this.createHtmlElement('h3', classList, `modal-title`, undefined, 'Results');
     return modalTitle;
   }
 
-  createBtnClose(): HTMLElement {
+  private createBtnClose(): HTMLElement {
     const classList: string[] = ['btn-close'];
     const btnClose: HTMLElement = this.createHtmlElement('button', classList, `btn-close`, [
       ['type', 'button'],
@@ -55,31 +55,31 @@ export default class GamesResults extends HTMLConstructor {
     return btnClose;
   }
 
-  createModalBody(): HTMLElement {
+  private createModalBody(): HTMLElement {
     const classList: string[] = ['modal-body', 'd-flex', 'flex-column'];
     const btnClose: HTMLElement = this.createHtmlElement('div', classList, `modal-body`);
     return btnClose;
   }
 
-  createPointsElement(points: number): HTMLElement {
+  private createPointsElement(points: number): HTMLElement {
     const pointsElement: HTMLElement = this.createHtmlElement('div', undefined, `points`, undefined, `Points: `);
     pointsElement.append(this.createBadge(points, 'text-bg-info'));
     return pointsElement;
   }
 
-  createAccuracyElement(accuracy: number): HTMLElement {
+  private createAccuracyElement(accuracy: number): HTMLElement {
     const accuracyElement: HTMLElement = this.createHtmlElement('div', undefined, `accuracy`, undefined, `Accuracy: `);
     accuracyElement.append(this.createBadge(accuracy, 'text-bg-warning'));
     return accuracyElement;
   }
 
-  createInARowElement(inARow: number): HTMLElement {
+  private createInARowElement(inARow: number): HTMLElement {
     const inARowElement: HTMLElement = this.createHtmlElement('div', undefined, `in-a-row`, undefined, `In a row: `);
     inARowElement.append(this.createBadge(inARow, 'text-bg-secondary'));
     return inARowElement;
   }
 
-  createRepeatedWordsElement(repeatedWords: number): HTMLElement {
+  private createRepeatedWordsElement(repeatedWords: number): HTMLElement {
     const repeatedWordsElement: HTMLElement = this.createHtmlElement(
       'div',
       undefined,
@@ -91,7 +91,7 @@ export default class GamesResults extends HTMLConstructor {
     return repeatedWordsElement;
   }
 
-  createCorrectAnswersElement(correctAnswers: number): HTMLElement {
+  private createCorrectAnswersElement(correctAnswers: number): HTMLElement {
     const correctAnswersElement: HTMLElement = this.createHtmlElement(
       'div',
       undefined,
@@ -103,13 +103,13 @@ export default class GamesResults extends HTMLConstructor {
     return correctAnswersElement;
   }
 
-  createMistakesElement(mistakes: number): HTMLElement {
+  private createMistakesElement(mistakes: number): HTMLElement {
     const mistakesElement: HTMLElement = this.createHtmlElement('div', undefined, `mistakes`, undefined, `Mistakes: `);
     mistakesElement.append(this.createBadge(mistakes, 'text-bg-danger'));
     return mistakesElement;
   }
 
-  createBadge(text: string | number, colorClass: string): HTMLElement {
+  private createBadge(text: string | number, colorClass: string): HTMLElement {
     const badge: HTMLElement = this.createHtmlElement(
       'span',
       ['badge', `${colorClass}`],
@@ -120,7 +120,7 @@ export default class GamesResults extends HTMLConstructor {
     return badge;
   }
 
-  createIcon(wordId: string, audio: string): SVGSVGElement {
+  private createIcon(wordId: string, audio: string): SVGSVGElement {
     return this.svg('volume-up-fill', ['sound-icon'], `sound-icon-${wordId}`, [['data-audio', `${audio}`]]);
   }
 
@@ -144,7 +144,7 @@ export default class GamesResults extends HTMLConstructor {
     return wordContainer;
   }
 
-  createIncorrectWords(wordsStatistics: WordsStatistics): HTMLElement {
+  private createIncorrectWords(wordsStatistics: WordsStatistics): HTMLElement {
     const incorrectWordsWrapper: HTMLElement = this.createHtmlElement('div', ['d-flex', 'flex-column']);
 
     const words: WordsStatistic[] = Object.values(wordsStatistics);
@@ -157,7 +157,7 @@ export default class GamesResults extends HTMLConstructor {
     return incorrectWordsWrapper;
   }
 
-  createCorrectWords(wordsStatistics: WordsStatistics): HTMLElement {
+  private createCorrectWords(wordsStatistics: WordsStatistics): HTMLElement {
     const correctWordsWrapper: HTMLElement = this.createHtmlElement('div', ['d-flex', 'flex-column']);
 
     const words: WordsStatistic[] = Object.values(wordsStatistics);
@@ -170,7 +170,7 @@ export default class GamesResults extends HTMLConstructor {
     return correctWordsWrapper;
   }
 
-  generateResults(
+  public generateResults(
     wordsStatistics: WordsStatistics,
     points: number,
     accuracy: number,

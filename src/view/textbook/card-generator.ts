@@ -3,7 +3,7 @@ import { PaginatedResult, TypeOfWordIsPaginatedResult, WordsResponseSchema } fro
 import HTMLConstructor from '../components/constructor';
 
 export default class TextbookCardGenerator extends HTMLConstructor {
-  createCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const classList: string[] = ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'];
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
 
@@ -21,7 +21,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     return card;
   }
 
-  createImg(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createImg(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement('img', ['img-fluid', 'rounded', 'image'], `image-${wordId}`, [
       ['alt', `image-${word.word}`],
@@ -29,7 +29,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     ]);
   }
 
-  createCardBody(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createCardBody(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'div',
@@ -38,17 +38,17 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     );
   }
 
-  createWordContainer(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createWordContainer(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement('h5', ['card-title', 'mb-3', 'word-container'], `word-container-${wordId}`);
   }
 
-  createWord(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createWord(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement('span', ['word'], `word-${wordId}`, undefined, `${word.word} `);
   }
 
-  createTranscription(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createTranscription(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'span',
@@ -59,7 +59,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     );
   }
 
-  createSoundIcon(word: WordsResponseSchema | PaginatedResult): SVGSVGElement {
+  private createSoundIcon(word: WordsResponseSchema | PaginatedResult): SVGSVGElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.svg('volume-up-fill', ['sound-icon'], `sound-icon-${wordId}`, [
       ['data-audio', `${word.audio}`],
@@ -68,7 +68,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     ]);
   }
 
-  createWordTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createWordTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'small',
@@ -79,7 +79,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     );
   }
 
-  createTextMeaning(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createTextMeaning(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'p',
@@ -90,7 +90,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     );
   }
 
-  createTextMeaningTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createTextMeaningTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'small',
@@ -101,7 +101,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     );
   }
 
-  createTextExample(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createTextExample(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'p',
@@ -112,7 +112,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     );
   }
 
-  createTextExampleTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  private createTextExampleTranslate(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const wordId: string = TypeOfWordIsPaginatedResult(word) ? word._id : word.id;
     return this.createHtmlElement(
       'small',
@@ -123,7 +123,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     );
   }
 
-  generateCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
+  public generateCard(word: WordsResponseSchema | PaginatedResult): HTMLElement {
     const card: HTMLElement = this.createCard(word);
     const img: HTMLElement = this.createImg(word);
     const cardBody: HTMLElement = this.createCardBody(word);
@@ -150,7 +150,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     return card;
   }
 
-  createControls(word: PaginatedResult): HTMLElement {
+  private createControls(word: PaginatedResult): HTMLElement {
     const wordId: string = word._id;
     const controlsWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
@@ -179,7 +179,7 @@ export default class TextbookCardGenerator extends HTMLConstructor {
     return controlsWrapper;
   }
 
-  createBadges(word: PaginatedResult): HTMLElement {
+  private createBadges(word: PaginatedResult): HTMLElement {
     const wordId: string = word._id;
     const badgesWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',

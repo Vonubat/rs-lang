@@ -1,7 +1,7 @@
 import HTMLConstructor from './constructor';
 
 export default class NotFound extends HTMLConstructor {
-  notFound() {
+  public notFound() {
     const fragment = document.createDocumentFragment();
     const divWrapper = this.div(['notfound-wrapper']);
     const svg = this.svg('emoji-frown', ['notfound-svg']);

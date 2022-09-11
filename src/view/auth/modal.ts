@@ -1,7 +1,7 @@
 import HTMLConstructor from '../components/constructor';
 
 export default class Modal extends HTMLConstructor {
-  modal(typeofModal: 'Login' | 'Registration'): DocumentFragment {
+  public modal(typeofModal: 'Login' | 'Registration'): DocumentFragment {
     const fragment: DocumentFragment = document.createDocumentFragment();
     const modal: HTMLElement = this.createHtmlElement(
       'div',

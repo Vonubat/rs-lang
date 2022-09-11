@@ -1,21 +1,21 @@
 import HTMLConstructor from '../components/constructor';
 
 export default class GamesCards extends HTMLConstructor {
-  sprintCardText: string;
+  private _sprintCardText: string;
 
-  audioChallengeCardText: string;
+  private _audioChallengeCardText: string;
 
-  miniCardsWrapper!: HTMLElement;
+  private _miniCardsWrapper!: HTMLElement;
 
   constructor() {
     super();
-    this.sprintCardText =
+    this._sprintCardText =
       'Check how much points you can get in one minute, making educated guesses about what is right and what is wrong.';
-    this.audioChallengeCardText =
+    this._audioChallengeCardText =
       'Check your listening skills, trying to pick the right meaning after hearing a word. Be careful, as you just have one guess.';
   }
 
-  createCardsWrapper(page: 'dictionary' | 'textbook' | 'minigames'): HTMLElement {
+  private createCardsWrapper(page: 'dictionary' | 'textbook' | 'minigames'): HTMLElement {
     const classList: string[] = ['d-flex', 'flex-wrap', 'justify-content-center', 'align-items-center', 'text-center'];
 
     if (page !== 'minigames') {
@@ -27,7 +27,10 @@ export default class GamesCards extends HTMLConstructor {
     return cardsWrapper;
   }
 
-  createCard(typeOfCard: 'sprint' | 'audio-challenge', page: 'dictionary' | 'textbook' | 'minigames'): HTMLElement {
+  private createCard(
+    typeOfCard: 'sprint' | 'audio-challenge',
+    page: 'dictionary' | 'textbook' | 'minigames'
+  ): HTMLElement {
     const classList: string[] = [
       'card',
       'rounded',
@@ -50,7 +53,7 @@ export default class GamesCards extends HTMLConstructor {
     return card;
   }
 
-  createSvg(
+  private createSvg(
     boxWidth: number,
     boxHeight: number,
     typeOfIcon: string,
@@ -68,7 +71,10 @@ export default class GamesCards extends HTMLConstructor {
     return svg;
   }
 
-  createCardBody(typeOfCard: 'sprint' | 'audio-challenge', page: 'dictionary' | 'textbook' | 'minigames'): HTMLElement {
+  private createCardBody(
+    typeOfCard: 'sprint' | 'audio-challenge',
+    page: 'dictionary' | 'textbook' | 'minigames'
+  ): HTMLElement {
     const classList: string[] = [`card-body-${typeOfCard}`];
     if (page === 'minigames') {
       classList.push('card-body');
@@ -77,7 +83,7 @@ export default class GamesCards extends HTMLConstructor {
     return cardBody;
   }
 
-  createCardTitle(
+  private createCardTitle(
     typeOfCard: 'sprint' | 'audio-challenge',
     page: 'dictionary' | 'textbook' | 'minigames'
   ): HTMLElement {
@@ -91,8 +97,8 @@ export default class GamesCards extends HTMLConstructor {
     return cardTitle;
   }
 
-  createCardText(typeOfCard: 'sprint' | 'audio-challenge'): HTMLElement {
-    const innerHtml = typeOfCard === 'sprint' ? this.sprintCardText : this.audioChallengeCardText;
+  private createCardText(typeOfCard: 'sprint' | 'audio-challenge'): HTMLElement {
+    const innerHtml = typeOfCard === 'sprint' ? this._sprintCardText : this._audioChallengeCardText;
     const cardText: HTMLElement = this.createHtmlElement(
       'p',
       ['card-text', `card-text-${typeOfCard}`],
@@ -103,7 +109,7 @@ export default class GamesCards extends HTMLConstructor {
     return cardText;
   }
 
-  generateSprintCard(): HTMLElement {
+  private generateSprintCard(): HTMLElement {
     const sprintCard: HTMLElement = this.createCard('sprint', 'minigames');
     const sprintSvg: SVGSVGElement = this.createSvg(85, 85, 'speedometer2', 'sprint');
     const sprintCardBody: HTMLElement = this.createCardBody('sprint', 'minigames');
@@ -114,7 +120,7 @@ export default class GamesCards extends HTMLConstructor {
     return sprintCard;
   }
 
-  generateAudioChallengeCard(): HTMLElement {
+  private generateAudioChallengeCard(): HTMLElement {
     const audioChallengeCard: HTMLElement = this.createCard('audio-challenge', 'minigames');
     const audioChallengeSvg: SVGSVGElement = this.createSvg(85, 85, 'file-earmark-music', 'audio-challenge');
     const audioChallengeCardBody: HTMLElement = this.createCardBody('audio-challenge', 'minigames');
@@ -125,7 +131,7 @@ export default class GamesCards extends HTMLConstructor {
     return audioChallengeCard;
   }
 
-  generateCards(): HTMLElement {
+  public generateCards(): HTMLElement {
     const cardsWrapper: HTMLElement = this.createCardsWrapper('minigames');
     const sprintCard: HTMLElement = this.generateSprintCard();
     const audioChallengeCard: HTMLElement = this.generateAudioChallengeCard();
@@ -133,7 +139,7 @@ export default class GamesCards extends HTMLConstructor {
     return cardsWrapper;
   }
 
-  generateMiniSprintCard(page: 'dictionary' | 'textbook'): HTMLElement {
+  private generateMiniSprintCard(page: 'dictionary' | 'textbook'): HTMLElement {
     const miniSprintCard: HTMLElement = this.createCard('sprint', page);
     const miniSprintSvg: SVGSVGElement = this.createSvg(32, 32, 'speedometer2', 'sprint');
     const miniSprintCardBody: HTMLElement = this.createCardBody('sprint', page);
@@ -143,7 +149,7 @@ export default class GamesCards extends HTMLConstructor {
     return miniSprintCard;
   }
 
-  generateMiniAudioChallengeCard(page: 'dictionary' | 'textbook'): HTMLElement {
+  private generateMiniAudioChallengeCard(page: 'dictionary' | 'textbook'): HTMLElement {
     const miniAudioChallengeCard: HTMLElement = this.createCard('audio-challenge', page);
     const miniAudioChallengeSprintSvg: SVGSVGElement = this.createSvg(32, 32, 'file-earmark-music', 'audio-challenge');
     const miniAudioChallengeCardBody: HTMLElement = this.createCardBody('audio-challenge', page);
@@ -153,13 +159,13 @@ export default class GamesCards extends HTMLConstructor {
     return miniAudioChallengeCard;
   }
 
-  generateMiniCards(page: 'dictionary' | 'textbook'): HTMLElement {
+  public generateMiniCards(page: 'dictionary' | 'textbook'): HTMLElement {
     const miniCardsWrapper: HTMLElement = this.createCardsWrapper(page);
     const miniSprintCard: HTMLElement = this.generateMiniSprintCard(page);
     const miniAudioChallengeCard: HTMLElement = this.generateMiniAudioChallengeCard(page);
     miniCardsWrapper.append(miniSprintCard, miniAudioChallengeCard);
 
-    this.miniCardsWrapper = miniCardsWrapper;
+    this._miniCardsWrapper = miniCardsWrapper;
 
     return miniCardsWrapper;
   }

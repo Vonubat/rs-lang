@@ -4,7 +4,7 @@ import Utils from '../../utilities/utils';
 import HTMLConstructor from '../components/constructor';
 
 export default class GamesLevels extends HTMLConstructor {
-  createWrapper(game: 'sprint' | 'audio-challenge'): HTMLElement {
+  private createWrapper(game: 'sprint' | 'audio-challenge'): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-column',
@@ -17,19 +17,19 @@ export default class GamesLevels extends HTMLConstructor {
     return cardsWrapper;
   }
 
-  createName(game: 'sprint' | 'audio-challenge'): HTMLElement {
+  private createName(game: 'sprint' | 'audio-challenge'): HTMLElement {
     const classList: string[] = [];
     const name: HTMLElement = this.createHtmlElement('h2', classList, `${Utils.capitalizeFirstLetter(game)}`);
     return name;
   }
 
-  createText(): HTMLElement {
+  private createText(): HTMLElement {
     const classList: string[] = ['text-muted'];
     const text: HTMLElement = this.createHtmlElement('h4', classList, undefined, undefined, `Select the Level`);
     return text;
   }
 
-  createLevelsContainer(game: 'sprint' | 'audio-challenge'): HTMLElement {
+  private createLevelsContainer(game: 'sprint' | 'audio-challenge'): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-row',
@@ -46,14 +46,14 @@ export default class GamesLevels extends HTMLConstructor {
     return levelsContainer;
   }
 
-  createCircle(color: Color, i: number): HTMLElement {
+  private createCircle(color: Color, i: number): HTMLElement {
     const classList: string[] = ['btn', `level`];
     const circle: HTMLElement = this.createHtmlElement('button', classList, `level-${i}`, [['type', 'button']], `${i}`);
     circle.style.backgroundColor = color;
     return circle;
   }
 
-  createBackBtn(): HTMLElement {
+  private createBackBtn(): HTMLElement {
     const classList: string[] = ['btn', 'btn-primary', `back-btn-to-games`];
     const backBtn: HTMLElement = this.createHtmlElement(
       'button',
@@ -65,7 +65,7 @@ export default class GamesLevels extends HTMLConstructor {
     return backBtn;
   }
 
-  generateGamesLevels(game: 'sprint' | 'audio-challenge'): HTMLElement {
+  public generateGamesLevels(game: 'sprint' | 'audio-challenge'): HTMLElement {
     const wrapper: HTMLElement = this.createWrapper(game);
     const name: HTMLElement = this.createName(game);
     const text: HTMLElement = this.createText();

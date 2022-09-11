@@ -4,48 +4,76 @@ import DictionaryCardsContainer from './cards-container';
 import DictionarySections from './dictionary-sections';
 
 export default class DictionaryView {
-  cardsContainer: DictionaryCardsContainer;
+  private _cardsContainer: DictionaryCardsContainer;
 
-  dictionarySections: DictionarySections;
+  private _dictionarySections: DictionarySections;
 
-  cardsContainerInstance!: HTMLElement;
+  private _cardsContainerInstance!: HTMLElement;
 
-  dictionarySectionsInstance!: HTMLElement;
+  private _dictionarySectionsInstance!: HTMLElement;
 
-  paginationTopInstance!: HTMLElement;
+  private _paginationTopInstance!: HTMLElement;
 
-  paginationBottomInstance!: HTMLElement;
+  private _paginationBottomInstance!: HTMLElement;
 
-  dictionary!: HTMLElement;
+  private _dictionary!: HTMLElement;
 
   constructor() {
-    this.cardsContainer = new DictionaryCardsContainer();
-    this.dictionarySections = new DictionarySections();
+    this._cardsContainer = new DictionaryCardsContainer();
+    this._dictionarySections = new DictionarySections();
+  }
+
+  public get cardsContainer(): DictionaryCardsContainer {
+    return this._cardsContainer;
+  }
+
+  public get dictionarySections(): DictionarySections {
+    return this._dictionarySections;
+  }
+
+  public get cardsContainerInstance(): HTMLElement {
+    return this._cardsContainerInstance;
+  }
+
+  public get dictionarySectionsInstance(): HTMLElement {
+    return this._dictionarySectionsInstance;
+  }
+
+  public get paginationTopInstance(): HTMLElement {
+    return this._paginationTopInstance;
+  }
+
+  public get paginationBottomInstance(): HTMLElement {
+    return this._paginationBottomInstance;
+  }
+
+  public get dictionary(): HTMLElement {
+    return this._dictionary;
   }
 
   drawPage(words: PaginatedResult[]): void {
-    this.dictionary = document.getElementById('main') as HTMLElement;
+    this._dictionary = document.getElementById('main') as HTMLElement;
 
-    this.dictionarySectionsInstance = this.dictionarySections.createSectionsWordsWrapper();
+    this._dictionarySectionsInstance = this.dictionarySections.createSectionsWordsWrapper();
 
     if (!words.length) {
-      this.cardsContainerInstance = this.cardsContainer.generateEmptyCardContainer();
+      this._cardsContainerInstance = this._cardsContainer.generateEmptyCardContainer();
     } else {
-      this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+      this._cardsContainerInstance = this._cardsContainer.generateCardContainer(words);
     }
 
     this.dictionary.append(
       view.gamesView.drawMiniCards('dictionary'),
-      this.dictionarySectionsInstance,
-      this.cardsContainerInstance
+      this._dictionarySectionsInstance,
+      this._cardsContainerInstance
     );
   }
 
   drawCardsContainer(words: PaginatedResult[]): void {
     if (!words.length) {
-      this.cardsContainerInstance = this.cardsContainer.generateEmptyCardContainer();
+      this._cardsContainerInstance = this._cardsContainer.generateEmptyCardContainer();
     } else {
-      this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+      this._cardsContainerInstance = this._cardsContainer.generateCardContainer(words);
     }
 
     this.dictionary.append(this.cardsContainerInstance);

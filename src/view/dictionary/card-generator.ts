@@ -3,7 +3,7 @@ import { PaginatedResult } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 
 export default class DictionaryCardGenerator extends HTMLConstructor {
-  createCard(word: PaginatedResult): HTMLElement {
+  private createCard(word: PaginatedResult): HTMLElement {
     const classList: string[] = ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2', 'dictionary-card'];
 
     if (word.userWord?.difficulty === 'hard') {
@@ -18,14 +18,14 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     return card;
   }
 
-  createImg(word: PaginatedResult): HTMLElement {
+  private createImg(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement('img', ['img-fluid', 'rounded', 'image'], `image-${word._id}`, [
       ['alt', `image-${word.word}`],
       ['src', `${Constants.BASE_URL}/${word.image}`],
     ]);
   }
 
-  createCardBody(word: PaginatedResult): HTMLElement {
+  private createCardBody(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement(
       'div',
       ['d-flex', 'flex-column', 'justify-content-between', 'card-body'],
@@ -33,15 +33,15 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     );
   }
 
-  createWordContainer(word: PaginatedResult): HTMLElement {
+  private createWordContainer(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement('h5', ['card-title', 'mb-3', 'word-container'], `word-container-${word._id}`);
   }
 
-  createWord(word: PaginatedResult): HTMLElement {
+  private createWord(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement('span', ['word'], `word-${word._id}`, undefined, `${word.word} `);
   }
 
-  createTranscription(word: PaginatedResult): HTMLElement {
+  private createTranscription(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement(
       'span',
       ['transcription'],
@@ -51,7 +51,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     );
   }
 
-  createSoundIcon(word: PaginatedResult): SVGSVGElement {
+  private createSoundIcon(word: PaginatedResult): SVGSVGElement {
     return this.svg('volume-up-fill', ['sound-icon'], `sound-icon-${word._id}`, [
       ['data-audio', `${word.audio}`],
       ['data-audio-meaning', `${word.audioMeaning}`],
@@ -59,7 +59,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     ]);
   }
 
-  createWordTranslate(word: PaginatedResult): HTMLElement {
+  private createWordTranslate(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement(
       'small',
       ['text-muted', 'word-translate'],
@@ -69,7 +69,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     );
   }
 
-  createTextMeaning(word: PaginatedResult): HTMLElement {
+  private createTextMeaning(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement(
       'p',
       ['card-text', 'mb-3', 'rounded', 'shadow', 'text-meaning'],
@@ -79,7 +79,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     );
   }
 
-  createTextMeaningTranslate(word: PaginatedResult): HTMLElement {
+  private createTextMeaningTranslate(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement(
       'small',
       ['text-muted', 'text-meaning-translate'],
@@ -89,7 +89,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     );
   }
 
-  createTextExample(word: PaginatedResult): HTMLElement {
+  private createTextExample(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement(
       'p',
       ['card-text', 'mb-3', 'rounded', 'shadow', 'text-example'],
@@ -99,7 +99,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     );
   }
 
-  createTextExampleTranslate(word: PaginatedResult): HTMLElement {
+  private createTextExampleTranslate(word: PaginatedResult): HTMLElement {
     return this.createHtmlElement(
       'small',
       ['text-muted', 'text-example-translate'],
@@ -109,7 +109,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     );
   }
 
-  generateCard(word: PaginatedResult): HTMLElement {
+  public generateCard(word: PaginatedResult): HTMLElement {
     const card: HTMLElement = this.createCard(word);
     const img: HTMLElement = this.createImg(word);
     const cardBody: HTMLElement = this.createCardBody(word);
@@ -132,7 +132,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     return card;
   }
 
-  createControls(word: PaginatedResult): HTMLElement {
+  private createControls(word: PaginatedResult): HTMLElement {
     const controlsWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
       'justify-content-center',
@@ -154,7 +154,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     return controlsWrapper;
   }
 
-  createBadges(word: PaginatedResult): HTMLElement {
+  private createBadges(word: PaginatedResult): HTMLElement {
     const badgesWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
       'justify-content-center',
@@ -186,7 +186,7 @@ export default class DictionaryCardGenerator extends HTMLConstructor {
     return badgesWrapper;
   }
 
-  createNoCardWord(): HTMLElement {
+  public createNoCardWord(): HTMLElement {
     const card: HTMLElement = this.createHtmlElement(
       'div',
       ['card', 'd-flex', 'align-items-center', 'm-2', 'p-2'],

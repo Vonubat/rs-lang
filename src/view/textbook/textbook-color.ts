@@ -2,7 +2,7 @@ import Constants from '../../constants';
 import { PageConfigResponce } from '../../types/types';
 
 export default class TextbookColor {
-  switchColor(element: HTMLElement, pageConfig: PageConfigResponce) {
+  public switchColor(element: HTMLElement, pageConfig: PageConfigResponce) {
     const currentElem: HTMLElement = element;
     switch (pageConfig.groupNumber) {
       case 0:
