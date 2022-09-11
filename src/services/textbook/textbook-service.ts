@@ -13,43 +13,43 @@ import { services } from '../services';
 import Utils from '../../utilities/utils';
 
 export default class TextbookService {
-  stack: { [index: string]: number };
+  private stack: { [index: string]: number };
 
-  pageNumberItemsLeft!: NodeListOf<HTMLElement>;
+  private pageNumberItemsLeft!: NodeListOf<HTMLElement>;
 
-  pageNumberItemsRight!: NodeListOf<HTMLElement>;
+  private pageNumberItemsRight!: NodeListOf<HTMLElement>;
 
-  groupNumberItemsLeft!: NodeListOf<HTMLElement>;
+  private groupNumberItemsLeft!: NodeListOf<HTMLElement>;
 
-  groupNumberItemsRight!: NodeListOf<HTMLElement>;
+  private groupNumberItemsRight!: NodeListOf<HTMLElement>;
 
-  pageNumberCurrent!: NodeListOf<HTMLElement>;
+  private pageNumberCurrent!: NodeListOf<HTMLElement>;
 
-  groupNumberCurrent!: NodeListOf<HTMLElement>;
+  private groupNumberCurrent!: NodeListOf<HTMLElement>;
 
-  pageNumber!: NodeListOf<HTMLAnchorElement>;
+  private pageNumber!: NodeListOf<HTMLAnchorElement>;
 
-  groupNumber!: NodeListOf<HTMLElement>;
+  private groupNumber!: NodeListOf<HTMLElement>;
 
-  soundIcons!: NodeListOf<SVGSVGElement>;
+  private soundIcons!: NodeListOf<SVGSVGElement>;
 
-  difficultBtns!: NodeListOf<HTMLElement>;
+  private difficultBtns!: NodeListOf<HTMLElement>;
 
-  learnedBtns!: NodeListOf<HTMLElement>;
+  private learnedBtns!: NodeListOf<HTMLElement>;
 
-  sprintGame!: HTMLDivElement;
+  private sprintGame!: HTMLDivElement;
 
-  audioChallengeGame!: HTMLDivElement;
+  private audioChallengeGame!: HTMLDivElement;
 
-  cards!: NodeListOf<HTMLDivElement>;
+  private cards!: NodeListOf<HTMLDivElement>;
 
-  gamesContainer!: HTMLDivElement;
+  private gamesContainer!: HTMLDivElement;
 
   constructor() {
     this.stack = {};
   }
 
-  async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[] | PaginatedResult[]> {
+  public async getWords(pageConfig: PageConfigResponce): Promise<WordsResponseSchema[] | PaginatedResult[]> {
     let words: WordsResponseSchema[] | PaginatedResult[];
 
     if (AuthService.checkUser()) {
@@ -68,7 +68,7 @@ export default class TextbookService {
     return words;
   }
 
-  async drawPage(): Promise<void> {
+  public async drawPage(): Promise<void> {
     view.loading.createSpinners();
     const pageConfig: PageConfigResponce = services.pageConfig.getPageConfigResponse();
     const words: WordsResponseSchema[] | PaginatedResult[] = await this.getWords(pageConfig);
@@ -82,7 +82,7 @@ export default class TextbookService {
     view.loading.delSpinners();
   }
 
-  setPaginationItems(): void {
+  private setPaginationItems(): void {
     this.pageNumberItemsLeft = view.textbookView.textbook.querySelectorAll('.left-page-number');
     this.pageNumberItemsRight = view.textbookView.textbook.querySelectorAll('.right-page-number');
     this.groupNumberItemsLeft = view.textbookView.textbook.querySelectorAll('.left-group-number');
@@ -98,14 +98,14 @@ export default class TextbookService {
     ) as HTMLDivElement;
   }
 
-  setCardsItems(): void {
+  public setCardsItems(): void {
     this.soundIcons = view.textbookView.textbook.querySelectorAll('.sound-icon');
     this.difficultBtns = view.textbookView.textbook.querySelectorAll('.word-difficult-btn');
     this.learnedBtns = view.textbookView.textbook.querySelectorAll('.word-learned-btn');
     this.cards = view.textbookView.textbook.querySelectorAll('.card');
   }
 
-  async decreasePageNumber(): Promise<void> {
+  private async decreasePageNumber(): Promise<void> {
     view.loading.createSpinners();
     services.pageConfig.shiftPageNumber('-');
 
@@ -120,7 +120,7 @@ export default class TextbookService {
     view.loading.delSpinners();
   }
 
-  async increasePageNumber(): Promise<void> {
+  private async increasePageNumber(): Promise<void> {
     view.loading.createSpinners();
     services.pageConfig.shiftPageNumber('+');
 
@@ -135,7 +135,7 @@ export default class TextbookService {
     view.loading.delSpinners();
   }
 
-  async decreaseGroupNumber(): Promise<void> {
+  private async decreaseGroupNumber(): Promise<void> {
     view.loading.createSpinners();
     services.pageConfig.shiftGroupNumber('-');
 
@@ -150,7 +150,7 @@ export default class TextbookService {
     view.loading.delSpinners();
   }
 
-  async increaseGroupNumber(): Promise<void> {
+  private async increaseGroupNumber(): Promise<void> {
     view.loading.createSpinners();
     services.pageConfig.shiftGroupNumber('+');
 
@@ -165,7 +165,7 @@ export default class TextbookService {
     view.loading.delSpinners();
   }
 
-  async setPageNumber(event: Event): Promise<void> {
+  private async setPageNumber(event: Event): Promise<void> {
     view.loading.createSpinners();
     const value: number = Number((event.target as HTMLElement).innerText) - 1;
     services.pageConfig.setPageNumber(value);
@@ -181,7 +181,7 @@ export default class TextbookService {
     view.loading.delSpinners();
   }
 
-  async setGroupNumber(event: Event): Promise<void> {
+  private async setGroupNumber(event: Event): Promise<void> {
     view.loading.createSpinners();
     const value: number = Number((event.target as HTMLElement).innerText) - 1;
     services.pageConfig.setGroupNumber(value);
@@ -197,7 +197,7 @@ export default class TextbookService {
     view.loading.delSpinners();
   }
 
-  playSound(event: Event): boolean {
+  private playSound(event: Event): boolean {
     let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
     if (elem instanceof SVGUseElement) {
       elem = elem.parentNode as SVGSVGElement;
@@ -222,7 +222,7 @@ export default class TextbookService {
     return true;
   }
 
-  async addDiffcultWord(event: Event): Promise<UsersWordsResponseSchema> {
+  private async addDifficultWord(event: Event): Promise<UsersWordsResponseSchema> {
     view.loading.createSpinners();
     const { id } = event.target as HTMLButtonElement;
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
@@ -245,7 +245,7 @@ export default class TextbookService {
     return userWord;
   }
 
-  async addLearnedWord(event: Event): Promise<UsersWordsResponseSchema> {
+  private async addLearnedWord(event: Event): Promise<UsersWordsResponseSchema> {
     view.loading.createSpinners();
     const { id } = event.target as HTMLButtonElement;
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
@@ -268,7 +268,7 @@ export default class TextbookService {
     return userWord;
   }
 
-  checkMaxStackOfWords(): void {
+  public checkMaxStackOfWords(): void {
     const currentPage: number = services.pageConfig.getPageNumber();
     this.stack[currentPage] = 0;
     this.cards.forEach((item: HTMLDivElement) => {
@@ -296,7 +296,7 @@ export default class TextbookService {
     }
   }
 
-  listenPagination(): void {
+  private listenPagination(): void {
     this.pageNumberItemsLeft.forEach((item: Element): void =>
       item.addEventListener('click', this.decreasePageNumber.bind(this))
     );
@@ -315,10 +315,10 @@ export default class TextbookService {
     this.audioChallengeGame.addEventListener('click', services.gamesService.launchGame.bind(this));
   }
 
-  listenCards(): void {
+  public listenCards(): void {
     this.soundIcons.forEach((item: Element): void => item.addEventListener('click', this.playSound.bind(this)));
     this.difficultBtns.forEach((item: Element): void =>
-      item.addEventListener('click', this.addDiffcultWord.bind(this))
+      item.addEventListener('click', this.addDifficultWord.bind(this))
     );
     this.learnedBtns.forEach((item: Element): void => item.addEventListener('click', this.addLearnedWord.bind(this)));
   }

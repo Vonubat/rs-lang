@@ -10,38 +10,78 @@ import TextbookService from './textbook/textbook-service';
 import GamesData from './games/games-data';
 
 export class Services {
-  textbookService: TextbookService;
+  private _textbookService: TextbookService;
 
-  authService: AuthService;
+  private _authService: AuthService;
 
-  pageConfig: PageConfig;
+  private _pageConfig: PageConfig;
 
-  dictionaryService: DictionaryService;
+  private _dictionaryService: DictionaryService;
 
-  gamesService: GamesService;
+  private _gamesService: GamesService;
 
-  soundHelper: SoundHelper;
+  private _soundHelper: SoundHelper;
 
-  statisticsService: StatisticsService;
+  private _statisticsService: StatisticsService;
 
-  timer: Timer;
+  private _timer: Timer;
 
-  gamesData: GamesData;
+  private _gamesData: GamesData;
 
-  sprintService: SprintService;
+  private _sprintService: SprintService;
 
   constructor() {
-    this.textbookService = new TextbookService();
-    this.pageConfig = new PageConfig();
-    this.soundHelper = new SoundHelper();
-    this.authService = new AuthService();
-    this.dictionaryService = new DictionaryService();
-    this.gamesService = new GamesService();
-    this.statisticsService = new StatisticsService();
-    this.soundHelper = new SoundHelper();
-    this.timer = new Timer();
-    this.gamesData = new GamesData();
-    this.sprintService = new SprintService();
+    this._textbookService = new TextbookService();
+    this._pageConfig = new PageConfig();
+    this._soundHelper = new SoundHelper();
+    this._authService = new AuthService();
+    this._dictionaryService = new DictionaryService();
+    this._gamesService = new GamesService();
+    this._statisticsService = new StatisticsService();
+    this._soundHelper = new SoundHelper();
+    this._timer = new Timer();
+    this._gamesData = new GamesData();
+    this._sprintService = new SprintService();
+  }
+
+  get textbookService(): TextbookService {
+    return this._textbookService;
+  }
+
+  public get authService(): AuthService {
+    return this._authService;
+  }
+
+  public get pageConfig(): PageConfig {
+    return this._pageConfig;
+  }
+
+  public get dictionaryService(): DictionaryService {
+    return this._dictionaryService;
+  }
+
+  public get gamesService(): GamesService {
+    return this._gamesService;
+  }
+
+  public get soundHelper(): SoundHelper {
+    return this._soundHelper;
+  }
+
+  public get statisticsService(): StatisticsService {
+    return this._statisticsService;
+  }
+
+  public get timer(): Timer {
+    return this._timer;
+  }
+
+  public get gamesData(): GamesData {
+    return this._gamesData;
+  }
+
+  public get sprintService(): SprintService {
+    return this._sprintService;
   }
 }
 export const services: Services = new Services();

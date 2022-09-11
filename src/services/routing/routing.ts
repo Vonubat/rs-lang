@@ -38,9 +38,9 @@ export class Route {
     },
   }; */
 
-  view: View;
+  private view: View;
 
-  notFound: NotFound;
+  private notFound: NotFound;
 
   constructor() {
     this.view = new View();
@@ -53,7 +53,7 @@ export class Route {
     this.handleLocation();
   } */
 
-  routingHash(): void {
+  public routingHash(): void {
     window.addEventListener('hashchange', (): void => {
       this.handleLocation();
       this.pageBG();
@@ -128,7 +128,7 @@ export class Route {
     });
   };
 
-  static checkUrl(address: string): boolean {
+  public static checkUrl(address: string): boolean {
     const url: string = window.location.hash.slice(1);
     if (url === address) {
       return true;

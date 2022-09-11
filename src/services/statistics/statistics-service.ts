@@ -12,11 +12,11 @@ export default class StatisticsService {
     this.statistics = new Statistic();
   }
 
-  setView() {
+  private setView() {
     this.statistics.drawPage();
   }
 
-  async getStatisticsData(): Promise<Statistics | Response | null> {
+  public async getStatisticsData(): Promise<Statistics | Response | null> {
     const userId: string = Credentials.getUserId();
     if (userId) {
       const data: Statistics | Response = await this.api.usersStatistics.getStatistics(userId);
