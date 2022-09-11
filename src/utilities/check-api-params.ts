@@ -1,7 +1,7 @@
 import Constants from '../constants';
 
 export default class CheckApiParams {
-  checkGroupsPagesOfWords(groupNumber: number, pageNumber: number): void {
+  public checkGroupsPagesOfWords(groupNumber: number, pageNumber: number): void {
     if (groupNumber > 5 || groupNumber < 0) {
       throw new Error('groupNumber value should be from 0 to 5');
     }
@@ -10,25 +10,25 @@ export default class CheckApiParams {
     }
   }
 
-  checkEmail(email: string): void {
+  public checkEmail(email: string): void {
     if (!email.includes('@')) {
       throw new Error('email is not correct');
     }
   }
 
-  checkPassword(password: string): void {
+  public checkPassword(password: string): void {
     if (password.length < Constants.PASSWORD_MIN_LENGTH) {
       throw new Error('password should contsins at least 8 chars');
     }
   }
 
-  checkId(id: string): void {
+  public checkId(id: string): void {
     if (id.length !== Constants.ID_LENGTH) {
       throw new Error('id is not correct');
     }
   }
 
-  checkTokens(token: string): void {
+  public checkTokens(token: string): void {
     if (
       token.length !== Constants.TOKEN_LENGTH &&
       token.length !== Constants.REFRESH_TOKEN_LENGTH &&

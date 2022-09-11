@@ -2,16 +2,16 @@ import Constants from '../../constants';
 import HTMLConstructor from './constructor';
 
 export default class Loading extends HTMLConstructor {
-  body: HTMLElement;
+  private body: HTMLElement;
 
-  spinnersWrapper!: HTMLElement;
+  private spinnersWrapper!: HTMLElement;
 
   constructor() {
     super();
     this.body = document.getElementById('body') as HTMLElement;
   }
 
-  createSpinners(): void {
+  public createSpinners(): void {
     this.body.classList.add('disabled');
     const spinnersWrapper: HTMLElement = this.createHtmlElement(
       'div',
@@ -43,7 +43,7 @@ export default class Loading extends HTMLConstructor {
     this.body.append(spinnersWrapper);
   }
 
-  delSpinners(): void {
+  public delSpinners(): void {
     this.body.classList.remove('disabled');
     this.spinnersWrapper.remove();
   }

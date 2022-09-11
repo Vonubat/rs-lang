@@ -5,13 +5,13 @@ import { view } from '../../view/view';
 const CanvasCircularCountdown = require('canvas-circular-countdown').default;
 
 export default class Timer {
-  startCount: number;
+  private startCount: number;
 
   constructor() {
     this.startCount = 0;
   }
 
-  createTimerElement(id: string, stage: 'start' | 'game'): HTMLElement {
+  public createTimerElement(id: string, stage: 'start' | 'game'): HTMLElement {
     const canvas = view.htmlConstructor.createHtmlElement(
       'canvas',
       [`countdown-canvas-${id}-${stage}`],
@@ -20,7 +20,7 @@ export default class Timer {
     return canvas;
   }
 
-  createTimerConfig(
+  public createTimerConfig(
     element: HTMLElement,
     duration: number,
     cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,

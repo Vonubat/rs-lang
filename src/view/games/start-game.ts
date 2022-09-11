@@ -2,7 +2,7 @@ import { services } from '../../services/services';
 import { WordsResponseSchema, PaginatedResult } from '../../types/types';
 
 export default class StartGameView {
-  drawStartLocation(
+  public drawStartLocation(
     elem: HTMLElement,
     game: 'sprint' | 'audio-challenge',
     cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,

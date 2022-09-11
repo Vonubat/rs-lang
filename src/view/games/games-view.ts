@@ -8,72 +8,116 @@ import SprintGame from './sprint/sprint-view';
 import StartGameView from './start-game';
 
 export default class GamesView {
-  gamesCards: GamesCards;
+  private _gamesCards: GamesCards;
 
-  startGameView: StartGameView;
+  public get gamesCards(): GamesCards {
+    return this._gamesCards;
+  }
 
-  gamesLevels: GamesLevels;
+  private _startGameView: StartGameView;
 
-  sprintView: SprintGame;
+  public get startGameView(): StartGameView {
+    return this._startGameView;
+  }
 
-  audioChallengeView: AudioChallengeView;
+  private _gamesLevels: GamesLevels;
 
-  gamesResults: GamesResults;
+  public get gamesLevels(): GamesLevels {
+    return this._gamesLevels;
+  }
 
-  games!: HTMLElement;
+  private _sprintView: SprintGame;
 
-  gamesCardsInstance!: HTMLElement;
+  public get sprintView(): SprintGame {
+    return this._sprintView;
+  }
 
-  gamesMiniCardsInstance!: HTMLElement;
+  private _audioChallengeView: AudioChallengeView;
 
-  gamesLevelsInstance!: HTMLElement;
+  public get audioChallengeView(): AudioChallengeView {
+    return this._audioChallengeView;
+  }
 
-  currentGame!: HTMLElement;
+  private _gamesResults: GamesResults;
+
+  public get gamesResults(): GamesResults {
+    return this._gamesResults;
+  }
+
+  private _games!: HTMLElement;
+
+  public get games(): HTMLElement {
+    return this._games;
+  }
+
+  private _gamesCardsInstance!: HTMLElement;
+
+  public get gamesCardsInstance(): HTMLElement {
+    return this._gamesCardsInstance;
+  }
+
+  private _gamesMiniCardsInstance!: HTMLElement;
+
+  public get gamesMiniCardsInstance(): HTMLElement {
+    return this._gamesMiniCardsInstance;
+  }
+
+  private _gamesLevelsInstance!: HTMLElement;
+
+  public get gamesLevelsInstance(): HTMLElement {
+    return this._gamesLevelsInstance;
+  }
+
+  private _currentGame!: HTMLElement;
+
+  public get currentGame(): HTMLElement {
+    return this._currentGame;
+  }
 
   constructor() {
-    this.gamesCards = new GamesCards();
-    this.gamesLevels = new GamesLevels();
-    this.startGameView = new StartGameView();
-    this.gamesResults = new GamesResults();
-    this.sprintView = new SprintGame();
-    this.audioChallengeView = new AudioChallengeView();
+    this._gamesCards = new GamesCards();
+    this._gamesLevels = new GamesLevels();
+    this._startGameView = new StartGameView();
+    this._gamesResults = new GamesResults();
+    this._sprintView = new SprintGame();
+    this._audioChallengeView = new AudioChallengeView();
   }
 
   drawCards(): void {
-    this.games = document.getElementById('main') as HTMLElement;
-    this.games.innerHTML = '';
-    this.gamesCardsInstance = this.gamesCards.generateCards();
+    this._games = document.getElementById('main') as HTMLElement;
+    this._games.innerHTML = '';
+    this._gamesCardsInstance = this._gamesCards.generateCards();
 
-    this.games.append(this.gamesCardsInstance);
+    this._games.append(this._gamesCardsInstance);
   }
 
   drawMiniCards(page: 'dictionary' | 'textbook'): HTMLElement {
-    this.gamesMiniCardsInstance = this.gamesCards.generateMiniCards(page);
+    this._gamesMiniCardsInstance = this._gamesCards.generateMiniCards(page);
 
-    return this.gamesMiniCardsInstance;
+    return this._gamesMiniCardsInstance;
   }
 
   drawGamesLevels(game: 'sprint' | 'audio-challenge'): HTMLElement {
-    this.games = document.getElementById('main') as HTMLElement;
-    this.games.innerHTML = '';
-    this.gamesLevelsInstance = this.gamesLevels.generateGamesLevels(game);
+    this._games = document.getElementById('main') as HTMLElement;
+    this._games.innerHTML = '';
+    this._gamesLevelsInstance = this._gamesLevels.generateGamesLevels(game);
 
-    this.games.append(this.gamesLevelsInstance);
-    return this.gamesLevelsInstance;
+    this._games.append(this._gamesLevelsInstance);
+    return this._gamesLevelsInstance;
   }
 
   drawGame(game: 'sprint' | 'audio-challenge', words: WordsResponseSchema[] | PaginatedResult[]): HTMLElement {
-    this.games = document.getElementById('main') as HTMLElement;
+    this._games = document.getElementById('main') as HTMLElement;
     if (game === 'sprint') {
-      this.currentGame = this.startGameView.drawStartLocation(
-        this.games,
+      this._currentGame = this._startGameView.drawStartLocation(
+        this._games,
         game,
         services.gamesService.sprintService.launchSprint.bind(services.gamesService.sprintService),
         words
       );
     } else {
-      this.currentGame = this.startGameView.drawStartLocation(
-        this.games,
+      this._currentGame = this._startGameView.drawStartLocation(
+        this._games,
         game,
         services.gamesService.audioChallengeService.launchAudioChallenge.bind(
           services.gamesService.audioChallengeService
@@ -82,6 +126,6 @@ export default class GamesView {
       );
     }
 
-    return this.currentGame;
+    return this._currentGame;
   }
 }

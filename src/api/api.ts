@@ -7,19 +7,19 @@ import Users from './users/users';
 import Words from './words/words';
 
 export class Api {
-  public words: Words;
+  private _words: Words;
 
-  public users: Users;
+  private _users: Users;
 
-  public usersWords: UsersWords;
+  private _usersWords: UsersWords;
 
-  public usersAggregatedWords: UsersAggregatedWords;
+  private _usersAggregateWords: UsersAggregatedWords;
 
-  public usersStatistics: UsersStatistics;
+  private _usersStatistics: UsersStatistics;
 
-  public usersSettings: UserSettings;
+  private _usersSettings: UserSettings;
 
-  public auth: Auth;
+  private _auth: Auth;
 
   constructor(
     words: Words,
@@ -30,14 +30,41 @@ export class Api {
     usersSettings: UserSettings,
     auth: Auth
   ) {
-    this.words = words;
-    this.users = users;
-    this.usersWords = usersWords;
-    this.usersAggregatedWords = usersAggregatedWords;
-    this.usersStatistics = usersStatistics;
-    this.usersSettings = usersSettings;
-    this.usersSettings = usersSettings;
-    this.auth = auth;
+    this._words = words;
+    this._users = users;
+    this._usersWords = usersWords;
+    this._usersAggregateWords = usersAggregatedWords;
+    this._usersStatistics = usersStatistics;
+    this._usersSettings = usersSettings;
+    this._auth = auth;
+  }
+
+  get users() {
+    return this._users;
+  }
+
+  get words() {
+    return this._words;
+  }
+
+  get usersWords() {
+    return this._usersWords;
+  }
+
+  get usersAggregatedWords() {
+    return this._usersAggregateWords;
+  }
+
+  get usersStatistics() {
+    return this._usersStatistics;
+  }
+
+  get usersSettings() {
+    return this._usersSettings;
+  }
+
+  get auth() {
+    return this._auth;
   }
 }
 

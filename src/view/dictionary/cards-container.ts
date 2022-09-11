@@ -3,14 +3,14 @@ import HTMLConstructor from '../components/constructor';
 import DictionaryCardGenerator from './card-generator';
 
 export default class DictionaryCardsContainer extends HTMLConstructor {
-  cardGenerator: DictionaryCardGenerator;
+  private cardGenerator: DictionaryCardGenerator;
 
   constructor() {
     super();
     this.cardGenerator = new DictionaryCardGenerator();
   }
 
-  createCardContainer(): HTMLElement {
+  private createCardContainer(): HTMLElement {
     let cardsContainer: HTMLElement | null = document.getElementById('cards-container');
 
     if (cardsContainer) {
@@ -26,7 +26,7 @@ export default class DictionaryCardsContainer extends HTMLConstructor {
     return cardsContainer;
   }
 
-  generateCardContainer(words: PaginatedResult[]): HTMLElement {
+  public generateCardContainer(words: PaginatedResult[]): HTMLElement {
     const cardsContainer: HTMLElement = this.createCardContainer();
     cardsContainer.innerHTML = '';
 
@@ -37,7 +37,7 @@ export default class DictionaryCardsContainer extends HTMLConstructor {
     return cardsContainer;
   }
 
-  generateEmptyCardContainer(): HTMLElement {
+  public generateEmptyCardContainer(): HTMLElement {
     const cardsContainer: HTMLElement = this.createCardContainer();
     cardsContainer.innerHTML = '';
 

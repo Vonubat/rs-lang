@@ -3,9 +3,9 @@ import { PaginatedResult, WordsResponseSchema } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
 export default class SprintView extends HTMLConstructor {
-  newWord!: HTMLElement;
+  private _newWord!: HTMLElement;
 
-  newTranslate!: HTMLElement;
+  private _newTranslate!: HTMLElement;
 
   createPointsWrapper(): HTMLElement {
     const classList: string[] = [
@@ -19,13 +19,13 @@ export default class SprintView extends HTMLConstructor {
     return pointsWrapper;
   }
 
-  createPoints(): HTMLElement {
+  private createPoints(): HTMLElement {
     const classList: string[] = [`points-sprint`];
     const points: HTMLElement = this.createHtmlElement('h2', classList, `points-sprint`, undefined, `0`);
     return points;
   }
 
-  createMultiplicator(): HTMLElement {
+  private createMultiplicator(): HTMLElement {
     const classList: string[] = ['multiplicator'];
     const multiplicator: HTMLElement = this.createHtmlElement(
       'h4',
@@ -37,7 +37,7 @@ export default class SprintView extends HTMLConstructor {
     return multiplicator;
   }
 
-  createSteps(): HTMLElement {
+  private createSteps(): HTMLElement {
     const stepsWrapper: HTMLElement = this.createHtmlElement('div', [
       'd-flex',
       'flex-row',
@@ -52,7 +52,7 @@ export default class SprintView extends HTMLConstructor {
     return stepsWrapper;
   }
 
-  generatePointsWrapper(): HTMLElement {
+  private generatePointsWrapper(): HTMLElement {
     const pointsWrapper: HTMLElement = this.createPointsWrapper();
     const points: HTMLElement = this.createPoints();
     const multiplicator: HTMLElement = this.createMultiplicator();
@@ -61,7 +61,7 @@ export default class SprintView extends HTMLConstructor {
     return pointsWrapper;
   }
 
-  createCardContainer(): HTMLElement {
+  private createCardContainer(): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-column',
@@ -78,8 +78,8 @@ export default class SprintView extends HTMLConstructor {
     return cardContainer;
   }
 
-  createWord(wordId: string, word: string): HTMLElement {
-    if (!this.newWord) {
+  public createWord(wordId: string, word: string): HTMLElement {
+    if (!this._newWord) {
       const classList: string[] = [];
       const newWord: HTMLElement = this.createHtmlElement(
         'h4',
@@ -88,16 +88,16 @@ export default class SprintView extends HTMLConstructor {
         undefined,
         `${word}`
       );
-      this.newWord = newWord;
-      return this.newWord;
+      this._newWord = newWord;
+      return this._newWord;
     }
-    this.newWord.innerHTML = word;
-    this.newWord.id = `sprint-word-${wordId}`;
-    return this.newWord;
+    this._newWord.innerHTML = word;
+    this._newWord.id = `sprint-word-${wordId}`;
+    return this._newWord;
   }
 
-  createWordTranslate(wordId: string, wordTranslate: string): HTMLElement {
-    if (!this.newTranslate) {
+  public createWordTranslate(wordId: string, wordTranslate: string): HTMLElement {
+    if (!this._newTranslate) {
       const classList: string[] = ['text-muted'];
       const newTranslate: HTMLElement = this.createHtmlElement(
         'h4',
@@ -106,15 +106,15 @@ export default class SprintView extends HTMLConstructor {
         undefined,
         `${wordTranslate}`
       );
-      this.newTranslate = newTranslate;
-      return this.newTranslate;
+      this._newTranslate = newTranslate;
+      return this._newTranslate;
     }
-    this.newTranslate.innerHTML = wordTranslate;
-    this.newTranslate.id = `sprint-translate-${wordId}`;
-    return this.newTranslate;
+    this._newTranslate.innerHTML = wordTranslate;
+    this._newTranslate.id = `sprint-translate-${wordId}`;
+    return this._newTranslate;
   }
 
-  createBtnsWrapper(): HTMLElement {
+  private createBtnsWrapper(): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-row',
@@ -127,7 +127,7 @@ export default class SprintView extends HTMLConstructor {
     return btnsWrapper;
   }
 
-  createBtnRight(): HTMLElement {
+  private createBtnRight(): HTMLElement {
     const classList: string[] = ['btn', 'btn-danger', `btn-right`];
     const btnRight: HTMLElement = this.createHtmlElement(
       'button',
@@ -139,7 +139,7 @@ export default class SprintView extends HTMLConstructor {
     return btnRight;
   }
 
-  createBtnWrong(): HTMLElement {
+  private createBtnWrong(): HTMLElement {
     const classList: string[] = ['btn', 'btn-secondary', `btn-right`];
     const btnWrong: HTMLElement = this.createHtmlElement(
       'button',
@@ -151,7 +151,7 @@ export default class SprintView extends HTMLConstructor {
     return btnWrong;
   }
 
-  generateCard(wordId: string, word: string, wordTranslate: string): HTMLElement {
+  private generateCard(wordId: string, word: string, wordTranslate: string): HTMLElement {
     const cardContainer: HTMLElement = this.createCardContainer();
     const newWord: HTMLElement = this.createWord(wordId, word);
     const newTranslate: HTMLElement = this.createWordTranslate(wordId, wordTranslate);
@@ -164,7 +164,7 @@ export default class SprintView extends HTMLConstructor {
     return cardContainer;
   }
 
-  createTimer(
+  private createTimer(
     cb: (words: WordsResponseSchema[] | PaginatedResult[]) => void,
     words: WordsResponseSchema[] | PaginatedResult[]
   ): HTMLElement {
@@ -174,7 +174,7 @@ export default class SprintView extends HTMLConstructor {
     return timer;
   }
 
-  createGameContainer(): HTMLElement {
+  private createGameContainer(): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-column',
@@ -188,7 +188,7 @@ export default class SprintView extends HTMLConstructor {
     return gameContainer;
   }
 
-  generateGameContainer(
+  public generateGameContainer(
     wordId: string,
     word: string,
     wordTranslate: string,

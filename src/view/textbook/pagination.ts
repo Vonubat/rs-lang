@@ -3,7 +3,7 @@ import { PageConfigResponce, TypeOfPagination } from '../../types/types';
 import HTMLConstructor from '../components/constructor';
 
 export default class Pagination extends HTMLConstructor {
-  createPaginationContainer(): HTMLElement {
+  private createPaginationContainer(): HTMLElement {
     return this.createHtmlElement('div', [
       'd-flex',
       'flex-row',
@@ -13,19 +13,19 @@ export default class Pagination extends HTMLConstructor {
     ]);
   }
 
-  createNav(): HTMLElement {
+  private createNav(): HTMLElement {
     return this.createHtmlElement('nav', ['m-2']);
   }
 
-  createPagination(): HTMLElement {
+  private createPagination(): HTMLElement {
     return this.createHtmlElement('ul', ['pagination', 'pagination-md', 'mb-0']);
   }
 
-  createNumberCurrentContainer(): HTMLElement {
+  private createNumberCurrentContainer(): HTMLElement {
     return this.createHtmlElement('li', ['page-item', 'active']);
   }
 
-  createArrow(direction: string, typeOfPagination: TypeOfPagination): HTMLElement {
+  private createArrow(direction: string, typeOfPagination: TypeOfPagination): HTMLElement {
     const classList: string[] = ['page-item', 'page-link'];
 
     if (typeOfPagination === 'Page') {
@@ -49,7 +49,7 @@ export default class Pagination extends HTMLConstructor {
     return this.createHtmlElement('li', classList, undefined, [['href', '#']], `${direction}`);
   }
 
-  createNumberCurrent(id: string, i: number): HTMLElement {
+  private createNumberCurrent(id: string, i: number): HTMLElement {
     const lastPage = id === 'page-number' ? 30 : 6;
     const pageName: TypeOfPagination = id === 'page-number' ? 'Page' : 'Group';
 
@@ -62,7 +62,7 @@ export default class Pagination extends HTMLConstructor {
     );
   }
 
-  updateNumberCurrent(elements: NodeListOf<HTMLElement>, pageConfig: PageConfigResponce): void {
+  public updateNumberCurrent(elements: NodeListOf<HTMLElement>, pageConfig: PageConfigResponce): void {
     let pageName: TypeOfPagination;
     let lastPage: number;
     let value: number;
@@ -83,7 +83,7 @@ export default class Pagination extends HTMLConstructor {
     });
   }
 
-  disableArrows(textbook: HTMLElement, pageConfig: PageConfigResponce): void {
+  public disableArrows(textbook: HTMLElement, pageConfig: PageConfigResponce): void {
     const leftPageArrows: NodeListOf<Element> = textbook.querySelectorAll('.left-page-number');
     const rightPageArrows: NodeListOf<Element> = textbook.querySelectorAll('.right-page-number');
     const leftGroupArrows: NodeListOf<Element> = textbook.querySelectorAll('.left-group-number');
@@ -124,19 +124,19 @@ export default class Pagination extends HTMLConstructor {
     }
   }
 
-  createDropdownMenu(): HTMLElement {
+  private createDropdownMenu(): HTMLElement {
     return this.createHtmlElement('ul', ['dropdown-menu', 'scrollable-menu']);
   }
 
-  createDropdownItem(id: string, i: number, position: string): HTMLElement {
+  private createDropdownItem(id: string, i: number, position: string): HTMLElement {
     return this.createHtmlElement('a', ['dropdown-item', `${id}`], `${id}-${i}-${position}`, undefined, `${i}`);
   }
 
-  createDropdownDivider(): HTMLElement {
+  private createDropdownDivider(): HTMLElement {
     return this.createHtmlElement('hr', ['dropdown-divider']);
   }
 
-  generatePaginationPageNumber(position: string, pageConfig: PageConfigResponce): HTMLElement {
+  private generatePaginationPageNumber(position: string, pageConfig: PageConfigResponce): HTMLElement {
     const nav: HTMLElement = this.createNav();
     const pagination: HTMLElement = this.createPagination();
     const numberCurrentContainer: HTMLElement = this.createNumberCurrentContainer();
@@ -157,7 +157,7 @@ export default class Pagination extends HTMLConstructor {
     return nav;
   }
 
-  generatePaginationGroupNumber(position: string, pageConfig: PageConfigResponce): HTMLElement {
+  private generatePaginationGroupNumber(position: string, pageConfig: PageConfigResponce): HTMLElement {
     const nav: HTMLElement = this.createNav();
     const pagination: HTMLElement = this.createPagination();
     const numberCurrentContainer: HTMLElement = this.createNumberCurrentContainer();
@@ -178,7 +178,7 @@ export default class Pagination extends HTMLConstructor {
     return nav;
   }
 
-  generatePaginationContainer(position: string, pageConfig: PageConfigResponce): HTMLElement {
+  public generatePaginationContainer(position: string, pageConfig: PageConfigResponce): HTMLElement {
     const paginationContainer: HTMLElement = this.createPaginationContainer();
     const paginationPageNumber: HTMLElement = this.generatePaginationPageNumber(position, pageConfig);
     const paginationGroupNumber: HTMLElement = this.generatePaginationGroupNumber(position, pageConfig);

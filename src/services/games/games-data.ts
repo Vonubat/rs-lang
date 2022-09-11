@@ -6,7 +6,7 @@ import Credentials from '../auth/credentials';
 import { services } from '../services';
 
 export default class GamesData {
-  async prepareData(id: string, level?: number): Promise<WordsResponseSchema[] | PaginatedResult[]> {
+  public async prepareData(id: string, level?: number): Promise<WordsResponseSchema[] | PaginatedResult[]> {
     let words: WordsResponseSchema[] | PaginatedResult[];
     if (level !== undefined) {
       words = await this.requestFromGamesPage(level);
@@ -23,7 +23,7 @@ export default class GamesData {
     return words;
   }
 
-  async requestFromGamesPage(level: number): Promise<WordsResponseSchema[] | PaginatedResult[]> {
+  private async requestFromGamesPage(level: number): Promise<WordsResponseSchema[] | PaginatedResult[]> {
     let words: WordsResponseSchema[] | PaginatedResult[];
     if (AuthService.checkUser()) {
       const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
@@ -42,7 +42,7 @@ export default class GamesData {
     return words;
   }
 
-  async requestFromDictionaryPage(): Promise<WordsResponseSchema[] | PaginatedResult[]> {
+  private async requestFromDictionaryPage(): Promise<WordsResponseSchema[] | PaginatedResult[]> {
     const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
       Credentials.getUserId(),
       '{"$or":[{"userWord.difficulty":"hard"},{"userWord.difficulty":"learned"}]}',
@@ -55,7 +55,7 @@ export default class GamesData {
     return words;
   }
 
-  async requestFromTextbookPage(): Promise<WordsResponseSchema[] | PaginatedResult[]> {
+  private async requestFromTextbookPage(): Promise<WordsResponseSchema[] | PaginatedResult[]> {
     let words: WordsResponseSchema[] | PaginatedResult[];
     if (AuthService.checkUser()) {
       const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
@@ -77,7 +77,7 @@ export default class GamesData {
     return words;
   }
 
-  randomPageNumber(): number {
+  private randomPageNumber(): number {
     return Math.floor(29 * Math.random());
   }
 }

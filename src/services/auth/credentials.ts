@@ -30,18 +30,18 @@ export default class Credentials {
     return Constants.EMPTY_STRING;
   }
 
-  public static setUserId(userId: string): void {
+  private static setUserId(userId: string): void {
     localStorage.setItem('userId', userId);
   }
 
-  public static getName(): string {
+  private static getName(): string {
     if (localStorage.getItem('userName')) {
       return localStorage.getItem('userName') as string;
     }
     return Constants.EMPTY_STRING;
   }
 
-  public static setName(name: string): void {
+  private static setName(name: string): void {
     localStorage.setItem('userName', name);
   }
 
@@ -52,7 +52,7 @@ export default class Credentials {
     return Constants.EMPTY_STRING;
   }
 
-  public static setEmail(email: string): void {
+  private static setEmail(email: string): void {
     localStorage.setItem('email', email);
   }
 
@@ -60,7 +60,7 @@ export default class Credentials {
     return Number(localStorage.getItem('timestamp'));
   }
 
-  public static setTimeStamp(): void {
+  private static setTimeStamp(): void {
     localStorage.setItem('timestamp', String(Date.now()));
   }
 

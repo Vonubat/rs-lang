@@ -2,13 +2,13 @@ import Constants from '../../constants';
 import { view } from '../../view/view';
 
 export default class SoundHelper {
-  i!: number;
+  private i!: number;
 
-  audioArray!: string[];
+  private audioArray!: string[];
 
-  audio!: HTMLAudioElement;
+  private audio!: HTMLAudioElement;
 
-  playWordPronouncing(elem: SVGSVGElement): void {
+  public playWordPronouncing(elem: SVGSVGElement): void {
     if (this.audio) {
       this.pause();
     }
@@ -21,7 +21,7 @@ export default class SoundHelper {
     });
   }
 
-  playGameSound(path: string): void {
+  public playGameSound(path: string): void {
     if (this.audio) {
       this.pause();
     }
@@ -29,7 +29,7 @@ export default class SoundHelper {
     this.audio.play();
   }
 
-  playQueue(elem: SVGSVGElement): void {
+  public playQueue(elem: SVGSVGElement): void {
     const audioPath = `${Constants.BASE_URL}/${elem.dataset.audio}`;
     const audioMeaningPath = `${Constants.BASE_URL}/${elem.dataset.audioMeaning}`;
     const audioExamplePath = `${Constants.BASE_URL}/${elem.dataset.audioExample}`;
@@ -41,7 +41,7 @@ export default class SoundHelper {
     this.playCallBack(elem);
   }
 
-  playCallBack(elem: SVGSVGElement): void {
+  private playCallBack(elem: SVGSVGElement): void {
     if (this.audio) {
       this.pause();
     }
@@ -60,7 +60,7 @@ export default class SoundHelper {
     });
   }
 
-  pause(): void {
+  public pause(): void {
     this.audio.pause();
   }
 }

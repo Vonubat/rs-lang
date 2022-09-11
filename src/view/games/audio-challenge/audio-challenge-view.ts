@@ -3,11 +3,11 @@ import { WordsResponseSchema, PaginatedResult } from '../../../types/types';
 import HTMLConstructor from '../../components/constructor';
 
 export default class AudioChallengeView extends HTMLConstructor {
-  btnControl!: HTMLElement;
+  private btnControl!: HTMLElement;
 
-  image!: HTMLElement | null;
+  private image!: HTMLElement | null;
 
-  createPointsWrapper(): HTMLElement {
+  private createPointsWrapper(): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-column',
@@ -19,13 +19,13 @@ export default class AudioChallengeView extends HTMLConstructor {
     return pointsWrapper;
   }
 
-  createPoints(): HTMLElement {
+  private createPoints(): HTMLElement {
     const classList: string[] = [`points-audio-challenge`];
     const points: HTMLElement = this.createHtmlElement('h2', classList, `points-audio-challenge`, undefined, `0`);
     return points;
   }
 
-  createMultiplicator(): HTMLElement {
+  private createMultiplicator(): HTMLElement {
     const classList: string[] = ['multiplicator'];
     const multiplicator: HTMLElement = this.createHtmlElement(
       'h4',
@@ -37,7 +37,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return multiplicator;
   }
 
-  generatePointsWrapper(): HTMLElement {
+  private generatePointsWrapper(): HTMLElement {
     const pointsWrapper: HTMLElement = this.createPointsWrapper();
     const points: HTMLElement = this.createPoints();
     const multiplicator: HTMLElement = this.createMultiplicator();
@@ -45,7 +45,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return pointsWrapper;
   }
 
-  createCardContainer(): HTMLElement {
+  private createCardContainer(): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-column',
@@ -58,7 +58,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return cardContainer;
   }
 
-  createBtnsWrapper(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
+  private createBtnsWrapper(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-row',
@@ -76,7 +76,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return btnsWrapper;
   }
 
-  createBtnWord(word: [string, WordsResponseSchema | PaginatedResult], index: number): HTMLElement {
+  private createBtnWord(word: [string, WordsResponseSchema | PaginatedResult], index: number): HTMLElement {
     const classList: string[] = ['btn', 'btn-light', `btn-word`];
     const btnWord: HTMLElement = this.createHtmlElement(
       'button',
@@ -88,7 +88,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return btnWord;
   }
 
-  createIcon(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): SVGSVGElement {
+  private createIcon(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): SVGSVGElement {
     let audio = '';
 
     wordsForIteration.forEach((word) => {
@@ -100,7 +100,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return this.svg('volume-up-fill', ['sound-icon'], `sound-icon-main`, [['data-audio', `${audio}`]]);
   }
 
-  generateCard(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
+  private generateCard(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
     const cardContainer: HTMLElement = this.createCardContainer();
     const icon: SVGSVGElement = this.createIcon(wordsForIteration);
     const btnsWrapper: HTMLElement = this.createBtnsWrapper(wordsForIteration);
@@ -110,7 +110,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return cardContainer;
   }
 
-  createWordsCounter(totalCount: number): HTMLElement {
+  private createWordsCounter(totalCount: number): HTMLElement {
     const progress: HTMLElement = this.createHtmlElement('div', ['progress', 'w-50']);
     const progressBar: HTMLElement = this.createHtmlElement(
       'div',
@@ -124,13 +124,13 @@ export default class AudioChallengeView extends HTMLConstructor {
     return progress;
   }
 
-  incrementWordsCounter(totalCount: number): void {
+  public incrementWordsCounter(totalCount: number): void {
     const progressBar: HTMLDivElement = document.getElementById('words-counter') as HTMLDivElement;
     const increment: number = 100 / totalCount;
     progressBar.style.width = `${parseInt(progressBar.style.width, 10) + increment}%`;
   }
 
-  createBtnControl(): HTMLElement {
+  private createBtnControl(): HTMLElement {
     const classList: string[] = ['btn', 'btn-primary', `btn-control`];
     const btnControl: HTMLElement = this.createHtmlElement(
       'button',
@@ -143,7 +143,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return btnControl;
   }
 
-  createImage(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
+  public createImage(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
     const cardContainer: HTMLElement | null = document.querySelector('.card-container');
 
     if (this.image && cardContainer) {
@@ -167,7 +167,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return image;
   }
 
-  createWord(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
+  public createWord(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): HTMLElement {
     const soundIcon: HTMLElement = document.querySelector('.sound-icon') as HTMLElement;
     let correctWord = '';
 
@@ -189,7 +189,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return word;
   }
 
-  createGameContainer(): HTMLElement {
+  private createGameContainer(): HTMLElement {
     const classList: string[] = [
       'd-flex',
       'flex-column',
@@ -203,7 +203,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return gameContainer;
   }
 
-  generateGameContainer(
+  public generateGameContainer(
     wordsForIteration: [string, WordsResponseSchema | PaginatedResult][],
     totalCount: number
   ): HTMLElement {
@@ -221,7 +221,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     return gameContainer;
   }
 
-  updateBtnControl(action: 'next' | 'skip'): void {
+  public updateBtnControl(action: 'next' | 'skip'): void {
     if (action === 'next') {
       this.btnControl.innerText = 'Next word';
     } else {
@@ -229,7 +229,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     }
   }
 
-  updateGameContainer(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): void {
+  public updateGameContainer(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): void {
     const oldCard: HTMLElement = document.querySelector('.card-container') as HTMLElement;
     const pointsWrapper: HTMLElement = document.querySelector('.points-wrapper') as HTMLElement;
     const newCard: HTMLElement = this.generateCard(wordsForIteration);

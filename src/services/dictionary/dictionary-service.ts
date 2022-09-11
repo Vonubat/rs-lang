@@ -7,25 +7,25 @@ import AuthService from '../auth/auth-service';
 import { services } from '../services';
 
 export default class DictionaryService {
-  soundIcons!: NodeListOf<HTMLElement>;
+  private soundIcons!: NodeListOf<HTMLElement>;
 
-  removeBtns!: NodeListOf<HTMLElement>;
+  private removeBtns!: NodeListOf<HTMLElement>;
 
-  difficultWordsBtn!: HTMLButtonElement;
+  private difficultWordsBtn!: HTMLButtonElement;
 
-  learnedWordsBtn!: HTMLButtonElement;
+  private learnedWordsBtn!: HTMLButtonElement;
 
-  cardsCount!: number;
+  private cardsCount!: number;
 
-  dictionaryMenuItem!: HTMLElement;
+  private dictionaryMenuItem!: HTMLElement;
 
-  sprintGame!: HTMLDivElement;
+  private sprintGame!: HTMLDivElement;
 
-  audioChallengeGame!: HTMLDivElement;
+  private audioChallengeGame!: HTMLDivElement;
 
-  gamesContainer!: HTMLDivElement;
+  private gamesContainer!: HTMLDivElement;
 
-  async getWords(typeOfWords: 'learned' | 'hard'): Promise<PaginatedResult[]> {
+  private async getWords(typeOfWords: 'learned' | 'hard'): Promise<PaginatedResult[]> {
     const aggregatedWords: AggregatedWords = await api.usersAggregatedWords.getAllUserAggregatedWords(
       Credentials.getUserId(),
       `{"userWord.difficulty":"${typeOfWords}"}`,
@@ -34,7 +34,7 @@ export default class DictionaryService {
     return aggregatedWords.paginatedResults;
   }
 
-  async drawPage(): Promise<void> {
+  public async drawPage(): Promise<void> {
     view.loading.createSpinners();
     const words: PaginatedResult[] = await this.getWords('hard');
 
@@ -47,7 +47,7 @@ export default class DictionaryService {
     view.loading.delSpinners();
   }
 
-  async updatePage(event: Event): Promise<void> {
+  private async updatePage(event: Event): Promise<void> {
     view.loading.createSpinners();
     const { id } = event.target as HTMLButtonElement;
     let typeOfWords: 'learned' | 'hard';
@@ -68,13 +68,13 @@ export default class DictionaryService {
     view.loading.delSpinners();
   }
 
-  setCardsItems(): void {
+  private setCardsItems(): void {
     this.cardsCount = view.dictionaryView.dictionary.querySelectorAll('.dictionary-card').length;
     this.soundIcons = view.dictionaryView.dictionary.querySelectorAll('.sound-icon');
     this.removeBtns = view.dictionaryView.dictionary.querySelectorAll('.remove-word-btn');
   }
 
-  setSectionsItems(): void {
+  private setSectionsItems(): void {
     this.difficultWordsBtn = view.dictionaryView.dictionary.querySelector(
       '.section-difficult-words'
     ) as HTMLButtonElement;
@@ -86,7 +86,7 @@ export default class DictionaryService {
     ) as HTMLDivElement;
   }
 
-  playSound(event: Event): boolean {
+  private playSound(event: Event): boolean {
     let elem: SVGUseElement | SVGSVGElement = event.target as SVGUseElement | SVGSVGElement;
     if (elem instanceof SVGUseElement) {
       elem = elem.parentNode as SVGSVGElement;
@@ -111,7 +111,7 @@ export default class DictionaryService {
     return true;
   }
 
-  async removeWord(event: Event): Promise<void> {
+  private async removeWord(event: Event): Promise<void> {
     view.loading.createSpinners();
     const { target } = event;
     const { id } = event.target as HTMLButtonElement;
@@ -134,19 +134,19 @@ export default class DictionaryService {
     view.loading.delSpinners();
   }
 
-  listenCards(): void {
+  private listenCards(): void {
     this.soundIcons.forEach((item: Element): void => item.addEventListener('click', this.playSound.bind(this)));
     this.removeBtns.forEach((item: Element): void => item.addEventListener('click', this.removeWord.bind(this)));
   }
 
-  listenSections(): void {
+  private listenSections(): void {
     this.difficultWordsBtn.addEventListener('click', this.updatePage.bind(this));
     this.learnedWordsBtn.addEventListener('click', this.updatePage.bind(this));
     this.sprintGame.addEventListener('click', services.gamesService.launchGame.bind(this));
     this.audioChallengeGame.addEventListener('click', services.gamesService.launchGame.bind(this));
   }
 
-  hideDictionaryItems(): void {
+  public hideDictionaryItems(): void {
     this.dictionaryMenuItem = document.getElementById('menu-dictionary') as HTMLElement;
     if (AuthService.checkUser()) {
       if (this.dictionaryMenuItem) {
@@ -157,7 +157,7 @@ export default class DictionaryService {
     }
   }
 
-  hideGamesContainer(): void {
+  private hideGamesContainer(): void {
     if (this.cardsCount < 1) {
       this.gamesContainer.classList.add('disabled');
     } else {

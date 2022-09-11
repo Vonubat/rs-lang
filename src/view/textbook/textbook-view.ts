@@ -6,34 +6,66 @@ import Pagination from './pagination';
 import TextbookColor from './textbook-color';
 
 export default class TextbookView {
-  cardsContainer: TextbookCardsContainer;
+  private _cardsContainer: TextbookCardsContainer;
 
-  cardGenerator: TextbookCardGenerator;
+  public get cardsContainer(): TextbookCardsContainer {
+    return this._cardsContainer;
+  }
 
-  pagination: Pagination;
+  private _cardGenerator: TextbookCardGenerator;
 
-  color: TextbookColor;
+  public get cardGenerator(): TextbookCardGenerator {
+    return this._cardGenerator;
+  }
 
-  textbook!: HTMLElement;
+  private _pagination: Pagination;
 
-  cardsContainerInstance!: HTMLElement;
+  public get pagination(): Pagination {
+    return this._pagination;
+  }
 
-  paginationTopInstance!: HTMLElement;
+  private _color: TextbookColor;
 
-  paginationBottomInstance!: HTMLElement;
+  public get color(): TextbookColor {
+    return this._color;
+  }
+
+  private _textbook!: HTMLElement;
+
+  public get textbook(): HTMLElement {
+    return this._textbook;
+  }
+
+  private _cardsContainerInstance!: HTMLElement;
+
+  public get cardsContainerInstance(): HTMLElement {
+    return this._cardsContainerInstance;
+  }
+
+  private _paginationTopInstance!: HTMLElement;
+
+  public get paginationTopInstance(): HTMLElement {
+    return this._paginationTopInstance;
+  }
+
+  private _paginationBottomInstance!: HTMLElement;
+
+  public get paginationBottomInstance(): HTMLElement {
+    return this._paginationBottomInstance;
+  }
 
   constructor() {
-    this.cardsContainer = new TextbookCardsContainer();
-    this.cardGenerator = new TextbookCardGenerator();
-    this.pagination = new Pagination();
-    this.color = new TextbookColor();
+    this._cardsContainer = new TextbookCardsContainer();
+    this._cardGenerator = new TextbookCardGenerator();
+    this._pagination = new Pagination();
+    this._color = new TextbookColor();
   }
 
   drawPage(words: WordsResponseSchema[] | PaginatedResult[], pageConfig: PageConfigResponce): void {
-    this.textbook = document.getElementById('main') as HTMLElement;
-    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
-    this.paginationTopInstance = this.pagination.generatePaginationContainer('top', pageConfig);
-    this.paginationBottomInstance = this.pagination.generatePaginationContainer('bottom', pageConfig);
+    this._textbook = document.getElementById('main') as HTMLElement;
+    this._cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+    this._paginationTopInstance = this.pagination.generatePaginationContainer('top', pageConfig);
+    this._paginationBottomInstance = this.pagination.generatePaginationContainer('bottom', pageConfig);
 
     this.textbook.append(
       view.gamesView.drawMiniCards('textbook'),
@@ -46,7 +78,7 @@ export default class TextbookView {
   }
 
   drawCardsContainer(words: WordsResponseSchema[] | PaginatedResult[], pageConfig: PageConfigResponce): void {
-    this.cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
+    this._cardsContainerInstance = this.cardsContainer.generateCardContainer(words);
     this.paginationTopInstance.after(this.cardsContainerInstance);
     this.color.switchColor(this.textbook, pageConfig);
   }

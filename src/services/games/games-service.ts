@@ -8,38 +8,50 @@ import SprintService from './sprint/sprint-service';
 import Timer from './timer';
 
 export default class GamesService {
-  sprintService: SprintService;
+  private _sprintService: SprintService;
 
-  gamesData: GamesData;
+  private gamesData: GamesData;
 
-  timer: Timer;
+  private _timer: Timer;
 
-  audioChallengeService: AudioChallengeService;
+  private _audioChallengeService: AudioChallengeService;
 
-  gamesSprintCard!: HTMLDivElement;
+  private gamesSprintCard!: HTMLDivElement;
 
-  gamesAudioChallengeCard!: HTMLDivElement;
+  private gamesAudioChallengeCard!: HTMLDivElement;
 
-  backBtnToGames!: HTMLButtonElement;
+  private backBtnToGames!: HTMLButtonElement;
 
-  levelsContainer!: HTMLDivElement;
+  private levelsContainer!: HTMLDivElement;
 
-  level!: number;
+  private level!: number;
 
   constructor() {
     this.gamesData = new GamesData();
-    this.timer = new Timer();
-    this.sprintService = new SprintService();
-    this.audioChallengeService = new AudioChallengeService();
+    this._timer = new Timer();
+    this._sprintService = new SprintService();
+    this._audioChallengeService = new AudioChallengeService();
   }
 
-  drawPage(): void {
+  get timer() {
+    return this._timer;
+  }
+
+  get sprintService() {
+    return this._sprintService;
+  }
+
+  get audioChallengeService() {
+    return this._audioChallengeService;
+  }
+
+  public drawPage(): void {
     view.gamesView.drawCards();
     this.setItems();
     this.listenGamesCards();
   }
 
-  drawGamesLevels(event: Event): void {
+  private drawGamesLevels(event: Event): void {
     const { id } = event.currentTarget as HTMLElement;
     const game: 'sprint' | 'audio-challenge' = id.includes('sprint') ? 'sprint' : 'audio-challenge';
     view.gamesView.drawGamesLevels(game);
@@ -47,7 +59,7 @@ export default class GamesService {
     this.listenGamesLevels();
   }
 
-  async launchGame(event: Event): Promise<void> {
+  public async launchGame(event: Event): Promise<void> {
     const { id } = event.currentTarget as HTMLElement;
     const trigger: HTMLElement = event.target as HTMLElement;
     const triggerId: string = trigger.id;
@@ -76,19 +88,19 @@ export default class GamesService {
     view.loading.delSpinners();
   }
 
-  setItems(): void {
+  private setItems(): void {
     this.gamesSprintCard = document.getElementById('card-minigames-sprint') as HTMLDivElement;
     this.gamesAudioChallengeCard = document.getElementById('card-minigames-audio-challenge') as HTMLDivElement;
     this.backBtnToGames = view.gamesView.games.querySelector('.back-btn-to-games') as HTMLButtonElement;
     this.levelsContainer = view.gamesView.games.querySelector('.levels-container') as HTMLDivElement;
   }
 
-  listenGamesCards(): void {
+  private listenGamesCards(): void {
     this.gamesSprintCard.addEventListener('click', this.drawGamesLevels.bind(this));
     this.gamesAudioChallengeCard.addEventListener('click', this.drawGamesLevels.bind(this));
   }
 
-  listenGamesLevels(): void {
+  private listenGamesLevels(): void {
     this.backBtnToGames.addEventListener('click', this.drawPage.bind(this));
     this.levelsContainer.addEventListener('click', this.launchGame.bind(this));
   }

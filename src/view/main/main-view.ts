@@ -29,7 +29,7 @@ export default class MainView {
     this.HTMLConstructor = new HTMLConstructor();
   }
 
-  view(): DocumentFragment {
+  public view(): DocumentFragment {
     const fragment = document.createDocumentFragment();
     const preview = this.preview();
     const ourAdvantages = this.advantages();

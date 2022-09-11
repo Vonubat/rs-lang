@@ -3,15 +3,19 @@ import Modal from '../auth/modal';
 import { burger } from '../../services/components/burger';
 
 export default class Header extends HTMLConstructor {
-  modal: Modal;
+  private modal: Modal;
 
-  icon!: SVGSVGElement;
+  private _icon!: SVGSVGElement;
 
-  loginBtn!: HTMLElement;
+  private loginBtn!: HTMLElement;
 
   constructor() {
     super();
     this.modal = new Modal();
+  }
+
+  public get icon(): SVGSVGElement {
+    return this._icon;
   }
 
   view(): DocumentFragment {
@@ -45,7 +49,7 @@ export default class Header extends HTMLConstructor {
     div.appendChild(buttonWrapper);
     header.appendChild(div);
     fragment.appendChild(header);
-    this.icon = svg;
+    this._icon = svg;
     return fragment;
   }
 }

@@ -53,7 +53,7 @@ export default class Menu {
     this.sidebarWrapper.appendChild(this.sidebar);
   }
 
-  fillMenu() {
+  private fillMenu() {
     this.menu.innerHTML = '';
     Object.values(Constants.MENU).forEach((menuInfo, index) => {
       // TODO: set href
@@ -74,7 +74,7 @@ export default class Menu {
     });
   }
 
-  getMenu() {
+  public getMenu() {
     return this.sidebarWrapper;
   }
 }

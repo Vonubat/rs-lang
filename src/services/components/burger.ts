@@ -1,7 +1,7 @@
 import HTMLConstructor from '../../view/components/constructor';
 
 export class Burger extends HTMLConstructor {
-  draw() {
+  public draw() {
     const fragment = document.createDocumentFragment();
     const a = this.div(['burger']);
     const svg = this.svg('list');
@@ -10,7 +10,7 @@ export class Burger extends HTMLConstructor {
     return fragment;
   }
 
-  listener() {
+  public listener() {
     const burger = document.querySelector('.burger') as HTMLElement;
     const navWrapper = document.querySelector('.sidebarmenu') as HTMLElement;
     const headerTitle = document.querySelector('.header-title') as HTMLElement;
