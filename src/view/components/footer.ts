@@ -11,18 +11,22 @@ export default class Footer {
   constructor() {
     this.htmlConstructor = new HTMLConstructor();
     this.footer = this.htmlConstructor.createHtmlElement('footer', ['footer', 'text-bg-dark']);
-    const link = this.htmlConstructor.a('https://rs.school/js/');
-    const logo = this.htmlConstructor.svg('logo-rs', ['footer__logo']);
+    const link: HTMLAnchorElement = this.htmlConstructor.a('https://rs.school/js/');
+    const logo: SVGSVGElement = this.htmlConstructor.svg('logo-rs', ['footer__logo']);
     link.append(logo);
     this.team = this.htmlConstructor.div(['footer__team']);
     this.fillTeam();
-    const copyright = this.htmlConstructor.createHtmlElement('span', ['copyright'], '', [], '© 2022');
+    const copyright: HTMLElement = this.htmlConstructor.createHtmlElement('span', ['copyright'], '', [], '© 2022');
     this.footer.append(link, this.team, copyright);
   }
 
   public fillTeam(): void {
-    Constants.TEAM.forEach((member) => {
-      const a = this.htmlConstructor.a(`${member.github}`, ['footer__team_member'], `${member.name}`);
+    Constants.TEAM.forEach((member: { name: string; github: string }): void => {
+      const a: HTMLAnchorElement = this.htmlConstructor.a(
+        `${member.github}`,
+        ['footer__team_member'],
+        `${member.name}`
+      );
       this.team.appendChild(a);
     });
   }
@@ -31,11 +35,11 @@ export default class Footer {
     return this.footer;
   }
 
-  public hideFooter() {
+  public hideFooter(): void {
     document.getElementsByClassName('footer')[0].classList.add('footer_hidden');
   }
 
-  public showFooter() {
+  public showFooter(): void {
     document.getElementsByClassName('footer')[0].classList.remove('footer_hidden');
   }
 }

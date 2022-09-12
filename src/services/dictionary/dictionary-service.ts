@@ -103,7 +103,7 @@ export default class DictionaryService {
       return false;
     }
 
-    this.soundIcons.forEach((item) => {
+    this.soundIcons.forEach((item: HTMLElement): void => {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
@@ -118,10 +118,9 @@ export default class DictionaryService {
     const startPositionOfWordId: number = id.lastIndexOf('-') + 1;
     const wordId: string = id.slice(startPositionOfWordId);
     const userId: string = Credentials.getUserId();
-    const card = Utils.findAncestor(target as HTMLElement, 'card');
+    const card: HTMLElement = Utils.findAncestor(target as HTMLElement, 'card');
     await api.usersWords.deleteUserWord(userId, wordId);
     card.remove();
-    // console.log(`delete word ${wordId}`);
 
     this.cardsCount -= 1;
 

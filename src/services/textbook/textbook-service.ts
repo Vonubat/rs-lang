@@ -232,13 +232,12 @@ export default class TextbookService {
     const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
 
     if (response instanceof Response) {
-      // console.log(`create hard word ${wordId}`);
       userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
     } else {
-      // console.log(`update hard word ${wordId}`);
       userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'hard', optional: {} });
     }
 
+    Utils.findAncestor(event.target as HTMLElement, 'card').classList.remove('learned-word');
     Utils.findAncestor(event.target as HTMLElement, 'card').classList.add('hard-word');
     this.checkMaxStackOfWords();
     view.loading.delSpinners();
@@ -255,13 +254,12 @@ export default class TextbookService {
     const response: UsersWordsResponseSchema | Response = await api.usersWords.getUserWordById(userId, wordId);
 
     if (response instanceof Response) {
-      // console.log(`create learned word ${wordId}`);
       userWord = await api.usersWords.createUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
     } else {
-      // console.log(`update learned word ${wordId}`);
       userWord = await api.usersWords.updateUserWord(userId, wordId, { difficulty: 'learned', optional: {} });
     }
 
+    Utils.findAncestor(event.target as HTMLElement, 'card').classList.remove('hard-word');
     Utils.findAncestor(event.target as HTMLElement, 'card').classList.add('learned-word');
     this.checkMaxStackOfWords();
     view.loading.delSpinners();

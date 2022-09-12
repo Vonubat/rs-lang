@@ -28,7 +28,6 @@ export default class Users extends HttpClient {
 
     const content: UserResponseSchema = await response.json();
 
-    // console.log(content);
     return content;
   }
 
@@ -53,7 +52,6 @@ export default class Users extends HttpClient {
 
     const content: UserSchema = await response.json();
 
-    // console.log(content);
     return content;
   }
 
@@ -82,7 +80,6 @@ export default class Users extends HttpClient {
 
     const content: UserResponseSchema = await response.json();
 
-    // console.log(content);
     return content;
   }
 
@@ -132,7 +129,6 @@ export default class Users extends HttpClient {
     Credentials.setToken(token);
     Credentials.setRefreshToken(refreshToken);
 
-    // console.log(content);
     return content;
   }
 }

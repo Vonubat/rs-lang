@@ -24,7 +24,6 @@ export default class UserSettings extends HttpClient {
 
     const content: Settings = await response.json();
 
-    // console.log(content);
     return content;
   }
 
@@ -51,7 +50,6 @@ export default class UserSettings extends HttpClient {
 
     const content: Settings = await response.json();
 
-    // console.log(content);
     return content;
   }
 }

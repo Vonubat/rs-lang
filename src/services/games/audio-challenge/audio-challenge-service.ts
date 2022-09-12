@@ -48,10 +48,6 @@ export default class AudioChallengeService {
 
   private multiplicatorElement!: HTMLElement;
 
-  private stepsElements!: HTMLSpanElement[];
-
-  private prediction!: boolean;
-
   private wordId!: string;
 
   private word!: string;
@@ -210,7 +206,7 @@ export default class AudioChallengeService {
       this.inARowCurrent += 1;
       this.inARowHistory.push(this.inARowCurrent);
       this.multiplicatorElement.classList.add('blink');
-      setTimeout(() => {
+      setTimeout((): void => {
         this.multiplicatorElement.classList.remove('blink');
       }, 2000);
       this.multiplicatorValue += 10;
@@ -391,7 +387,6 @@ export default class AudioChallengeService {
           );
 
           if (response instanceof Response) {
-            // console.log(`create learned word ${wordId}`);
             await api.usersWords.createUserWord(userId, word.wordId, {
               difficulty: word.difficulty as string,
               optional: {
@@ -400,7 +395,6 @@ export default class AudioChallengeService {
               },
             });
           } else {
-            // console.log(`update learned word ${wordId}`);
             await api.usersWords.updateUserWord(userId, word.wordId, {
               difficulty: word.difficulty as string,
               optional: {
@@ -451,7 +445,6 @@ export default class AudioChallengeService {
       this.wordsStatistics[this.word].incorrectAttemptsSession += 1;
       this.mistakes += 1;
     }
-    // console.log(this.wordsStatistics);
     this.allWordsCounter = this.correctAnswers + this.mistakes;
   }
 
@@ -515,12 +508,12 @@ export default class AudioChallengeService {
     view.gamesView.audioChallengeView.updateBtnControl('next');
     view.gamesView.audioChallengeView.createImage(this.wordsForIteration);
     view.gamesView.audioChallengeView.createWord(this.wordsForIteration);
-    this.btnsWord.forEach((item: HTMLButtonElement) => item.classList.add('disabled'));
+    this.btnsWord.forEach((item: HTMLButtonElement): void => item.classList.add('disabled'));
   }
 
   checkBtnControl(event: Event): void {
     const { innerText } = event.target as HTMLButtonElement;
-    this.btnsWord.forEach((item: HTMLButtonElement) => item.classList.remove('disabled'));
+    this.btnsWord.forEach((item: HTMLButtonElement): void => item.classList.remove('disabled'));
 
     const thisIsTheEnd: boolean = this.controlCurrentWord();
     if (thisIsTheEnd) {
@@ -562,7 +555,7 @@ export default class AudioChallengeService {
       return false;
     }
 
-    this.soundIcons.forEach((item) => {
+    this.soundIcons.forEach((item: SVGSVGElement): void => {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
@@ -587,28 +580,28 @@ export default class AudioChallengeService {
       this.btnControl.dispatchEvent(new Event('click'));
     }
     if (code === 'Digit1') {
-      this.btnsWord.forEach((item: HTMLButtonElement) => {
+      this.btnsWord.forEach((item: HTMLButtonElement): void => {
         if (conditional(1, item)) {
           item.dispatchEvent(new Event('click'));
         }
       });
     }
     if (code === 'Digit2') {
-      this.btnsWord.forEach((item: HTMLButtonElement) => {
+      this.btnsWord.forEach((item: HTMLButtonElement): void => {
         if (conditional(2, item)) {
           item.dispatchEvent(new Event('click'));
         }
       });
     }
     if (code === 'Digit3') {
-      this.btnsWord.forEach((item: HTMLButtonElement) => {
+      this.btnsWord.forEach((item: HTMLButtonElement): void => {
         if (conditional(3, item)) {
           item.dispatchEvent(new Event('click'));
         }
       });
     }
     if (code === 'Digit4') {
-      this.btnsWord.forEach((item: HTMLButtonElement) => {
+      this.btnsWord.forEach((item: HTMLButtonElement): void => {
         if (conditional(4, item)) {
           item.dispatchEvent(new Event('click'));
         }
@@ -628,11 +621,13 @@ export default class AudioChallengeService {
   }
 
   private listenGame(): void {
-    this.btnsWord.forEach((item: HTMLButtonElement) => item.addEventListener('click', this.checkAnswer.bind(this)));
+    this.btnsWord.forEach((item: HTMLButtonElement): void =>
+      item.addEventListener('click', this.checkAnswer.bind(this))
+    );
     this.soundIconMain.addEventListener('click', this.playSound.bind(this));
   }
 
-  boundControlKeyboard = this.controlKeyboard.bind(this);
+  boundControlKeyboard: (event: KeyboardEvent) => void = this.controlKeyboard.bind(this);
 
   private listenControlBtn(): void {
     this.btnControl.addEventListener('click', this.checkBtnControl.bind(this));
@@ -644,7 +639,7 @@ export default class AudioChallengeService {
   }
 
   private listenFinal(): void {
-    this.soundIcons.forEach((item: SVGSVGElement) => item.addEventListener('click', this.playSound.bind(this)));
+    this.soundIcons.forEach((item: SVGSVGElement): void => item.addEventListener('click', this.playSound.bind(this)));
     this.closeBtn.addEventListener('click', this.closeGame.bind(this));
   }
 }

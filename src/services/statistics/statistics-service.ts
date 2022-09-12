@@ -12,10 +12,6 @@ export default class StatisticsService {
     this.statistics = new Statistic();
   }
 
-  private setView() {
-    this.statistics.drawPage();
-  }
-
   public async getStatisticsData(): Promise<Statistics | Response | null> {
     const userId: string = Credentials.getUserId();
     if (userId) {

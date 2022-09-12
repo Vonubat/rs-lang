@@ -68,7 +68,7 @@ export default class AudioChallengeView extends HTMLConstructor {
       `btn-wrapper`,
     ];
     const btnsWrapper: HTMLElement = this.createHtmlElement('div', classList);
-    wordsForIteration.forEach((word: [string, WordsResponseSchema | PaginatedResult], index): void => {
+    wordsForIteration.forEach((word: [string, WordsResponseSchema | PaginatedResult], index: number): void => {
       const btn: HTMLElement = this.createBtnWord(word, index);
       btnsWrapper.append(btn);
     });
@@ -91,7 +91,7 @@ export default class AudioChallengeView extends HTMLConstructor {
   private createIcon(wordsForIteration: [string, WordsResponseSchema | PaginatedResult][]): SVGSVGElement {
     let audio = '';
 
-    wordsForIteration.forEach((word) => {
+    wordsForIteration.forEach((word: [string, WordsResponseSchema | PaginatedResult]): void => {
       if (word[0] === 'keyWord') {
         audio = word[1].audio;
       }
@@ -153,7 +153,7 @@ export default class AudioChallengeView extends HTMLConstructor {
 
     let imgPath = '';
 
-    wordsForIteration.forEach((word) => {
+    wordsForIteration.forEach((word: [string, WordsResponseSchema | PaginatedResult]): void => {
       if (word[0] === 'keyWord') {
         imgPath = word[1].image;
       }
@@ -171,7 +171,7 @@ export default class AudioChallengeView extends HTMLConstructor {
     const soundIcon: HTMLElement = document.querySelector('.sound-icon') as HTMLElement;
     let correctWord = '';
 
-    wordsForIteration.forEach((word) => {
+    wordsForIteration.forEach((word: [string, WordsResponseSchema | PaginatedResult]): void => {
       if (word[0] === 'keyWord') {
         correctWord = word[1].word;
       }

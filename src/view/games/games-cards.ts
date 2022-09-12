@@ -5,8 +5,6 @@ export default class GamesCards extends HTMLConstructor {
 
   private _audioChallengeCardText: string;
 
-  private _miniCardsWrapper!: HTMLElement;
-
   constructor() {
     super();
     this._sprintCardText =
@@ -87,8 +85,8 @@ export default class GamesCards extends HTMLConstructor {
     typeOfCard: 'sprint' | 'audio-challenge',
     page: 'dictionary' | 'textbook' | 'minigames'
   ): HTMLElement {
-    const innerHtml = typeOfCard === 'sprint' ? 'Sprint' : 'Audio Challenge';
-    const type = page === 'minigames' ? 'h3' : 'span';
+    const innerHtml: 'Sprint' | 'Audio Challenge' = typeOfCard === 'sprint' ? 'Sprint' : 'Audio Challenge';
+    const type: 'h3' | 'span' = page === 'minigames' ? 'h3' : 'span';
     const classList: string[] = [`card-title-${typeOfCard}`];
     if (page === 'minigames') {
       classList.push('card-title');
@@ -98,7 +96,7 @@ export default class GamesCards extends HTMLConstructor {
   }
 
   private createCardText(typeOfCard: 'sprint' | 'audio-challenge'): HTMLElement {
-    const innerHtml = typeOfCard === 'sprint' ? this._sprintCardText : this._audioChallengeCardText;
+    const innerHtml: string = typeOfCard === 'sprint' ? this._sprintCardText : this._audioChallengeCardText;
     const cardText: HTMLElement = this.createHtmlElement(
       'p',
       ['card-text', `card-text-${typeOfCard}`],
@@ -164,8 +162,6 @@ export default class GamesCards extends HTMLConstructor {
     const miniSprintCard: HTMLElement = this.generateMiniSprintCard(page);
     const miniAudioChallengeCard: HTMLElement = this.generateMiniAudioChallengeCard(page);
     miniCardsWrapper.append(miniSprintCard, miniAudioChallengeCard);
-
-    this._miniCardsWrapper = miniCardsWrapper;
 
     return miniCardsWrapper;
   }

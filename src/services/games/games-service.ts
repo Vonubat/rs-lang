@@ -33,15 +33,15 @@ export default class GamesService {
     this._audioChallengeService = new AudioChallengeService();
   }
 
-  get timer() {
+  get timer(): Timer {
     return this._timer;
   }
 
-  get sprintService() {
+  get sprintService(): SprintService {
     return this._sprintService;
   }
 
-  get audioChallengeService() {
+  get audioChallengeService(): AudioChallengeService {
     return this._audioChallengeService;
   }
 

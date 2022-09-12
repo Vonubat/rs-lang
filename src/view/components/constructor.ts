@@ -28,9 +28,9 @@ export default class HTMLConstructor {
   }
 
   public div(classList?: string[]): HTMLDivElement {
-    const element = document.createElement('div');
+    const element: HTMLDivElement = document.createElement('div');
     if (classList) {
-      classList.forEach((elem) => {
+      classList.forEach((elem: string): void => {
         element.classList.add(elem);
       });
     }
@@ -39,9 +39,9 @@ export default class HTMLConstructor {
   }
 
   public span(classList?: string[], innerText?: string): HTMLSpanElement {
-    const element = document.createElement('span');
+    const element: HTMLSpanElement = document.createElement('span');
     if (classList) {
-      classList.forEach((elem) => {
+      classList.forEach((elem: string): void => {
         element.classList.add(elem);
       });
     }
@@ -53,7 +53,7 @@ export default class HTMLConstructor {
   }
 
   public img(src: string, alt: string, classList?: string[]): HTMLImageElement {
-    const element = document.createElement('img');
+    const element: HTMLImageElement = document.createElement('img');
     element.src = src;
     element.alt = alt;
 
@@ -66,10 +66,10 @@ export default class HTMLConstructor {
   }
 
   public button(classList?: string[], type?: string): HTMLButtonElement {
-    const element = document.createElement('button');
+    const element: HTMLButtonElement = document.createElement('button');
     if (type) element.type = type;
     if (classList) {
-      classList.forEach((elem) => {
+      classList.forEach((elem: string): void => {
         element.classList.add(elem);
       });
     }
@@ -89,7 +89,7 @@ export default class HTMLConstructor {
     use.setAttributeNS(XLINK_NS, 'xlink:href', `./assets/bootstrap-icons.svg#${type}`);
     svg.appendChild(use);
     if (classList) {
-      classList.forEach((elem) => {
+      classList.forEach((elem: string): void => {
         svg.classList.add(elem);
       });
     }
@@ -125,7 +125,7 @@ export default class HTMLConstructor {
     use.setAttributeNS(XLINK_NS, 'xlink:href', `${url}#${type}`);
     svg.appendChild(use);
     if (classList) {
-      classList.forEach((elem) => {
+      classList.forEach((elem: string): void => {
         svg.classList.add(elem);
       });
     }
@@ -140,15 +140,15 @@ export default class HTMLConstructor {
     return svg;
   }
 
-  changeSvg(elem: SVGUseElement, type: string) {
+  changeSvg(elem: SVGUseElement, type: string): void {
     elem.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `./assets/bootstrap-icons.svg#${type}`);
   }
 
   public audio(src: string, classList?: string[]): HTMLAudioElement {
-    const element = document.createElement('audio');
+    const element: HTMLAudioElement = document.createElement('audio');
     element.src = src;
     if (classList) {
-      classList.forEach((elem) => {
+      classList.forEach((elem: string): void => {
         element.classList.add(elem);
       });
     }
@@ -157,11 +157,11 @@ export default class HTMLConstructor {
   }
 
   public a(href: string, classList?: string[], innerText?: string): HTMLAnchorElement {
-    const element = document.createElement('a');
+    const element: HTMLAnchorElement = document.createElement('a');
     element.setAttribute('target', '_blank');
     element.href = href;
     if (classList) {
-      classList.forEach((elem) => {
+      classList.forEach((elem: string): void => {
         element.classList.add(elem);
       });
     }

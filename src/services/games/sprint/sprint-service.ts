@@ -231,7 +231,7 @@ export default class SprintService {
 
     if (this.steps.length > 3) {
       this.multiplicatorElement.classList.add('blink');
-      setTimeout(() => {
+      setTimeout((): void => {
         this.multiplicatorElement.classList.remove('blink');
       }, 2000);
       this.steps.length = 0;
@@ -485,7 +485,6 @@ export default class SprintService {
       this.wordsStatistics[this.word].incorrectAttemptsSession += 1;
       this.mistakes += 1;
     }
-    // console.log(this.wordsStatistics);
     this.allWordsCounter = this.correctAnswers + this.mistakes;
   }
 
@@ -572,7 +571,7 @@ export default class SprintService {
       return false;
     }
 
-    this.soundIcons.forEach((item) => {
+    this.soundIcons.forEach((item: SVGSVGElement): void => {
       view.htmlConstructor.changeSvg(item.firstChild as SVGUseElement, 'volume-up-fill');
     });
 
@@ -617,7 +616,7 @@ export default class SprintService {
   }
 
   private listenFinal(): void {
-    this.soundIcons.forEach((item: SVGSVGElement) => item.addEventListener('click', this.playSound.bind(this)));
+    this.soundIcons.forEach((item: SVGSVGElement): void => item.addEventListener('click', this.playSound.bind(this)));
     this.closeBtn.addEventListener('click', this.closeGame.bind(this));
   }
 }

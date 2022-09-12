@@ -8,8 +8,6 @@ export default class Menu {
 
   private menu: HTMLElement;
 
-  // private logout: HTMLDivElement;
-
   private sidebarWrapper: HTMLDivElement;
 
   constructor() {
@@ -32,12 +30,9 @@ export default class Menu {
       'pt-2',
       'text-bg-dark',
     ]);
-    // const menuButton = this.htmlConstructor.button(['navbar-toggler'], 'button'); menuButton.dataset.bsToggle = 'offcanvas';
-    const header = this.htmlConstructor.div(['sidebar__header']);
-    /* menuButton.dataset.bsTarget = '#offcanvasNavbar'; menuButton.setAttribute('aria-controls', 'offcanvasNavbar');
-    const buttonIcon = this.htmlConstructor.span(['navbar-toggler-icon']); menuButton.appendChild(buttonIcon); */
-    // const brand = this.htmlConstructor.a('#', ['navbar-brand'], 'RSLang');
-    const brand = this.htmlConstructor.span(['navbar-brand'], 'RSLang');
+
+    const header: HTMLDivElement = this.htmlConstructor.div(['sidebar__header']);
+    const brand: HTMLSpanElement = this.htmlConstructor.span(['navbar-brand'], 'MENU');
     header.append(brand);
     this.sidebar.append(header, document.createElement('hr'));
     this.menu = this.htmlConstructor.createHtmlElement('ul', [
@@ -47,34 +42,41 @@ export default class Menu {
       'flex-column',
       'mb-auto',
     ]);
-    // this.logout = this.htmlConstructor.div(['sidebar__logout']);
+
     this.fillMenu();
-    this.sidebar.append(this.menu /* , this.logout */);
+    this.sidebar.append(this.menu);
     this.sidebarWrapper.appendChild(this.sidebar);
   }
 
-  private fillMenu() {
+  private fillMenu(): void {
     this.menu.innerHTML = '';
-    Object.values(Constants.MENU).forEach((menuInfo, index) => {
-      // TODO: set href
-      const href = menuInfo.NAME === 'Main' ? '#' : `#${menuInfo.NAME.toLowerCase()}`;
-      const item = this.htmlConstructor.createHtmlElement('li', ['nav-item', 'sidebar__nav-menu_item']);
-      const link = this.htmlConstructor.a(`${href}`, ['nav-link']);
-      // link.setAttribute('onclick', 'route()');
-      link.removeAttribute('target');
-      link.id = `menu-${menuInfo.NAME.toLowerCase()}`;
-      // link.dataset.bsToggle = 'collapse';
-      const icon = this.htmlConstructor.svg(`${menuInfo.ICON}`, ['bi', 'px-0', 'me-2', 'nav-icon']);
-      link.innerHTML = `${icon.outerHTML} ${menuInfo.NAME}`;
-      if (index === 0) {
-        link.classList.add('active');
+    Object.values(Constants.MENU).forEach(
+      (
+        menuInfo: {
+          NAME: string;
+          ICON: string;
+        },
+        index: number
+      ): void => {
+        const href: string = menuInfo.NAME === 'Main' ? '#' : `#${menuInfo.NAME.toLowerCase()}`;
+        const item: HTMLElement = this.htmlConstructor.createHtmlElement('li', ['nav-item', 'sidebar__nav-menu_item']);
+        const link: HTMLAnchorElement = this.htmlConstructor.a(`${href}`, ['nav-link']);
+
+        link.removeAttribute('target');
+        link.id = `menu-${menuInfo.NAME.toLowerCase()}`;
+
+        const icon: SVGSVGElement = this.htmlConstructor.svg(`${menuInfo.ICON}`, ['bi', 'px-0', 'me-2', 'nav-icon']);
+        link.innerHTML = `${icon.outerHTML} ${menuInfo.NAME}`;
+        if (index === 0) {
+          link.classList.add('active');
+        }
+        item.appendChild(link);
+        this.menu.appendChild(item);
       }
-      item.appendChild(link);
-      this.menu.appendChild(item);
-    });
+    );
   }
 
-  public getMenu() {
+  public getMenu(): HTMLDivElement {
     return this.sidebarWrapper;
   }
 }

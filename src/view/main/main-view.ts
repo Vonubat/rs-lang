@@ -20,7 +20,7 @@ export default class MainView {
     'The dictionary contains lists of studied words, words that do not need to be learned, as well as those that cause difficulties. The dictionary reflects statistics for each section and student progress.';
 
   private GamesText =
-    'For learning words and reinforcing memorization, the application has games: Sprint and Audio Chalenge , which will help you to "pump" your vocabulary in a playful way.';
+    'For learning words and reinforcing memorization, the application has games: Sprint and Audio Challenge , which will help you to "pump" your vocabulary in a playful way.';
 
   private StatisticsText =
     'All the progress of training can be viewed in statistics, where data for the current day, as well as for the entire training period, are presented. The information is presented both in the form of a table and graphs, which is very convenient.';
@@ -30,31 +30,36 @@ export default class MainView {
   }
 
   public view(): DocumentFragment {
-    const fragment = document.createDocumentFragment();
-    const preview = this.preview();
-    const ourAdvantages = this.advantages();
-    const possibilities = this.possibilities();
-    const team = this.team();
+    const fragment: DocumentFragment = document.createDocumentFragment();
+    const preview: HTMLElement = this.preview();
+    const ourAdvantages: HTMLElement = this.advantages();
+    const possibilities: HTMLElement = this.possibilities();
+    const team: HTMLElement = this.team();
     fragment.append(preview, ourAdvantages, possibilities, team);
     return fragment;
   }
 
   private preview(): HTMLElement {
-    const previewSection = this.HTMLConstructor.createHtmlElement('section', ['preview']);
-    const previewContainer = this.HTMLConstructor.div([
+    const previewSection: HTMLElement = this.HTMLConstructor.createHtmlElement('section', ['preview']);
+    const previewContainer: HTMLDivElement = this.HTMLConstructor.div([
       'justify-content-around',
       'd-flex',
       'container-preview',
       'text-center',
     ]);
-    const previewCard = this.card('preview', 'RS Lang', 'If you can dream it, you can do it', this.previewText);
-    const cardBody = previewCard.querySelector('.card-body') as HTMLElement;
-    const button = this.HTMLConstructor.a('#textbook', ['btn', 'btn-primary']);
+    const previewCard: HTMLDivElement = this.card(
+      'preview',
+      'RS Lang',
+      'If you can dream it, you can do it',
+      this.previewText
+    );
+    const cardBody: HTMLElement = previewCard.querySelector('.card-body') as HTMLElement;
+    const button: HTMLAnchorElement = this.HTMLConstructor.a('#textbook', ['btn', 'btn-primary']);
     button.removeAttribute('target');
     button.innerText = "Let's start";
     cardBody.appendChild(button);
     previewContainer.appendChild(previewCard);
-    const previewImg = this.HTMLConstructor.createFreeSvg(
+    const previewImg: SVGSVGElement = this.HTMLConstructor.createFreeSvg(
       './assets/img/statue.svg',
       'statue',
       ['preview-img'],
@@ -69,22 +74,33 @@ export default class MainView {
   }
 
   private advantages(): HTMLElement {
-    const advantagesSection = this.HTMLConstructor.createHtmlElement('section', ['ourAdvantages']);
-    const advantagesContainer = this.HTMLConstructor.div(['container-fluid']);
-    const title = this.HTMLConstructor.createHtmlElement('h2', ['text-center', 'section-title']);
+    const advantagesSection: HTMLElement = this.HTMLConstructor.createHtmlElement('section', ['ourAdvantages']);
+    const advantagesContainer: HTMLDivElement = this.HTMLConstructor.div(['container-fluid']);
+    const title: HTMLElement = this.HTMLConstructor.createHtmlElement('h2', ['text-center', 'section-title']);
     title.innerText = 'Our advantages';
     advantagesContainer.appendChild(title);
-    const cardWrapper = this.HTMLConstructor.div(['d-flex', 'justify-content-around', 'flex-wrap', 'gap-5']);
-    const TextbookCard = this.card('ourAdvantages', 'Textbook', '', this.TextbookText, './assets/img/textbook.svg');
-    const DictionaryCard = this.card(
+    const cardWrapper: HTMLDivElement = this.HTMLConstructor.div([
+      'd-flex',
+      'justify-content-around',
+      'flex-wrap',
+      'gap-5',
+    ]);
+    const TextbookCard: HTMLDivElement = this.card(
+      'ourAdvantages',
+      'Textbook',
+      '',
+      this.TextbookText,
+      './assets/img/textbook.svg'
+    );
+    const DictionaryCard: HTMLDivElement = this.card(
       'ourAdvantages',
       'Dictionary',
       '',
       this.DictionaryText,
       './assets/img/dictionary.svg'
     );
-    const GamesCard = this.card('ourAdvantages', 'Games', '', this.GamesText, './assets/img/games.svg');
-    const StatisticsCard = this.card(
+    const GamesCard: HTMLDivElement = this.card('ourAdvantages', 'Games', '', this.GamesText, './assets/img/games.svg');
+    const StatisticsCard: HTMLDivElement = this.card(
       'ourAdvantages',
       'Statistics',
       '',
@@ -101,14 +117,16 @@ export default class MainView {
   }
 
   private possibilities(): HTMLElement {
-    const possibilitiesSection = this.HTMLConstructor.createHtmlElement('section', ['ourPosibilities']);
-    const title = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
+    const possibilitiesSection: HTMLElement = this.HTMLConstructor.createHtmlElement('section', ['ourPosibilities']);
+    const title: HTMLElement = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
     title.innerText = 'Our possibilities';
     possibilitiesSection.appendChild(title);
-    const possibilitiesContainer = this.HTMLConstructor.div(['container-fluid']);
-    const videoContainer = this.HTMLConstructor.div(['video-container']);
-    const videoWrapper = this.HTMLConstructor.div(['video-wrapper']);
-    const video = this.HTMLConstructor.createHtmlElement('iframe', ['video'], undefined, [['src', this.videoSrc]]);
+    const possibilitiesContainer: HTMLDivElement = this.HTMLConstructor.div(['container-fluid']);
+    const videoContainer: HTMLDivElement = this.HTMLConstructor.div(['video-container']);
+    const videoWrapper: HTMLDivElement = this.HTMLConstructor.div(['video-wrapper']);
+    const video: HTMLElement = this.HTMLConstructor.createHtmlElement('iframe', ['video'], undefined, [
+      ['src', this.videoSrc],
+    ]);
     videoWrapper.appendChild(video);
     videoContainer.appendChild(videoWrapper);
     possibilitiesContainer.appendChild(videoContainer);
@@ -117,12 +135,12 @@ export default class MainView {
   }
 
   private team(): HTMLElement {
-    const teamSection = this.HTMLConstructor.createHtmlElement('section', ['ourTeam']);
-    const title = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
+    const teamSection: HTMLElement = this.HTMLConstructor.createHtmlElement('section', ['ourTeam']);
+    const title: HTMLElement = this.HTMLConstructor.createHtmlElement('h3', ['text-center', 'section-title']);
     title.innerText = 'Our team';
     teamSection.appendChild(title);
-    const teamContainer = this.HTMLConstructor.div(['container-fluid', 'gap-5']);
-    const vonubat = this.card(
+    const teamContainer: HTMLDivElement = this.HTMLConstructor.div(['container-fluid', 'gap-5']);
+    const vonubat: HTMLDivElement = this.card(
       'ourteam',
       'Vonubat',
       'Team leader',
@@ -130,7 +148,7 @@ export default class MainView {
       './assets/img/vonubat.jpg',
       this.gitVonubat
     );
-    const slavikusVOG = this.card(
+    const slavikusVOG: HTMLDivElement = this.card(
       'ourteam',
       'SlavikusVOG',
       'Frontend developer',
@@ -138,7 +156,7 @@ export default class MainView {
       './assets/img/slavikusvog.jpg',
       this.gitSlavikusVOG
     );
-    const derThun = this.card(
+    const derThun: HTMLDivElement = this.card(
       'ourteam',
       'Der_Thun',
       'Frontend developer',
@@ -153,25 +171,36 @@ export default class MainView {
     return teamSection;
   }
 
-  private card(type: string, title: string, subtitle: string, text: string, img?: string, git?: string) {
-    const card = this.HTMLConstructor.div(['card', `card-${type}`]);
+  private card(
+    type: string,
+    title: string,
+    subtitle: string,
+    text: string,
+    img?: string,
+    git?: string
+  ): HTMLDivElement {
+    const card: HTMLDivElement = this.HTMLConstructor.div(['card', `card-${type}`]);
     if (img) {
-      const cardImg = this.HTMLConstructor.img(img, title, ['card-img', `card-img-${type}`, 'img-fluid']);
+      const cardImg: HTMLImageElement = this.HTMLConstructor.img(img, title, [
+        'card-img',
+        `card-img-${type}`,
+        'img-fluid',
+      ]);
       card.appendChild(cardImg);
     }
-    const cardBody = this.HTMLConstructor.div(['card-body', `card-body-${type}`]);
-    const cardTitle = this.HTMLConstructor.createHtmlElement('h3', ['card-title']);
+    const cardBody: HTMLDivElement = this.HTMLConstructor.div(['card-body', `card-body-${type}`]);
+    const cardTitle: HTMLElement = this.HTMLConstructor.createHtmlElement('h3', ['card-title']);
     cardTitle.innerText = title;
     cardBody.appendChild(cardTitle);
-    const cardSubTitle = this.HTMLConstructor.createHtmlElement('h4', ['card-subtitle', 'text-muted']);
+    const cardSubTitle: HTMLElement = this.HTMLConstructor.createHtmlElement('h4', ['card-subtitle', 'text-muted']);
     cardSubTitle.innerText = subtitle;
     cardBody.appendChild(cardSubTitle);
-    const cardText = this.HTMLConstructor.createHtmlElement('p', ['card-text']);
+    const cardText: HTMLElement = this.HTMLConstructor.createHtmlElement('p', ['card-text']);
     cardText.innerHTML = text;
     cardBody.appendChild(cardText);
     if (git) {
-      const cardGit = this.HTMLConstructor.a(git, ['card-git-link']);
-      const cardGitSvg = this.HTMLConstructor.svg('github', ['git-svg']);
+      const cardGit: HTMLAnchorElement = this.HTMLConstructor.a(git, ['card-git-link']);
+      const cardGitSvg: SVGSVGElement = this.HTMLConstructor.svg('github', ['git-svg']);
       cardGit.appendChild(cardGitSvg);
       cardBody.appendChild(cardGit);
     }

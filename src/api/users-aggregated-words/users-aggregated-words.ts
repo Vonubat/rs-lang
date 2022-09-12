@@ -20,7 +20,7 @@ export default class UsersAggregatedWords extends HttpClient {
    *
    * Get all words that have BOTH difficulty equal="easy" AND optional.repeat=true, OR do not have the linked userWord:
    * {"$or":[{"$and":[{"userWord.difficulty":"easy", "userWord.optional.repeat":true}]},{"userWord":null}]}
-   * @returns {Promise<AggregatedWords[]>} return array of user aggregated words.
+   * @returns {Promise<AggregatedWords>} return array of user aggregated words.
    */
 
   public async getAllUserAggregatedWords(
@@ -55,9 +55,8 @@ export default class UsersAggregatedWords extends HttpClient {
       }
     }
 
-    const content = (await response.json())[0];
+    const content: AggregatedWords = (await response.json())[0];
 
-    // console.log(content);
     return content;
   }
 
@@ -84,7 +83,6 @@ export default class UsersAggregatedWords extends HttpClient {
 
     const content: PaginatedResult = await response.json();
 
-    // console.log(content);
     return content;
   }
 }

@@ -39,31 +39,31 @@ export class Api {
     this._auth = auth;
   }
 
-  get users() {
+  get users(): Users {
     return this._users;
   }
 
-  get words() {
+  get words(): Words {
     return this._words;
   }
 
-  get usersWords() {
+  get usersWords(): UsersWords {
     return this._usersWords;
   }
 
-  get usersAggregatedWords() {
+  get usersAggregatedWords(): UsersAggregatedWords {
     return this._usersAggregateWords;
   }
 
-  get usersStatistics() {
+  get usersStatistics(): UsersStatistics {
     return this._usersStatistics;
   }
 
-  get usersSettings() {
+  get usersSettings(): UserSettings {
     return this._usersSettings;
   }
 
-  get auth() {
+  get auth(): Auth {
     return this._auth;
   }
 }

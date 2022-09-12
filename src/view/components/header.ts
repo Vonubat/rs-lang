@@ -7,8 +7,6 @@ export default class Header extends HTMLConstructor {
 
   private _icon!: SVGSVGElement;
 
-  private loginBtn!: HTMLElement;
-
   constructor() {
     super();
     this.modal = new Modal();
@@ -29,8 +27,8 @@ export default class Header extends HTMLConstructor {
       'bg-dark',
     ]);
     header.appendChild(burger.draw());
-    const div = this.div(['header-wrapper']);
-    const h1 = this.createHtmlElement('h1', ['header-title']);
+    const div: HTMLDivElement = this.div(['header-wrapper']);
+    const h1: HTMLElement = this.createHtmlElement('h1', ['header-title']);
     h1.innerText = 'Main';
     div.appendChild(h1);
     div.appendChild(this.modal.modal('Login'));

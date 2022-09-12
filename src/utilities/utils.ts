@@ -10,7 +10,7 @@ export default class Utils {
 
   // change bg-color of input element
   public static resetBackground(el: HTMLElement, color: Color = '#FFFFFF'): HTMLElement {
-    const element = el;
+    const element: HTMLElement = el;
     element.style.backgroundImage = '';
     element.style.backgroundColor = color;
     return element;

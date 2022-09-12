@@ -120,7 +120,6 @@ export default class UsersWords extends HttpClient {
 
     const content: UsersWordsResponseSchema = await response.json();
 
-    // console.log(content);
     return content;
   }
 

@@ -12,7 +12,7 @@ export default class Timer {
   }
 
   public createTimerElement(id: string, stage: 'start' | 'game'): HTMLElement {
-    const canvas = view.htmlConstructor.createHtmlElement(
+    const canvas: HTMLElement = view.htmlConstructor.createHtmlElement(
       'canvas',
       [`countdown-canvas-${id}-${stage}`],
       `countdown-canvas-${id}`

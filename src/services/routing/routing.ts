@@ -3,41 +3,6 @@ import NotFound from '../../view/components/not_found';
 import Utils from '../../utilities/utils';
 
 export class Route {
-  /* private urlTitle = 'RS Lang';
-
-  private routes = {
-    404: {
-      template: '',
-      title: `404 | ${this.urlTitle}`,
-      description: '',
-    },
-    '/': {
-      template: '',
-      title: `Main | ${this.urlTitle}`,
-      description: '',
-    },
-    '/textbook': {
-      template: '',
-      title: `Textbook | ${this.urlTitle}`,
-      description: '',
-    },
-    '/dictionary': {
-      template: '',
-      title: `Dictionary | ${this.urlTitle}`,
-      description: '',
-    },
-    '/minigames': {
-      template: '',
-      title: `Games | ${this.urlTitle}`,
-      description: '',
-    },
-    '/statistics': {
-      template: '',
-      title: `Statistics | ${this.urlTitle}`,
-      description: '',
-    },
-  }; */
-
   private view: View;
 
   private notFound: NotFound;
@@ -47,31 +12,15 @@ export class Route {
     this.notFound = new NotFound();
   }
 
-  /* routing(): void {
-    window.onpopstate = this.handleLocation;
-    (window as any).route = this.route;
-    this.handleLocation();
-  } */
-
   public routingHash(): void {
     window.addEventListener('hashchange', (): void => {
       this.handleLocation();
       this.pageBG();
     });
     this.handleLocation();
-    /* window.onpopstate = this.handleLocation;
-    (window as any).route = this.route;
-    this.handleLocation(); */
   }
 
-  /* private route = (event: Event) => {
-    event = event || window.event;
-    event.preventDefault();
-    window.history.pushState({}, '', (event.target as HTMLAnchorElement).href);
-    this.handleLocation();
-  }; */
-
-  private handleLocation = () => {
+  private handleLocation: () => void = (): void => {
     this.onNavigate();
     const path = window.location.hash;
     const id = `menu-${path === '' ? 'main' : path.slice(1)}`;
@@ -84,11 +33,11 @@ export class Route {
     }
   };
 
-  private onNavigate = (): void => {
-    const rootDiv = document.getElementById('main') as HTMLElement;
+  private onNavigate: () => void = (): void => {
+    const rootDiv: HTMLElement = document.getElementById('main') as HTMLElement;
     rootDiv.innerHTML = '';
-    // let path = window.location.pathname;
-    let path = window.location.hash.replace('#', '');
+
+    let path: string = window.location.hash.replace('#', '');
     if (path.length === 0) {
       path = '/';
     }
@@ -110,7 +59,6 @@ export class Route {
         this.view.footer.hideFooter();
         break;
       case 'statistics':
-        // TO DO
         this.view.footer.showFooter();
         this.view.drawStatistics();
         break;
@@ -120,9 +68,9 @@ export class Route {
     }
   };
 
-  private onActiveNav = (id: string): void => {
-    const links = document.querySelectorAll('.nav-link');
-    links.forEach((link) => {
+  private onActiveNav: (id: string) => void = (id: string): void => {
+    const links: NodeListOf<HTMLElement> = document.querySelectorAll('.nav-link');
+    links.forEach((link: HTMLElement): void => {
       link.classList.remove('active');
       if (link.id === id) link.classList.add('active');
     });
@@ -136,9 +84,9 @@ export class Route {
     return false;
   }
 
-  private pageName = (id: string): void => {
-    const name = id.slice(5).toUpperCase();
-    const menuTitle = document.querySelector('.header-title') as HTMLElement;
+  private pageName: (id: string) => void = (id: string): void => {
+    const name: string = id.slice(5).toUpperCase();
+    const menuTitle: HTMLElement = document.querySelector('.header-title') as HTMLElement;
     menuTitle.innerText = name;
   };
 

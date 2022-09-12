@@ -24,7 +24,6 @@ export default class UsersStatistics extends HttpClient {
 
     const content: Statistics = await response.json();
 
-    // console.log(content);
     return content;
   }
 
@@ -51,7 +50,6 @@ export default class UsersStatistics extends HttpClient {
 
     const content: Statistics = await response.json();
 
-    // console.log(content);
     return content;
   }
 }

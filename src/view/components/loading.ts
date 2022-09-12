@@ -30,10 +30,9 @@ export default class Loading extends HTMLConstructor {
       [['role', 'status']]
     );
 
-    this.spinnersWrapper = spinnersWrapper;
     spinnersWrapper.style.zIndex = '10';
 
-    Constants.BOOTSTRAP_TEXT_COLORS.forEach((item) => {
+    Constants.BOOTSTRAP_TEXT_COLORS.forEach((item: string): void => {
       const spinner: HTMLElement = this.createHtmlElement('div', ['spinner-grow', `${item}`], undefined, [
         ['role', 'status'],
       ]);
@@ -44,7 +43,9 @@ export default class Loading extends HTMLConstructor {
   }
 
   public delSpinners(): void {
-    this.body.classList.remove('disabled');
+    this.spinnersWrapper = document.getElementById('spinners-wrapper') as HTMLElement;
     this.spinnersWrapper.remove();
+
+    this.body.classList.remove('disabled');
   }
 }

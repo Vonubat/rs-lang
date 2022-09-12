@@ -23,7 +23,6 @@ export default class Words extends HttpClient {
 
     const content: WordsResponseSchema[] = await response.json();
 
-    // console.log(content);
     return content;
   }
 
@@ -46,7 +45,6 @@ export default class Words extends HttpClient {
 
     const content: WordsResponseSchema = await response.json();
 
-    // console.log(content);
     return content;
   }
 }

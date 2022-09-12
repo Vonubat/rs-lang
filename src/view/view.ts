@@ -106,8 +106,7 @@ export class View {
     services.gamesService.drawPage();
   }
 
-  async drawStatistics() {
-    // throw new Error('Method not implemented.');
+  async drawStatistics(): Promise<void> {
     await this._statistics.drawPage();
   }
 

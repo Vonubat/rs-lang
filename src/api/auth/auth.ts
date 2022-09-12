@@ -31,8 +31,6 @@ export default class Auth extends HttpClient {
 
     const content: AuthResponseSchema = await response.json();
 
-    // console.log(content);
-
     return content;
   }
 }
