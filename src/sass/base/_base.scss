@@ -1,0 +1,67 @@
+html {
+  background-color: RGBA(33, 37, 41, var(--bs-bg-opacity, 1));
+  scroll-behavior: smooth;
+}
+
+body {
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.hidden {
+  overflow: hidden;
+}
+
+.blink {
+  animation: blinker 0.5s infinite;
+}
+
+@keyframes blinker {
+  from {
+    color: red;
+  }
+  50% {
+    color: whitesmoke;
+  }
+  to {
+    color: red;
+  }
+}
+
+.learned-word {
+  border-color: green;
+  border-width: 3px;
+}
+
+.hard-word {
+  border-color: red;
+  border-width: 3px;
+}
+
+@keyframes append-animate {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

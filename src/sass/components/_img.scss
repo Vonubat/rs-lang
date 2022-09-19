@@ -1,0 +1,14 @@
+//main
+.preview-img {
+  height: 350px;
+
+  @media (max-width: 860px) {
+    order: -1;
+    width: 50%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 650px) {
+  }
+}

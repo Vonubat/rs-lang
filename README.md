@@ -1,4 +1,10 @@
 
+# RS Lang
+
+RS Lang – приложение для изучения иностранных слов, включающее электронный учебник с базой слов для изучения, мини-игры для их повторения, страницу статистики для отслеживания индивидуального прогресса.
+
+https://github.com/rolling-scopes-school/tasks/blob/master/tasks/stage-2/rs-lang/rslang.md
+
 
     "dependencies": {
         "@popperjs/core": "^2.11.6", // необходимая для bootstrap библиотека
@@ -53,3 +59,4 @@
         "webpack-dev-server": "^4.9.2",
         "webpack-merge": "^5.7.3"
       }``
+

@@ -1,0 +1,18 @@
+// Import all of Bootstrap's CSS
+
+@import '~bootstrap/scss/bootstrap';
+
+@import './base/base';
+@import './components/card';
+@import './components/pagination';
+@import './components/svg';
+@import './components/video';
+@import './components/img';
+@import './components/menu';
+@import './components/footer';
+@import './components/header';
+@import './components/404';
+@import './layout/dictionary';
+@import './layout/main';
+@import './layout/games';
+@import './layout/statistics';

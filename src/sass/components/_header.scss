@@ -1,0 +1,61 @@
+.header {
+  padding: 0 20px;
+  height: 60px;
+  background-image: url('../assets/img/random-grey-variations.png');
+
+  @media (max-width: 530px) {
+    height: 115px;
+  }
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+
+  @media (max-width: 530px) {
+    flex-direction: column;
+  }
+}
+
+.header-title {
+  color: $white;
+  padding-left: 45px;
+  margin: 0;
+
+  @media (max-width: 530px) {
+    padding-left: 0;
+  }
+}
+
+.header-title.hide {
+  @media (max-width: 767px) {
+    visibility: hidden;
+    transition: all 0.3s;
+  }
+
+  @media (max-width: 530px) {
+    visibility: visible;
+  }
+}
+
+.burger {
+  fill: white;
+  display: none;
+  cursor: pointer;
+  position: absolute;
+
+  @media (max-width: 767px) {
+    display: block;
+  }
+}
+
+.burger.active {
+  transform: translateX(170px);
+  transition: all 0.3s;
+  z-index: 1050;
+  transform: rotate(90deg);
+}

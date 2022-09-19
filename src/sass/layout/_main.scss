@@ -1,0 +1,65 @@
+#main {
+  position: relative;
+  flex-grow: 1;
+}
+
+.preview,
+.ourAdvantages,
+.ourPosibilities,
+.ourTeam {
+  padding: 35px 20px;
+}
+
+.container-preview {
+  max-height: 300px;
+
+  .preview-img {
+    max-height: 300px;
+  }
+
+  .card-preview {
+    border-style: none;
+    max-width: 300px;
+
+    .card-title {
+      font-size: 60px;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+
+      @media (max-width: 767px) {
+        font-size: 50px;
+      }
+
+      @media (max-width: 530px) {
+        font-size: 30px;
+      }
+    }
+  }
+}
+
+main .section-title {
+  margin-bottom: 30px;
+  font-size: 35px;
+}
+
+.preview .container-fluid {
+  @media (max-width: 860px) {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+.ourAdvantages .d-flex {
+  max-width: 995px;
+  margin: 0 auto;
+
+  @media (max-width: 1710px) {
+  }
+}
+
+.ourTeam .container-fluid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
