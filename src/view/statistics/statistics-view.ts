@@ -45,6 +45,21 @@ export default class Statistic {
     if (data instanceof Response) {
       data = null;
     }
+    const currentDate: Date = new Date();
+    if (data?.optional?.dailyStatSprint) {
+      const lastDate: Date = new Date(Number(Object.keys(data.optional.dailyStatSprint)[0]));
+      const diff: number = currentDate.getDate() - lastDate.getDate();
+      if (diff >= 1) {
+        delete data.optional.dailyStatSprint;
+      }
+    }
+    if (data?.optional?.dailyStatAudioChallenge) {
+      const lastDate: Date = new Date(Number(Object.keys(data.optional.dailyStatAudioChallenge)[0]));
+      const diff: number = currentDate.getDate() - lastDate.getDate();
+      if (diff >= 1) {
+        delete data.optional.dailyStatSprint;
+      }
+    }
     if (main) {
       main.innerHTML = '';
       main.append(this.view(data));
