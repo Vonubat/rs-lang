@@ -57,7 +57,7 @@ export default class Statistic {
       const lastDate: Date = new Date(Number(Object.keys(data.optional.dailyStatAudioChallenge)[0]));
       const diff: number = currentDate.getDate() - lastDate.getDate();
       if (diff >= 1) {
-        delete data.optional.dailyStatSprint;
+        delete data.optional.dailyStatAudioChallenge;
       }
     }
     if (main) {
